@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using Synthesis.Input;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,15 +6,36 @@ namespace Synthesis
 {
     public class PauseMenu : MonoBehaviour
     {
+        [SerializeField] private GameInputReader inputReader;
 
         [SerializeField] private GameObject pauseMenuCanvas;
+        private bool paused;
 
-        void Update()
+        private void OnEnable()
         {
-            if (Input.GetKeyDown(KeyCode.Escape))
+            inputReader.Cancel += HandlePause;
+        }
+
+        private void OnDisable()
+        {
+            inputReader.Cancel -= HandlePause;
+        }
+
+        private void HandlePause(bool started)
+        {
+            // Exit case - if the button is released
+            if (!started) return;
+
+            // Check if paused
+            if(paused)
             {
-                PauseGame();
+                // Resume the game
+                ResumeGame();
+                return;
             }
+
+            // Pause the game
+            PauseGame();
         }
 
         public void PauseGame()
@@ -23,6 +43,7 @@ namespace Synthesis
             // Pause the game
             Time.timeScale = 0;
             pauseMenuCanvas.SetActive(true);
+            paused = true;
 
         }
 
@@ -31,6 +52,7 @@ namespace Synthesis
             // Resume the game
             Time.timeScale = 1;
             pauseMenuCanvas.SetActive(false);
+            paused = false;
         }
 
         public void ToMainMenu()
