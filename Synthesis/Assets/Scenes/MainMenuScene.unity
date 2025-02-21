@@ -414,6 +414,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6885800130078147384, guid: 891dfd567c007c743a47aea946469e68, type: 3}
+      propertyPath: m_fontStyle
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6885800130078147384, guid: 891dfd567c007c743a47aea946469e68, type: 3}
+      propertyPath: m_enableVertexGradient
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6929103219698717308, guid: 891dfd567c007c743a47aea946469e68, type: 3}
       propertyPath: m_SizeDelta.x
       value: 243.16
