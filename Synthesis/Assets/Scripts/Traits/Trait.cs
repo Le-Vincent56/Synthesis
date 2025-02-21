@@ -6,18 +6,17 @@ using UnityEngine;
 
 namespace Synthesis.Traits
 {
-    [CreateAssetMenu(fileName = "Basic Trait", menuName = "ScriptableObjects/Traits", order = 1)]
+    [CreateAssetMenu(fileName = "Basic Trait", menuName = "ScriptableObjects/BasicTrait", order = 1)]
     // Container for Trait Strategies.
     public class Trait : ScriptableObject, ITrait
     {
 
         private MoveType type = MoveType.Both;
-        private string traitName = "Trait";
         [SerializeField] protected float additive = 0;
         [SerializeField] protected float multiplier = 1;
 
         public MoveType Type { get => type; }
-        public string Name { get => traitName; }
+        public string Name { get => name; }
 
         public virtual void Activate(ref MoveInfo info)
         {

@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Basic Trait
   m_EditorClassIdentifier: 
   additive: 5
-  multiplier: 0
+  multiplier: 1
