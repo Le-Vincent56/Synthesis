@@ -10,12 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c60957aa378f739419ce2fd542836d98, type: 3}
-  m_Name: Trait
+  m_Name: Basic Trait
   m_EditorClassIdentifier: 
-  strategy:
-    rid: -2
-  references:
-    version: 2
-    RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
+  additive: 5
+  multiplier: 0

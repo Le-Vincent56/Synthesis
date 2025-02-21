@@ -6,27 +6,23 @@ using UnityEngine;
 
 namespace Synthesis.Traits
 {
-    [CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/SpawnManagerScriptableObject", order = 1)]
+    [CreateAssetMenu(fileName = "Basic Trait", menuName = "ScriptableObjects/Traits", order = 1)]
     // Container for Trait Strategies.
     public class Trait : ScriptableObject, ITrait
     {
 
         private MoveType type = MoveType.Both;
-        private string name = "Generic Trait";
-        [SerializeField] private TraitStrategy strategy;
+        private string traitName = "Trait";
+        [SerializeField] protected float additive = 0;
+        [SerializeField] protected float multiplier = 1;
 
         public MoveType Type { get => type; }
-        public string Name { get => name; }
-
-        TraitStrategy ITrait.Strategy
-        {
-            get => strategy;
-            set => strategy = value;
-        }
+        public string Name { get => traitName; }
 
         public virtual void Activate(ref MoveInfo info)
         {
-            strategy.Activate(ref info);
+            info.Additive += additive;
+            info.Multiplier *= multiplier;
         }
     }
     
@@ -37,8 +33,6 @@ namespace Synthesis.Traits
         
         // Name of Trait
         public string Name { get; }
-
-        protected TraitStrategy Strategy { get; set; }
 
         // Do any logic in here.
         public void Activate(ref MoveInfo info);

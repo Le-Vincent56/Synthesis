@@ -27,10 +27,14 @@ namespace Synthesis.Traits
         /// <param name="info"></param>
         public void ActivateStrategy(ref MoveInfo info)
         {
+            // Iterate through each strategy and apply modifiers.
             foreach (var trait in traits)
             {
                 trait.Activate(ref info);
             }
+            
+            // Apply final calculation logic.
+            info.FinalValue = (info.BaseValue + info.Additive) * info.Multiplier;
         }
 
         /// <summary>

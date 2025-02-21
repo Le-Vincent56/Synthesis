@@ -11,13 +11,11 @@ namespace Synthesis.Traits
         // Start is called before the first frame update
         void Start()
         {
-        
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-        
+            var info = new MoveInfo(10, MoveType.Attack);
+            
+            navigator.ActivateStrategy(ref info);
+            
+            Debug.Log(info.FinalValue);
         }
     }
 }
