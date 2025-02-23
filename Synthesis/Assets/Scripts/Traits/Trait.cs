@@ -12,11 +12,15 @@ namespace Synthesis.Traits
     {
 
         private MoveType type = MoveType.Both;
+
+        [SerializeField] [TextArea]
+        private string description = "This is a basic script that can add a flat value of {additive} and a multiplier of x{multiplier}.";
         [SerializeField] protected float additive = 0;
         [SerializeField] protected float multiplier = 1;
 
         public MoveType Type { get => type; }
         public string Name { get => name; }
+        public string Description { get => description; }
 
         public virtual void Activate(ref MoveInfo info)
         {
@@ -32,6 +36,9 @@ namespace Synthesis.Traits
         
         // Name of Trait
         public string Name { get; }
+        
+        // Trait Description
+        public string Description { get; }
 
         // Do any logic in here.
         public void Activate(ref MoveInfo info);

@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c60957aa378f739419ce2fd542836d98, type: 3}
   m_Name: Basic Trait 1
   m_EditorClassIdentifier: 
+  description: This is a basic script that does nothing..
   additive: 0
   multiplier: 1

@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c60957aa378f739419ce2fd542836d98, type: 3}
   m_Name: Basic Trait 2
   m_EditorClassIdentifier: 
+  description: This is a basic script that adds a multiplier of x0.3333.
   additive: 0
   multiplier: 0.3333
