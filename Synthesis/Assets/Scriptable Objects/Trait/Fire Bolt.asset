@@ -10,11 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c60957aa378f739419ce2fd542836d98, type: 3}
-  m_Name: Basic Trait 3
+  m_Name: Fire Bolt
   m_EditorClassIdentifier: 
-  description: This is a basic script that can add a flat value of 2 and a multiplier
-    of x1.5.
-  additive: 2
-  multiplier: 1.5
+  type: 0
+  description: '{0} adds a flat value of {1} to damage.'
+  additive: 3
+  multiplier: 1
+  additiveHeal: 0
+  multiplierHeal: 1
+  additiveMutate: 0
+  multiplierMutate: 1
   associatedPiece: {fileID: 5093379418373471637, guid: 045c76f218474f14caa6356959cef821, type: 3}
   color: {r: 1, g: 1, b: 1, a: 1}
