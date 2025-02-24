@@ -18,28 +18,38 @@ namespace Synthesis.Traits
 
             for (int i = 0; i < numTraits; i++)
             {
-                var trait = TraitPoolManager.Instance.traitPool.GetRandomTrait();
-                if (navigator.AddTrait(trait))
-                {
-                    foreach (var connector in creature.piece.connectors)
-                    {
-                        var con = connector;
-                        while (con.child)
-                        {
-                            con = con.child.connectors[0];
-                        }
-                        var piece = Instantiate(trait.associatedPiece);
-                        piece.transform.position = con.transform.position;
-                        piece.transform.parent = con.transform;
-                        piece.SetPartColor(trait.color);
-                        con.child = piece;
-                    }
-                }
+                AddRandomTrait();
             }
 
             navigator.ActivateStrategy(ref info);
             
             Debug.Log(info.FinalValue);
+        }
+
+        private void AddRandomTrait()
+        {
+            var trait = TraitPoolManager.Instance.traitPool.GetRandomTrait();
+            AddTrait(trait);
+        }
+
+        private void AddTrait(Trait trait)
+        {
+            if (navigator.AddTrait(trait))
+            {
+                foreach (var connector in creature.piece.connectors)
+                {
+                    var con = connector;
+                    while (con.child)
+                    {
+                        con = con.child.connectors[0];
+                    }
+                    var piece = Instantiate(trait.associatedPiece);
+                    piece.transform.position = con.transform.position;
+                    piece.transform.parent = con.transform;
+                    piece.SetPartColor(trait.color);
+                    con.child = piece;
+                }
+            }
         }
     }
 }
