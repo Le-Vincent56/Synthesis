@@ -11,9 +11,9 @@ namespace Synthesis.Modifiers.Traits
 
         private MoveType type = MoveType.Both;
 
-        [Tooltip("{0} is additive value, {1} is multiplicative value.")]
+        [Tooltip("{0} is additive value, {1} is multiplicative value, {2} is name.")]
         [SerializeField] [TextArea]
-        private string description = "This is a basic trait that can add a flat value of {0} and a multiplier of x{1}.";
+        protected string description = "This is a {2} trait that can add a flat value of {0} and a multiplier of x{1}.";
         [SerializeField] protected float additive = 0;
         [SerializeField] protected float multiplier = 1;
         [SerializeField] public CreaturePiece associatedPiece;
@@ -22,11 +22,11 @@ namespace Synthesis.Modifiers.Traits
         public MoveType Type { get => type; }
         public string Name { get => name; }
 
-        public string Description
+        public virtual string Description
         {
             get
             {
-                return String.Format(description, additive, multiplier);
+                return String.Format(description, additive, multiplier, name);
             }
         }
 

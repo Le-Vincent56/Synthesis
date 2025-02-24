@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c60957aa378f739419ce2fd542836d98, type: 3}
-  m_Name: Basic Trait 3
+  m_Name: Basic 3
   m_EditorClassIdentifier: 
-  description: This is a basic trait that can add a flat value of {0} and a multiplier
+  description: This is a {2} trait that can add a flat value of {0} and a multiplier
     of x{1}.
   additive: 2
   multiplier: 1.5
