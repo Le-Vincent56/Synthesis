@@ -12,7 +12,7 @@ namespace Synthesis.Modifiers.Traits
         // Start is called before the first frame update
         void Start()
         {
-            var info = new MoveInfo(10, MoveType.Attack);
+            var info = new MoveInfo(MoveType.Attack, attackValue: 10);
 
             for (int i = 0; i < numTraits; i++)
             {
@@ -21,7 +21,7 @@ namespace Synthesis.Modifiers.Traits
 
             navigator.ActivateStrategy(ref info);
             
-            Debug.Log(info.FinalValue);
+            Debug.Log(info.attack.FinalValue);
         }
 
         private void AddRandomTrait()
@@ -34,18 +34,21 @@ namespace Synthesis.Modifiers.Traits
         {
             if (navigator.AddTrait(trait))
             {
-                foreach (var connector in creature.piece.connectors)
+                if (creature)
                 {
-                    var con = connector;
-                    while (con.child)
+                    foreach (var connector in creature.piece.connectors)
                     {
-                        con = con.child.connectors[0];
+                        var con = connector;
+                        while (con.child)
+                        {
+                            con = con.child.connectors[0];
+                        }
+                        var piece = Instantiate(trait.associatedPiece);
+                        piece.transform.position = con.transform.position;
+                        piece.transform.parent = con.transform;
+                        piece.SetPartColor(trait.color);
+                        con.child = piece;
                     }
-                    var piece = Instantiate(trait.associatedPiece);
-                    piece.transform.position = con.transform.position;
-                    piece.transform.parent = con.transform;
-                    piece.SetPartColor(trait.color);
-                    con.child = piece;
                 }
             }
         }

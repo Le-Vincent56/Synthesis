@@ -23,8 +23,8 @@ namespace Synthesis.Modifiers.Traits
 
         public virtual void ApplyModifier(ref MoveInfo info)
         {
-            info.Additive += additive;
-            info.Multiplier *= multiplier;
+            info.attack.Additive += additive;
+            info.attack.Multiplier *= multiplier;
         }
     }
     

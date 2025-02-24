@@ -34,7 +34,7 @@ namespace Synthesis.Modifiers.Traits
             }
             
             // Apply final calculation logic.
-            info.FinalValue = (info.BaseValue + info.Additive) * info.Multiplier;
+            info.attack.FinalValue = (info.attack.BaseValue + info.attack.Additive) * info.attack.Multiplier;
         }
 
         /// <summary>

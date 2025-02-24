@@ -1,33 +1,25 @@
 namespace Synthesis.Modifiers
 {
     // Used to pass data across traits.
-    public struct MoveInfo
+    public struct MoveAttribute
     {
-        public MoveInfo(float baseValue, MoveType moveType)
+        public MoveAttribute(float baseValue)
         {
             this.baseValue = baseValue;
-            finalValue = this.baseValue;
-            type = moveType;
+            finalValue = baseValue;
             additive = 0;
             multiplier = 1;
         }
         
-        private MoveType type;
         private float baseValue;
+        private float finalValue;
         private float additive;
         private float multiplier;
-        private float finalValue;
-        
-        public MoveType Type
-        {
-            get => type;
-            private set => type = value;
-        }
 
         public float BaseValue
         {
             get => baseValue;
-            private set => baseValue = value;
+            set => baseValue = value;
         }
 
         public float FinalValue
@@ -41,12 +33,35 @@ namespace Synthesis.Modifiers
             get => additive;
             set => additive = value;
         }
-        
+
         public float Multiplier
         {
             get => multiplier;
             set => multiplier = value;
         }
+    }
+
+    public struct MoveInfo
+    {
+        public MoveInfo(MoveType moveType, float attackValue = 0, float mutationValue = 0, float healValue = 0)
+        {
+            type = moveType;
+            attack = new MoveAttribute(attackValue);
+            mutate = new MoveAttribute(mutationValue);
+            heal = new MoveAttribute(healValue);
+        }
+        
+        private MoveType type;
+        public MoveType Type
+        {
+            get => type;
+            private set => type = value;
+        }
+
+        public MoveAttribute attack;
+        public MoveAttribute mutate;
+        public MoveAttribute heal;
+        
     }
 
     
@@ -56,5 +71,14 @@ namespace Synthesis.Modifiers
         Attack,
         Synthesize,
         Both
+    }
+    
+    // Used to change where values are added
+    public enum ModifierTarget
+    {
+        Attack,
+        Mutate,
+        Heal,
+        HealMutate,
     }
 }
