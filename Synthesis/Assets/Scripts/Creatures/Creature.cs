@@ -32,7 +32,7 @@ namespace Synthesis.Creatures
         /// <param name="trait"></param>
         /// <param name="index"></param>
         /// <returns></returns>
-        private bool AddTrait(Trait trait, int index)
+        public bool AddTrait(Trait trait, int index)
         {
             if (index >= moves.Length || index < 0) return false;
             
