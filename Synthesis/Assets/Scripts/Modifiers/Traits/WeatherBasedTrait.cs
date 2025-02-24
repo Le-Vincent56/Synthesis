@@ -2,6 +2,9 @@ using UnityEngine;
 
 namespace Synthesis.Modifiers.Traits
 {
+    /// <summary>
+    /// Check weather conditional.
+    /// </summary>
     public class WeatherBasedTrait : Trait
     {
         private enum TempWeather
@@ -19,7 +22,7 @@ namespace Synthesis.Modifiers.Traits
         public override void ApplyModifier(ref MoveInfo info)
         {
             // current weather, which we get somehow from somewhere.
-            if (weather == TempWeather.Rain)
+            if (not ^ weather == TempWeather.Rain)
             {
                 base.ApplyModifier(ref info);
             }
