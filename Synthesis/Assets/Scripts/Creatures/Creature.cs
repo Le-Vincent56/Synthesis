@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using Synthesis.Creatures.Visual;
+using Synthesis.Modifiers;
 using Synthesis.Modifiers.Traits;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Synthesis.Creatures
@@ -44,6 +46,18 @@ namespace Synthesis.Creatures
             }
 
             return false;
+        }
+        
+        public bool AddTrait(Trait trait)
+        {
+            if (trait.Type == MoveType.Attack || trait.Type == MoveType.Both)
+            {
+                return AddTrait(trait, 0);
+            }
+            else
+            {
+                return AddTrait(trait, 1);
+            }
         }
 
         /// <summary>

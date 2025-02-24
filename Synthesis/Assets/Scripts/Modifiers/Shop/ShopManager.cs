@@ -67,7 +67,7 @@ namespace Synthesis
 
                 if (creature != null)
                 {
-                    bool success = creature.AddTrait(purchasedTrait, index); 
+                    bool success = creature.AddTrait(purchasedTrait); 
                     if (!success)
                     {
                         Debug.LogError("Failed to add trait to creature.");
