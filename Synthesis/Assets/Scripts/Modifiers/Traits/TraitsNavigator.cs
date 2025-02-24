@@ -28,8 +28,9 @@ namespace Synthesis.Modifiers.Traits
         public void ActivateStrategy(ref MoveInfo info)
         {
             // Iterate through each strategy and apply modifiers.
-            foreach (var trait in traits)
+            for(int i = 0; i < traits.Count; i++)
             {
+                var trait = traits[i];
                 trait.ApplyModifier(ref info);
             }
             
