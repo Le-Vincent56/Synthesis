@@ -803,6 +803,17 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!114 &1894704343 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3578435588895073367, guid: 92899fcadc14cf8488fd819c5e0cbd33, type: 3}
+  m_PrefabInstance: {fileID: 536692589}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab79929a8a7c8014eb66d9eb7b525650, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &958710016163198838
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1684,7 +1695,7 @@ PrefabInstance:
     - target: {fileID: 6275725672943324544, guid: fbbcad217ffc0a94f98b6fc8056e0cc6, type: 3}
       propertyPath: creature
       value: 
-      objectReference: {fileID: 3578435588895073367, guid: 92899fcadc14cf8488fd819c5e0cbd33, type: 3}
+      objectReference: {fileID: 1894704343}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
