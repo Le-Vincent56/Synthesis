@@ -9,13 +9,17 @@ namespace Synthesis.Modifiers.Traits
     public class Trait : ScriptableObject, ITrait, IModifier
     {
 
-        [SerializeField] private MoveType type = MoveType.Both;
+        [SerializeField] protected MoveType type = MoveType.Both;
 
         [Tooltip("{0} is additive value, {1} is multiplicative value, {2} is name.")]
         [SerializeField] [TextArea]
-        protected string description = "This is a {2} trait that can add a flat value of {0} and a multiplier of x{1}.";
+        protected string description = "{0} adds a flat value of {1} and a multiplier of x{2} to attack damage, a flat value of {3} and a multiplier of x{4} to healing, and a flat value of {5} and a multiplier of x{6} to mutation gain.";
         [SerializeField] protected float additive = 0;
         [SerializeField] protected float multiplier = 1;
+        [SerializeField] protected float additiveHeal = 0;
+        [SerializeField] protected float multiplierHeal = 1;
+        [SerializeField] protected float additiveMutate = 0;
+        [SerializeField] protected float multiplierMutate = 1;
         [SerializeField] public CreaturePiece associatedPiece;
         [SerializeField] public Color color = Color.white;
 
@@ -26,7 +30,7 @@ namespace Synthesis.Modifiers.Traits
         {
             get
             {
-                return String.Format(description, additive, multiplier, name);
+                return String.Format(description, name, additive, multiplier, additiveHeal, multiplierHeal, additiveMutate, multiplierMutate);
             }
         }
 
