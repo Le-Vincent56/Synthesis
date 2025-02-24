@@ -669,6 +669,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3578435588895073367, guid: 92899fcadc14cf8488fd819c5e0cbd33, type: 3}
+      propertyPath: moves.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3578435588895073367, guid: 92899fcadc14cf8488fd819c5e0cbd33, type: 3}
+      propertyPath: moves.Array.data[1].type
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6269594779246671748, guid: 92899fcadc14cf8488fd819c5e0cbd33, type: 3}
       propertyPath: m_Name
       value: Creature Base
@@ -3860,6 +3868,38 @@ PrefabInstance:
       propertyPath: m_fontColor32.rgba
       value: 4278190080
       objectReference: {fileID: 0}
+    - target: {fileID: 2837580276538826638, guid: 5181ed9abf5b88f43a8f8a392f2b5392, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2837580276538826638, guid: 5181ed9abf5b88f43a8f8a392f2b5392, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2837580276538826638, guid: 5181ed9abf5b88f43a8f8a392f2b5392, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 39480905}
+    - target: {fileID: 2837580276538826638, guid: 5181ed9abf5b88f43a8f8a392f2b5392, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2837580276538826638, guid: 5181ed9abf5b88f43a8f8a392f2b5392, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SetState
+      objectReference: {fileID: 0}
+    - target: {fileID: 2837580276538826638, guid: 5181ed9abf5b88f43a8f8a392f2b5392, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Synthesis.Turns.TurnSystem, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2837580276538826638, guid: 5181ed9abf5b88f43a8f8a392f2b5392, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2837580276538826638, guid: 5181ed9abf5b88f43a8f8a392f2b5392, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 4152163321310260161, guid: 5181ed9abf5b88f43a8f8a392f2b5392, type: 3}
       propertyPath: m_fontColor.b
       value: 0
@@ -3895,6 +3935,38 @@ PrefabInstance:
     - target: {fileID: 4359959129069383051, guid: 5181ed9abf5b88f43a8f8a392f2b5392, type: 3}
       propertyPath: m_fontColor32.rgba
       value: 4278190080
+      objectReference: {fileID: 0}
+    - target: {fileID: 4479355871292672032, guid: 5181ed9abf5b88f43a8f8a392f2b5392, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4479355871292672032, guid: 5181ed9abf5b88f43a8f8a392f2b5392, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4479355871292672032, guid: 5181ed9abf5b88f43a8f8a392f2b5392, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 39480905}
+    - target: {fileID: 4479355871292672032, guid: 5181ed9abf5b88f43a8f8a392f2b5392, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4479355871292672032, guid: 5181ed9abf5b88f43a8f8a392f2b5392, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SetState
+      objectReference: {fileID: 0}
+    - target: {fileID: 4479355871292672032, guid: 5181ed9abf5b88f43a8f8a392f2b5392, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Synthesis.Turns.TurnSystem, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4479355871292672032, guid: 5181ed9abf5b88f43a8f8a392f2b5392, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4479355871292672032, guid: 5181ed9abf5b88f43a8f8a392f2b5392, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 5226711052311676742, guid: 5181ed9abf5b88f43a8f8a392f2b5392, type: 3}
       propertyPath: m_fontColor.b
