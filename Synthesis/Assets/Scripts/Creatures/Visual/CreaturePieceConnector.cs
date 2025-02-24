@@ -1,4 +1,4 @@
-// by Ryan Zhang from GTMK Game Jam 2024
+// by Ryan Zhang from GMTK Game Jam 2024
 
 using System;
 using UnityEngine;
