@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Synthesis.Creatures.Visual;
 using UnityEngine;
 
 namespace Synthesis.Creatures
@@ -9,8 +10,7 @@ namespace Synthesis.Creatures
         public float hp,strength,attack1damage, attack2damage, strengthincrease1, strengthincrease2;
         public string attack1, attack2, strength1, strength2;
 
-       
-
+        public CreaturePiece piece;
 
     }
 

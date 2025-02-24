@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Synthesis.Creatures.Visual;
 using Synthesis.Traits;
 using UnityEngine;
 
@@ -17,6 +18,8 @@ namespace Synthesis.Traits
         private string description = "This is a basic script that can add a flat value of {additive} and a multiplier of x{multiplier}.";
         [SerializeField] protected float additive = 0;
         [SerializeField] protected float multiplier = 1;
+        [SerializeField] public CreaturePiece associatedPiece;
+        [SerializeField] public Color color = Color.white;
 
         public MoveType Type { get => type; }
         public string Name { get => name; }
