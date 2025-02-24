@@ -1,9 +1,10 @@
+using System;
 using UnityEngine;
 
 namespace Synthesis.Modifiers.Traits
 {
     /// <summary>
-    /// Check weather conditional.
+    /// Trait that checks for a weather conditional.
     /// </summary>
     public class WeatherBasedTrait : Trait
     {
@@ -18,6 +19,17 @@ namespace Synthesis.Modifiers.Traits
 
         [SerializeField] private TempWeather weather;
         [SerializeField] private bool not;
+        [SerializeField] [TextArea] protected string weatherConditional = "While {1}in {2}, {0}";
+
+        public override string Description
+        {
+            get
+            {
+                var notString = not ? "not " : "";
+                var weatherString = "Rain";
+                return String.Format(weatherConditional, base.Description, notString, weatherString);
+            }
+        }
 
         public override void ApplyModifier(ref MoveInfo info)
         {
