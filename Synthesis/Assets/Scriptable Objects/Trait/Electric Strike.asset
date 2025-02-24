@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c60957aa378f739419ce2fd542836d98, type: 3}
-  m_Name: Basic 1
+  m_Name: Electric Strike
   m_EditorClassIdentifier: 
-  description: This is a {2} trait that can add a flat value of {0} and a multiplier
-    of x{1}.
-  additive: 0
+  type: 0
+  description: '{2} adds a flat value of {0} and a multiplier of x{1}.'
+  additive: 4
   multiplier: 1
   associatedPiece: {fileID: 5093379418373471637, guid: 045c76f218474f14caa6356959cef821, type: 3}
   color: {r: 1, g: 1, b: 1, a: 1}

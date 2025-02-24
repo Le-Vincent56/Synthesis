@@ -9,7 +9,7 @@ namespace Synthesis.Modifiers.Traits
     public class Trait : ScriptableObject, ITrait, IModifier
     {
 
-        private MoveType type = MoveType.Both;
+        [SerializeField] private MoveType type = MoveType.Both;
 
         [Tooltip("{0} is additive value, {1} is multiplicative value, {2} is name.")]
         [SerializeField] [TextArea]
@@ -32,8 +32,17 @@ namespace Synthesis.Modifiers.Traits
 
         public virtual void ApplyModifier(ref MoveInfo info)
         {
-            info.attack.Additive += additive;
-            info.attack.Multiplier *= multiplier;
+            if (type == MoveType.Attack || type == MoveType.Both)
+            {
+                info.attack.Additive += additive;
+                info.attack.Multiplier *= multiplier;
+            }
+
+            if (type == MoveType.Synthesize || type == MoveType.Both)
+            {
+                info.mutate.Additive += additive;
+                info.mutate.Multiplier *= multiplier;
+            }
             Debug.Log(Description);
         }
     }
