@@ -1,3 +1,4 @@
+using System;
 using Synthesis.Creatures.Visual;
 using UnityEngine;
 
@@ -10,8 +11,9 @@ namespace Synthesis.Modifiers.Traits
 
         private MoveType type = MoveType.Both;
 
+        [Tooltip("{0} is additive value, {1} is multiplicative value.")]
         [SerializeField] [TextArea]
-        private string description = "This is a basic script that can add a flat value of {additive} and a multiplier of x{multiplier}.";
+        private string description = "This is a basic trait that can add a flat value of {0} and a multiplier of x{1}.";
         [SerializeField] protected float additive = 0;
         [SerializeField] protected float multiplier = 1;
         [SerializeField] public CreaturePiece associatedPiece;
@@ -19,12 +21,20 @@ namespace Synthesis.Modifiers.Traits
 
         public MoveType Type { get => type; }
         public string Name { get => name; }
-        public string Description { get => description; }
+
+        public string Description
+        {
+            get
+            {
+                return String.Format(description, additive, multiplier);
+            }
+        }
 
         public virtual void ApplyModifier(ref MoveInfo info)
         {
             info.attack.Additive += additive;
             info.attack.Multiplier *= multiplier;
+            Debug.Log(Description);
         }
     }
     
