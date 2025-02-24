@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using Synthesis.Creatures;
 using UnityEngine;
 
-namespace Synthesis.Traits
+namespace Synthesis.Modifiers.Traits
 {
     public class TestTraitMove : MonoBehaviour
     {

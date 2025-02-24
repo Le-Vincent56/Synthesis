@@ -1,15 +1,11 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Synthesis.Creatures.Visual;
-using Synthesis.Traits;
 using UnityEngine;
 
-namespace Synthesis.Traits
+namespace Synthesis.Modifiers.Traits
 {
     [CreateAssetMenu(fileName = "Basic Trait", menuName = "ScriptableObjects/BasicTrait", order = 1)]
     // Container for Trait Strategies.
-    public class Trait : ScriptableObject, ITrait
+    public class Trait : ScriptableObject, ITrait, IModifier
     {
 
         private MoveType type = MoveType.Both;
@@ -25,7 +21,7 @@ namespace Synthesis.Traits
         public string Name { get => name; }
         public string Description { get => description; }
 
-        public virtual void Activate(ref MoveInfo info)
+        public virtual void ApplyModifier(ref MoveInfo info)
         {
             info.Additive += additive;
             info.Multiplier *= multiplier;
@@ -42,8 +38,5 @@ namespace Synthesis.Traits
         
         // Trait Description
         public string Description { get; }
-
-        // Do any logic in here.
-        public void Activate(ref MoveInfo info);
     }
 }

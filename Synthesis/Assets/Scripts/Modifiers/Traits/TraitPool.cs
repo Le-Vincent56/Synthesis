@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Synthesis.Traits
+namespace Synthesis.Modifiers.Traits
 {
     [CreateAssetMenu(fileName = "TraitPool", menuName = "ScriptableObjects/TraitPool", order = 0)]
     public class TraitPool : ScriptableObject

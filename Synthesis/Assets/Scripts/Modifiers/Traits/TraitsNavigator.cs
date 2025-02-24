@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Synthesis.Traits
+namespace Synthesis.Modifiers.Traits
 {
     /// <summary>
     /// Stores a list of traits and applies them to a move.
@@ -30,7 +30,7 @@ namespace Synthesis.Traits
             // Iterate through each strategy and apply modifiers.
             foreach (var trait in traits)
             {
-                trait.Activate(ref info);
+                trait.ApplyModifier(ref info);
             }
             
             // Apply final calculation logic.

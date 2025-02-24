@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace Synthesis.Traits
+namespace Synthesis.Modifiers
 {
     // Used to pass data across traits.
     public struct MoveInfo
