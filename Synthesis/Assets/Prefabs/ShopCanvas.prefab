@@ -2025,7 +2025,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b30707ac421da2d4084f224a9cae7765, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  traitPool: {fileID: 11400000, guid: 250c5d5ab0db7a64db0aee2921e949d9, type: 2}
+  creature: {fileID: 0}
+  mutationPool: {fileID: 11400000, guid: 250c5d5ab0db7a64db0aee2921e949d9, type: 2}
   buyButtons:
   - {fileID: 175612617253294673}
   - {fileID: 6008116880798532209}

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TraitPool
   m_EditorClassIdentifier: 
   traits:
-  - {fileID: 11400000, guid: 58e761278dc637d48a3c2b1eb0e6d92d, type: 2}
-  - {fileID: 11400000, guid: 9f3438907fa08f64db4d1abd2c770ead, type: 2}
   - {fileID: 11400000, guid: 77872c41821390746b5055d1879722b9, type: 2}
+  - {fileID: 11400000, guid: 9f3438907fa08f64db4d1abd2c770ead, type: 2}
+  - {fileID: 11400000, guid: 58e761278dc637d48a3c2b1eb0e6d92d, type: 2}
   - {fileID: 11400000, guid: 391cd898c50a65343a2c65527cca8efe, type: 2}
