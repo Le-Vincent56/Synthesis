@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Synthesis.Modifiers.Traits
+namespace Synthesis.Modifiers.Mutations
 {
     // Singleton
     public class TraitPoolManager : MonoBehaviour

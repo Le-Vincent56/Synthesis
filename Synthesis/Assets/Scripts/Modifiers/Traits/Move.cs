@@ -1,24 +1,23 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Synthesis.Modifiers.Traits
+namespace Synthesis.Modifiers.Mutations
 {
     /// <summary>
     /// Stores a list of traits and applies them to a move.
     /// </summary>
-    [Serializable] public class TraitsNavigator
+    [Serializable] public class Move
     {
-        [SerializeField] private List<Trait> traits = new List<Trait>();
+        [SerializeField] private List<Mutation> traits = new List<Mutation>();
         [SerializeField] private MoveType type;
 
-        public TraitsNavigator(MoveType type)
+        public Move(MoveType type)
         {
             this.type = type;
         }
 
-        public List<Trait> Traits => traits;
+        public List<Mutation> Traits => traits;
         public MoveType Type => type;
 
         /// <summary>
@@ -30,7 +29,7 @@ namespace Synthesis.Modifiers.Traits
             // Iterate through each strategy and apply modifiers.
             for(int i = 0; i < traits.Count; i++)
             {
-                var trait = traits[i];
+                Mutation trait = traits[i];
                 trait.ApplyModifier(ref info);
             }
             
@@ -42,7 +41,7 @@ namespace Synthesis.Modifiers.Traits
         /// Adds a trait to the trait navigator
         /// </summary>
         /// <param name="trait"></param>
-        public bool AddTrait(Trait trait)
+        public bool AddTrait(Mutation trait)
         {
             // Both on either means this check doesn't need to happen
             if (type == MoveType.Both || trait.Type == MoveType.Both)
