@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Electric Strike
   m_EditorClassIdentifier: 
   type: 0
-  description: '{0} adds a flat value of {1} and a multiplier of x{2}.'
+  description: An electric attack is unleashed. Adding a flat value of {1} to damage.
   additive: 4
   multiplier: 1
   additiveHeal: 0

@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: Expand Limbs
   m_EditorClassIdentifier: 
   type: 1
-  description: '{0} adds a flat value of {1} and a multiplier of x{2} to attack damage,
-    a flat value of {3} and a multiplier of x{4} to healing, and a flat value of
-    {5} and a multiplier of x{6} to mutation gain.'
+  description: Expand limbs to defend against a heavy attack. Adding a flat value
+    of {3} and a multiplier of x{4} to healing, and a flat value of {5} and a multiplier
+    of x{6} to mutation gain.
   additive: 0
   multiplier: 1
-  additiveHeal: 0
-  multiplierHeal: 1
-  additiveMutate: 0
-  multiplierMutate: 1
+  additiveHeal: 2
+  multiplierHeal: 1.1
+  additiveMutate: 2
+  multiplierMutate: 1.1
   associatedPiece: {fileID: 5093379418373471637, guid: 045c76f218474f14caa6356959cef821, type: 3}
   color: {r: 0.5808331, g: 1, b: 0.47484267, a: 1}

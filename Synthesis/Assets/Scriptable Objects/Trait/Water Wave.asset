@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Water Wave
   m_EditorClassIdentifier: 
   type: 0
-  description: '{0} adds a flat value of {1} and a multiplier of x{2}.'
+  description: Spread waves all around you. Adding a flat value of {1} to attack
+    damage.
   additive: 2
   multiplier: 1
   additiveHeal: 0

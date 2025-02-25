@@ -16,11 +16,14 @@ namespace Synthesis
         public List<TextMeshProUGUI> traitTexts;
         private List<Trait> displayedTraits = new List<Trait>();
         private List<bool> purchasedTraits = new List<bool>();
+        private ShowTraits showTraitsScript;
 
         // Start is called before the first frame update
         void Start()
         {
             PopulateShop();
+
+            showTraitsScript = FindObjectOfType<ShowTraits>();
 
             for (int i = 0; i < buyButtons.Count; i++)
             {
@@ -71,6 +74,16 @@ namespace Synthesis
                     {
                         Debug.LogError("Failed to add trait to creature.");
                     }
+                }
+
+                if (showTraitsScript != null)
+                {
+                    //Debug.Log("Calling ShowTraitsFunction() from ShopManager...");
+                    showTraitsScript.ShowTraitsFunction();
+                }
+                else
+                {
+                    Debug.LogError("ShowTraits script reference is missing!");
                 }
             }
         }
