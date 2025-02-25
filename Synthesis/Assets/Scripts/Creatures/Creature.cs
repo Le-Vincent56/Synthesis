@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using Synthesis.Creatures.Visual;
+using Synthesis.Modifiers;
 using Synthesis.Modifiers.Traits;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Synthesis.Creatures
@@ -32,7 +34,7 @@ namespace Synthesis.Creatures
         /// <param name="trait"></param>
         /// <param name="index"></param>
         /// <returns></returns>
-        private bool AddTrait(Trait trait, int index)
+        public bool AddTrait(Trait trait, int index)
         {
             if (index >= moves.Length || index < 0) return false;
             
@@ -45,6 +47,18 @@ namespace Synthesis.Creatures
 
             return false;
         }
+        
+        public bool AddTrait(Trait trait)
+        {
+            if (trait.Type == MoveType.Attack || trait.Type == MoveType.Both)
+            {
+                return AddTrait(trait, 0);
+            }
+            else
+            {
+                return AddTrait(trait, 1);
+            }
+        }
 
         /// <summary>
         /// Updates creature based on trait added.
@@ -55,15 +69,24 @@ namespace Synthesis.Creatures
             foreach (var connector in piece.connectors)
             {
                 var con = connector;
+                var oldPiece = piece;
                 while (con.child)
                 {
+                    oldPiece = con.child;
                     con = con.child.connectors[0];
                 }
-                var piece = Instantiate(trait.associatedPiece);
-                piece.transform.position = con.transform.position;
-                piece.transform.parent = con.transform;
-                piece.SetPartColor(trait.color);
-                con.child = piece;
+                var newPiece = Instantiate(trait.associatedPiece);
+                newPiece.transform.position = con.transform.position;
+                newPiece.transform.parent = con.transform;
+                if (oldPiece.primaryColorIn != null || oldPiece.primaryColorIn[0] != null)
+                {
+                    newPiece.SetPartColor(Color.Lerp(trait.color, oldPiece.primaryColorIn[0].color, 0.4f));
+                }
+                else
+                {
+                    newPiece.SetPartColor(trait.color);
+                }
+                con.child = newPiece;
             }
         }
     }
