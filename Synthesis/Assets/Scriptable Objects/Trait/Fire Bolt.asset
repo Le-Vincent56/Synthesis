@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Fire Bolt
   m_EditorClassIdentifier: 
   type: 0
-  description: '{0} adds a flat value of {1} to damage.'
+  description: Shoot off a flaming bolt. Adding a flat value of {1} to attack damage.
   additive: 3
   multiplier: 1
   additiveHeal: 0
