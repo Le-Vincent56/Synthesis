@@ -1,3 +1,5 @@
+using Synthesis.EventBus;
+using Synthesis.EventBus.Events.UI;
 using UnityEngine;
 
 namespace Synthesis.Turns.States
@@ -10,7 +12,9 @@ namespace Synthesis.Turns.States
 
         public override void OnEnter()
         {
-            Debug.Log("Started Battle");
+            EventBus<SetInfoText>.Raise(new SetInfoText { Text = "Battle Started" });
+
+            turnSystem.AwaitPlayerTurn();
         }
     }
 }

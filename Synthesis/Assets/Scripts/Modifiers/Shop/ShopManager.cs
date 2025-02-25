@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
@@ -10,9 +9,9 @@ namespace Synthesis
 {
     public class ShopManager : MonoBehaviour
     {
-        public Creature creature;
+        public Player creature;
 
-        public TraitPool traitPool;
+        public TraitPool mutationPool;
         public List<Button> buyButtons;
         public List<TextMeshProUGUI> traitTexts;
         private List<Trait> displayedTraits = new List<Trait>();
@@ -33,7 +32,7 @@ namespace Synthesis
 
         void PopulateShop()
         {
-            if (traitPool == null || traitPool.traits.Length == 0)
+            if (mutationPool == null || mutationPool.traits.Length == 0)
             {
                 Debug.LogError("Traitpool is empty");
                 return;
@@ -42,12 +41,12 @@ namespace Synthesis
             displayedTraits.Clear();
             purchasedTraits.Clear();
 
-            for (int i = 0; i < traitPool.traits.Length; i++)
+            for (int i = 0; i < mutationPool.traits.Length; i++)
             {
-                Trait randomTrait = traitPool.GetRandomTrait();
+                Trait randomTrait = mutationPool.GetRandomTrait();
                 while (displayedTraits.Contains(randomTrait))
                 {
-                    randomTrait = traitPool.GetRandomTrait();
+                    randomTrait = mutationPool.GetRandomTrait();
                 }
 
                 displayedTraits.Add(randomTrait);

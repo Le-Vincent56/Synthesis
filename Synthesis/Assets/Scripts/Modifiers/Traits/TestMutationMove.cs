@@ -1,7 +1,7 @@
 using Synthesis.Creatures;
 using UnityEngine;
 
-namespace Synthesis.Modifiers.Mutations
+namespace Synthesis.Modifiers.Traits
 {
     public class TestMutationMove : MonoBehaviour
     {
@@ -30,7 +30,7 @@ namespace Synthesis.Modifiers.Mutations
             AddTrait(trait);
         }
 
-        private void AddTrait(Mutation trait)
+        private void AddTrait(Trait trait)
         {
             if (!navigator.AddTrait(trait)) return;
 

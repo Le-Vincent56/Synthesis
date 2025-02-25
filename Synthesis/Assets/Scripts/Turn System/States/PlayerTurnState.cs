@@ -1,5 +1,6 @@
 using Synthesis.EventBus;
 using Synthesis.EventBus.Events.Turns;
+using Synthesis.EventBus.Events.UI;
 using Synthesis.Utilities.StateMachine;
 using UnityEngine;
 
@@ -63,7 +64,7 @@ namespace Synthesis.Turns.States
             state = 0;
             subStateMachine.SetState(action);
 
-            Debug.Log("Entered Player Turn");
+            EventBus<SetInfoText>.Raise(new SetInfoText { Text = "Player Turn" });
         }
 
         public override void Update()

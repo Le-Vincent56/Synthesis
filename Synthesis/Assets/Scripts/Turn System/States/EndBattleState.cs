@@ -1,3 +1,5 @@
+using Synthesis.EventBus.Events.UI;
+using Synthesis.EventBus;
 using UnityEngine;
 
 namespace Synthesis.Turns.States
@@ -10,7 +12,7 @@ namespace Synthesis.Turns.States
 
         public override void OnEnter()
         {
-            Debug.Log("Ended Battle");
+            EventBus<SetInfoText>.Raise(new SetInfoText { Text = "Battle Ended" });
 
             // Start the next battle
             turnSystem.NextBattle();

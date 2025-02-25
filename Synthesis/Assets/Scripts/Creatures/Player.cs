@@ -1,6 +1,6 @@
 using Synthesis.Creatures.Visual;
 using Synthesis.Modifiers;
-using Synthesis.Modifiers.Mutations;
+using Synthesis.Modifiers.Traits;
 using UnityEngine;
 
 namespace Synthesis.Creatures
@@ -28,7 +28,7 @@ namespace Synthesis.Creatures
         /// <summary>
         /// Adds a new trait to a move of the creature
         /// </summary>
-        private bool AddTrait(Mutation trait, MoveType moveType)
+        private bool AddTrait(Trait trait, MoveType moveType)
         {
             return moveType switch
             {
@@ -39,31 +39,58 @@ namespace Synthesis.Creatures
             };
         }
 
-        /// <summary>
-        /// Updates creature based on trait added.
-        /// </summary>
-        private void UpdateCreatureVisual(Mutation trait)
+        public bool AddTrait(Trait trait)
         {
-            foreach (CreaturePieceConnector connector in piece.connectors)
+            if (trait.Type == MoveType.Attack || trait.Type == MoveType.Both)
             {
-                CreaturePieceConnector con = connector;
-                while (con.child)
-                {
-                    con = con.child.connectors[0];
-                }
-                CreaturePiece piece = Instantiate(trait.associatedPiece);
-                piece.transform.position = con.transform.position;
-                piece.transform.parent = con.transform;
-                piece.SetPartColor(trait.color);
-                con.child = piece;
+                return AddTrait(trait, MoveType.Attack);
+            }
+            else
+            {
+                return AddTrait(trait, MoveType.Synthesize);
             }
         }
 
-        public void CalculatePoints()
+        /// <summary>
+        /// Updates creature based on trait added.
+        /// </summary>
+        /// <param name="trait"></param>
+        private void UpdateCreatureVisual(Trait trait)
+        {
+            foreach (var connector in piece.connectors)
+            {
+                var con = connector;
+                var oldPiece = piece;
+                while (con.child)
+                {
+                    oldPiece = con.child;
+                    con = con.child.connectors[0];
+                }
+                var newPiece = Instantiate(trait.associatedPiece);
+                newPiece.transform.position = con.transform.position;
+                newPiece.transform.parent = con.transform;
+                if (oldPiece.primaryColorIn != null || oldPiece.primaryColorIn[0] != null)
+                {
+                    newPiece.SetPartColor(Color.Lerp(trait.color, oldPiece.primaryColorIn[0].color, 0.4f));
+                }
+                else
+                {
+                    newPiece.SetPartColor(trait.color);
+                }
+                con.child = newPiece;
+            }
+        }
+
+        /// <summary>
+        /// Calculate the points
+        /// </summary>
+        public float CalculatePoints()
         {
             moveInfo = new MoveInfo(MoveType.Attack, 10);
 
+            infect.ActivateStrategy(ref moveInfo);
 
+            return moveInfo.attack.FinalValue;
         }
     }
 }

@@ -1,19 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace Synthesis.Modifiers.Mutations
+namespace Synthesis.Modifiers.Traits
 {
     [CreateAssetMenu(fileName = "TraitPool", menuName = "ScriptableObjects/TraitPool", order = 0)]
     public class TraitPool : ScriptableObject
     {
-        public Mutation[] traits;
+        public Trait[] traits;
 
         /// <summary>
         /// Get a random trait from the pool.
         /// </summary>
-        /// <returns></returns>
-        public Mutation GetRandomTrait()
+        public Trait GetRandomTrait()
         {
             // pick a random trait, repeat if the reference is null up to a max number of times.
             int iterations = traits.Length * 2;
@@ -34,9 +31,7 @@ namespace Synthesis.Modifiers.Mutations
         /// <summary>
         /// Find a trait by its string name.
         /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public Mutation GetTraitByName(string name)
+        public Trait GetTraitByName(string name)
         {
             foreach (var trait in traits)
             {

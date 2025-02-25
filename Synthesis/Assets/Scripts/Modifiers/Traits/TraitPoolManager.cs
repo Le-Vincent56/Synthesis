@@ -1,9 +1,6 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace Synthesis.Modifiers.Mutations
+namespace Synthesis.Modifiers.Traits
 {
     // Singleton
     public class TraitPoolManager : MonoBehaviour

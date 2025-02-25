@@ -8,7 +8,6 @@ namespace Synthesis.Modifiers.Traits
     // Container for Trait Strategies.
     public class Trait : ScriptableObject, ITrait, IModifier
     {
-
         [SerializeField] protected MoveType type = MoveType.Both;
 
         [Tooltip("{0} is additive value, {1} is multiplicative value, {2} is name.")]

@@ -1,3 +1,5 @@
+using Synthesis.EventBus.Events.UI;
+using Synthesis.EventBus;
 using UnityEngine;
 
 namespace Synthesis.Turns.States
@@ -10,7 +12,9 @@ namespace Synthesis.Turns.States
 
         public override void OnEnter()
         {
-            Debug.Log("Entered Enemy Turn");
+            EventBus<SetInfoText>.Raise(new SetInfoText { Text = "Enemy Turn" });
+
+            turnSystem.AwaitEnemyDamage();
         }
     }
 }
