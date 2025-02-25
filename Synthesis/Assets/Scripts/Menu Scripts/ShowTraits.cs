@@ -11,10 +11,10 @@ namespace Synthesis
     {
         //public GameObject popupPanel; 
         private Creature creature;
-        private Button baseTraitButton;
-        private Button trait1Button;
-        private Button trait2Button;
-        private Button trait3Button;
+        private Button expandLimbsButton;
+        private Button electricStrikeButton;
+        private Button fireBoltButton;
+        private Button waterWaveButton;
 
         private void Start()
         {
@@ -22,11 +22,16 @@ namespace Synthesis
             creature = GameObject.Find("Creature Base").GetComponent<Creature>();
 
             //get trait buttons to hover over
-            baseTraitButton = transform.Find("BaseTraitButton").GetComponent<Button>();
-            trait1Button = transform.Find("Trait1Button").GetComponent<Button>();
-            trait2Button = transform.Find("Trait2Button").GetComponent<Button>();
-            trait3Button = transform.Find("Trait3Button").GetComponent<Button>();
+            expandLimbsButton = transform.Find("ExpandLimbsButton").GetComponent<Button>();
+            electricStrikeButton = transform.Find("ElectricStrikeButton").GetComponent<Button>();
+            fireBoltButton = transform.Find("FireBoltButton").GetComponent<Button>();
+            waterWaveButton = transform.Find("WaterWaveButton").GetComponent<Button>();
 
+            ShowTraitsFunction();
+        }
+
+        public void ShowTraitsFunction()
+        {
             foreach (var move in creature.moves)
             {
                 foreach (var trait in move.Traits)
@@ -34,17 +39,17 @@ namespace Synthesis
                     //Debug.Log($"Trait found: {trait.Name}");
                     switch (trait.Name)
                     {
-                        case "Basic Trait":
-                            baseTraitButton.gameObject.SetActive(true);
+                        case "Expand Limbs":
+                            expandLimbsButton.gameObject.SetActive(true);
                             break;
-                        case "Basic Trait 1":
-                            trait1Button.gameObject.SetActive(true);
+                        case "Electric Strike":
+                            electricStrikeButton.gameObject.SetActive(true);
                             break;
-                        case "Basic Trait 2":
-                            trait2Button.gameObject.SetActive(true);
+                        case "Fire Bolt":
+                            fireBoltButton.gameObject.SetActive(true);
                             break;
-                        case "Basic Trait 3":
-                            trait3Button.gameObject.SetActive(true);
+                        case "Water Wave":
+                            waterWaveButton.gameObject.SetActive(true);
                             break;
                         default:
                             Debug.LogWarning($"No button found for trait: {trait.Name}");
