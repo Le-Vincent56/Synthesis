@@ -69,15 +69,24 @@ namespace Synthesis.Creatures
             foreach (var connector in piece.connectors)
             {
                 var con = connector;
+                var oldPiece = piece;
                 while (con.child)
                 {
+                    oldPiece = con.child;
                     con = con.child.connectors[0];
                 }
-                var piece = Instantiate(trait.associatedPiece);
-                piece.transform.position = con.transform.position;
-                piece.transform.parent = con.transform;
-                piece.SetPartColor(trait.color);
-                con.child = piece;
+                var newPiece = Instantiate(trait.associatedPiece);
+                newPiece.transform.position = con.transform.position;
+                newPiece.transform.parent = con.transform;
+                if (oldPiece.primaryColorIn != null || oldPiece.primaryColorIn[0] != null)
+                {
+                    newPiece.SetPartColor(Color.Lerp(trait.color, oldPiece.primaryColorIn[0].color, 0.4f));
+                }
+                else
+                {
+                    newPiece.SetPartColor(trait.color);
+                }
+                con.child = newPiece;
             }
         }
     }
