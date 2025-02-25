@@ -14,6 +14,8 @@ namespace Synthesis.Creatures
         private MoveInfo moveInfo;
 
         public CreaturePiece Piece { get => piece; }
+        public Move Infect { get => infect; }
+        public Move Synthesize { get => synthesize; }
 
         // Methods
         /// <summary>

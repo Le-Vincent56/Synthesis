@@ -8,7 +8,6 @@ namespace Synthesis.Turns.States
 
         public override void OnEnter()
         {
-            Debug.Log("Entered Action State");
         }
     }
 }

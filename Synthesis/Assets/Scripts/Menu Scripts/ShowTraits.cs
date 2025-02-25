@@ -10,7 +10,7 @@ namespace Synthesis
     public class ShowTraits : MonoBehaviour
     {
         //public GameObject popupPanel; 
-        private Creature creature;
+        private Player creature;
         private Button expandLimbsButton;
         private Button electricStrikeButton;
         private Button fireBoltButton;
@@ -19,7 +19,7 @@ namespace Synthesis
         private void Start()
         {
             // Find the Creature component
-            creature = GameObject.Find("Creature Base").GetComponent<Creature>();
+            creature = GameObject.Find("Creature Base").GetComponent<Player>();
 
             //get trait buttons to hover over
             expandLimbsButton = transform.Find("ExpandLimbsButton").GetComponent<Button>();
@@ -32,29 +32,49 @@ namespace Synthesis
 
         public void ShowTraitsFunction()
         {
-            foreach (var move in creature.moves)
+            foreach (var trait in creature.Infect.Traits)
             {
-                foreach (var trait in move.Traits)
+                //Debug.Log($"Trait found: {trait.Name}");
+                switch (trait.Name)
                 {
-                    //Debug.Log($"Trait found: {trait.Name}");
-                    switch (trait.Name)
-                    {
-                        case "Expand Limbs":
-                            expandLimbsButton.gameObject.SetActive(true);
-                            break;
-                        case "Electric Strike":
-                            electricStrikeButton.gameObject.SetActive(true);
-                            break;
-                        case "Fire Bolt":
-                            fireBoltButton.gameObject.SetActive(true);
-                            break;
-                        case "Water Wave":
-                            waterWaveButton.gameObject.SetActive(true);
-                            break;
-                        default:
-                            Debug.LogWarning($"No button found for trait: {trait.Name}");
-                            break;
-                    }
+                    case "Expand Limbs":
+                        expandLimbsButton.gameObject.SetActive(true);
+                        break;
+                    case "Electric Strike":
+                        electricStrikeButton.gameObject.SetActive(true);
+                        break;
+                    case "Fire Bolt":
+                        fireBoltButton.gameObject.SetActive(true);
+                        break;
+                    case "Water Wave":
+                        waterWaveButton.gameObject.SetActive(true);
+                        break;
+                    default:
+                        Debug.LogWarning($"No button found for trait: {trait.Name}");
+                        break;
+                }
+            }
+
+            foreach (var trait in creature.Synthesize.Traits)
+            {
+                //Debug.Log($"Trait found: {trait.Name}");
+                switch (trait.Name)
+                {
+                    case "Expand Limbs":
+                        expandLimbsButton.gameObject.SetActive(true);
+                        break;
+                    case "Electric Strike":
+                        electricStrikeButton.gameObject.SetActive(true);
+                        break;
+                    case "Fire Bolt":
+                        fireBoltButton.gameObject.SetActive(true);
+                        break;
+                    case "Water Wave":
+                        waterWaveButton.gameObject.SetActive(true);
+                        break;
+                    default:
+                        Debug.LogWarning($"No button found for trait: {trait.Name}");
+                        break;
                 }
             }
         }

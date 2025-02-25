@@ -11,7 +11,7 @@ namespace Synthesis
     public class OnHoverPopup : MonoBehaviour
     {
         public GameObject popupPanel; // UI panel containing description text
-        private Creature creature; 
+        private Player creature; 
         public TraitPool traitPool;
 
         public Button expandLimbsButton, electricStrikeButton, fireBoltButton, waterWaveButton;
@@ -21,7 +21,7 @@ namespace Synthesis
         private void Start()
         {
             // Find the Creature
-            creature = GameObject.Find("Creature Base").GetComponent<Creature>();
+            creature = GameObject.Find("Creature Base").GetComponent<Player>();
 
             // Find the description popup panel text
             descriptionText = popupPanel.transform.Find("DescriptionText").GetComponent<TMP_Text>();
