@@ -7,7 +7,7 @@ namespace Synthesis.Creatures
 {
     public class Player : MonoBehaviour, ICreature
     {
-        private CreaturePiece piece;
+        [SerializeField] private CreaturePiece piece;
         private Move infect = new Move(MoveType.Attack);
         private Move synthesize = new Move(MoveType.Synthesize);
 
@@ -32,6 +32,7 @@ namespace Synthesis.Creatures
         /// </summary>
         private bool AddTrait(Trait trait, MoveType moveType)
         {
+            UpdateCreatureVisual(trait);
             return moveType switch
             {
                 MoveType.Attack => infect.AddTrait(trait),
