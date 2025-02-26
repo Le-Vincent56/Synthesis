@@ -25,6 +25,9 @@ namespace Synthesis.Turns
             // Set initial state
             state = 0;
 
+            // Get the player
+            player = GetComponentInChildren<Player>();
+
             // Create the Start Battle Timer
             CreateTimers();
 

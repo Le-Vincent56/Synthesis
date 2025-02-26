@@ -64,7 +64,8 @@ namespace Synthesis.Turns.States
             state = 0;
             subStateMachine.SetState(action);
 
-            EventBus<SetInfoText>.Raise(new SetInfoText { Text = "Player Turn" });
+            EventBus<ShowTurnHeader>.Raise(new ShowTurnHeader { Text = "PLAYER TURN" });
+            EventBus<ShowPlayerInfo>.Raise(new ShowPlayerInfo());
         }
 
         public override void Update()

@@ -1,6 +1,5 @@
 using Synthesis.EventBus;
 using Synthesis.EventBus.Events.UI;
-using UnityEngine;
 
 namespace Synthesis.Turns.States
 {
@@ -12,7 +11,7 @@ namespace Synthesis.Turns.States
 
         public override void OnEnter()
         {
-            EventBus<SetInfoText>.Raise(new SetInfoText { Text = "Battle Started" });
+            EventBus<ShowTurnHeader>.Raise(new ShowTurnHeader{ Text = "ENCOUNTER START" });
 
             turnSystem.AwaitPlayerTurn();
         }
