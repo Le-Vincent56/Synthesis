@@ -8,6 +8,8 @@ namespace Synthesis.Turns.States
 {
     public class PlayerTurnState : TurnState
     {
+        private readonly CameraController cameraController;
+
         private StateMachine subStateMachine;
         private ActionState action;
         private MutateState mutate;
@@ -17,8 +19,10 @@ namespace Synthesis.Turns.States
         private EventBinding<EnterAction> onEnterAction;
         private EventBinding<EnterMutate> onEnterMutate;
 
-        public PlayerTurnState(TurnSystem turnSystem) : base(turnSystem)
+        public PlayerTurnState(TurnSystem turnSystem, CameraController cameraController) : base(turnSystem)
         {
+            this.cameraController = cameraController;
+
             // Set the initial state
             state = 0;
 
@@ -60,6 +64,9 @@ namespace Synthesis.Turns.States
 
         public override void OnEnter()
         {
+            // Set the camera to the UI camera
+            cameraController.PrioritizeUICamera();
+
             // Set the action state
             state = 0;
             subStateMachine.SetState(action);

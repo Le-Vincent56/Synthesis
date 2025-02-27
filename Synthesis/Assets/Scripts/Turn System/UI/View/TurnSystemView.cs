@@ -3,20 +3,22 @@ using Synthesis.EventBus;
 using Synthesis.EventBus.Events.UI;
 using Synthesis.Timers;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Synthesis
 {
     public class TurnSystemView : MonoBehaviour
     {
+        [Header("References")]
         [SerializeField] private CanvasGroup turnHeader;
         [SerializeField] private CanvasGroup playerInformation;
         [SerializeField] private CanvasGroup enemyInformation;
-
         private RectTransform playerInfoRect;
-
         private Text turnHeaderText;
+        [SerializeField] private SelectableButton infectButton;
 
+        [Header("Fields")]
         [SerializeField] private bool turnHeaderActive;
         private CountdownTimer turnHeaderFadeOutTimer;
 
@@ -147,7 +149,14 @@ namespace Synthesis
         /// <summary>
         /// Show the Player Information panel
         /// </summary>
-        private void ShowPlayerInfo() => TranslatePlayerInfo(translateAmount, translateDuration);
+        private void ShowPlayerInfo()
+        {
+            TranslatePlayerInfo(translateAmount, translateDuration, () =>
+            {
+                // Select the Infect button
+                EventSystem.current.SetSelectedGameObject(infectButton.gameObject);
+            });
+        }
 
         /// <summary>
         /// Hide the Player Information panel

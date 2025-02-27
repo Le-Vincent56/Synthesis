@@ -1,4 +1,5 @@
 using Synthesis.Creatures;
+using Synthesis.ServiceLocators;
 using Synthesis.Timers;
 using Synthesis.Turns.States;
 using Synthesis.Utilities.StateMachine;
@@ -8,6 +9,9 @@ namespace Synthesis.Turns
 {
     public class TurnSystem : MonoBehaviour
     {
+        [Header("References")]
+        [SerializeField] private CameraController cameraController;
+
         [Header("States")]
         [SerializeField] private Player player;
         [SerializeField] private int state;
@@ -31,10 +35,16 @@ namespace Synthesis.Turns
             // Create the Start Battle Timer
             CreateTimers();
 
+            turnsRemaining = 4;
+        }
+
+        private void Start()
+        {
+            // Set the camera controller
+            cameraController = ServiceLocator.ForSceneOf(this).Get<CameraController>();
+
             // Set up the State Machine
             SetupStateMachine();
-
-            turnsRemaining = 4;
         }
 
         private void Update()
@@ -63,8 +73,8 @@ namespace Synthesis.Turns
 
             // Create states
             StartBattleState startBattle = new StartBattleState(this);
-            PlayerTurnState playerTurn = new PlayerTurnState(this);
-            CalculatePointsState calculatePoints = new CalculatePointsState(this, player);
+            PlayerTurnState playerTurn = new PlayerTurnState(this, cameraController);
+            CalculatePointsState calculatePoints = new CalculatePointsState(this, player, cameraController);
             EnemyTurnState enemyTurn = new EnemyTurnState(this);
             CalculateDamageState calculateDamage = new CalculateDamageState(this);
             EndBattleState endBattle = new EndBattleState(this);
@@ -118,13 +128,13 @@ namespace Synthesis.Turns
             setPlayerTurnTimer = new CountdownTimer(1f);
             setPlayerTurnTimer.OnTimerStop += () => state = 1;
 
-            setEnemyTurnTimer = new CountdownTimer(1f);
+            setEnemyTurnTimer = new CountdownTimer(3f);
             setEnemyTurnTimer.OnTimerStop += () => state = 3;
 
-            setEnemyDamageTimer = new CountdownTimer(1f);
+            setEnemyDamageTimer = new CountdownTimer(3f);
             setEnemyDamageTimer.OnTimerStop += () => state = 4;
 
-            endTurnTimer = new CountdownTimer(1f);
+            endTurnTimer = new CountdownTimer(3f);
             endTurnTimer.OnTimerStop += () => PassTurn();
         }
 
@@ -143,10 +153,19 @@ namespace Synthesis.Turns
         /// </summary>
         public void AwaitPlayerTurn() => setPlayerTurnTimer?.Start();
 
+        /// <summary>
+        /// Await the enemy turn phase
+        /// </summary>
         public void AwaitEnemyTurn() => setEnemyTurnTimer?.Start();
 
+        /// <summary>
+        /// Await the enemy damage phase
+        /// </summary>
         public void AwaitEnemyDamage() => setEnemyDamageTimer?.Start();
 
+        /// <summary>
+        /// Await the end turn phase
+        /// </summary>
         public void AwaitPassTurn() => endTurnTimer?.Start();
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace Synthesis
 {
-    public class SelectableButton : MonoBehaviour, ISelectHandler, IDeselectHandler, ISubmitHandler
+    public class SelectableButton : MonoBehaviour, ISelectHandler, IDeselectHandler, ISubmitHandler, IPointerDownHandler
     {
         [Header("References")]
         [SerializeField] private Image image;
@@ -44,6 +44,8 @@ namespace Synthesis
         public void OnDeselect(BaseEventData eventData) => Highlight(false);
 
         public void OnSubmit(BaseEventData eventData) => Glow();
+
+        public void OnPointerDown(PointerEventData eventData) => Glow();
 
         /// <summary>
         /// Handle highlighting for the selectable button
