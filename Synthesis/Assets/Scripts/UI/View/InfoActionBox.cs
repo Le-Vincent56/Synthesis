@@ -3,7 +3,7 @@ using Synthesis.EventBus.Events.UI;
 using TMPro;
 using UnityEngine;
 
-namespace Synthesis
+namespace Synthesis.UI.View
 {
     public class InfoActionBox : MonoBehaviour
     {

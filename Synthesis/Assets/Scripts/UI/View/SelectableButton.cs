@@ -1,9 +1,10 @@
 using DG.Tweening;
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace Synthesis
+namespace Synthesis.UI.View
 {
     public class SelectableButton : MonoBehaviour, ISelectHandler, IDeselectHandler, ISubmitHandler, IPointerDownHandler
     {
@@ -21,7 +22,17 @@ namespace Synthesis
         private Tween fadeTween;
         private Tween expandTween;
 
-        private void Awake()
+        private void OnDestroy()
+        {
+            // Kill the highlight tween if it exists
+            fadeTween?.Kill();
+            expandTween?.Kill();
+        }
+
+        /// <summary>
+        /// Initialize the Selectable Button
+        /// </summary>
+        public void Initialize(Action onClick)
         {
             // Get components
             button = GetComponent<Button>();
@@ -30,13 +41,9 @@ namespace Synthesis
             // Set the initial color
             initialColor = image.color;
             initialColor.a = 1f;
-        }
 
-        private void OnDestroy()
-        {
-            // Kill the highlight tween if it exists
-            fadeTween?.Kill();
-            expandTween?.Kill();
+            // Set button event listener
+            button.onClick.AddListener(() => onClick());
         }
 
         public void OnSelect(BaseEventData eventData) => Highlight(true);

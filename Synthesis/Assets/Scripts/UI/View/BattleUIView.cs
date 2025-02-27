@@ -1,14 +1,15 @@
 using DG.Tweening;
 using Synthesis.EventBus;
+using Synthesis.EventBus.Events.Turns;
 using Synthesis.EventBus.Events.UI;
 using Synthesis.Timers;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace Synthesis
+namespace Synthesis.UI.View
 {
-    public class TurnSystemView : MonoBehaviour
+    public class BattleUIView : MonoBehaviour
     {
         [Header("References")]
         [SerializeField] private CanvasGroup turnHeader;
@@ -17,6 +18,7 @@ namespace Synthesis
         private RectTransform playerInfoRect;
         private Text turnHeaderText;
         [SerializeField] private SelectableButton infectButton;
+        [SerializeField] private SelectableButton synthesizeButton;
 
         [Header("Fields")]
         [SerializeField] private bool turnHeaderActive;
@@ -50,6 +52,11 @@ namespace Synthesis
                 HideTurnHeader();
             };
 
+            // Initialize buttons
+            infectButton.Initialize(() => EventBus<Infect>.Raise(new Infect()));
+            synthesizeButton.Initialize(() => EventBus<Synthesize>.Raise(new Synthesize()));
+
+            // Translate the player info off screen
             TranslatePlayerInfo(-translateAmount, 0f);
         }
 

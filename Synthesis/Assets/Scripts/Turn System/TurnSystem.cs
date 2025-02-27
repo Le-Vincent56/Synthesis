@@ -1,4 +1,6 @@
 using Synthesis.Creatures;
+using Synthesis.EventBus;
+using Synthesis.EventBus.Events.Turns;
 using Synthesis.ServiceLocators;
 using Synthesis.Timers;
 using Synthesis.Turns.States;
@@ -17,6 +19,7 @@ namespace Synthesis.Turns
         [SerializeField] private int state;
         private StateMachine stateMachine;
         private int turnsRemaining;
+        private int currentRound;
 
         private CountdownTimer startBattleTimer;
         private CountdownTimer setPlayerTurnTimer;
@@ -24,10 +27,18 @@ namespace Synthesis.Turns
         private CountdownTimer setEnemyDamageTimer;
         private CountdownTimer endTurnTimer;
 
+        private EventBinding<Infect> onInfect;
+        private EventBinding<Synthesize> onSynthesize;
+
+        public int CurrentRound { get => currentRound; }
+
         private void Awake()
         {
             // Set initial state
             state = 0;
+
+            // Set the current round to 0
+            currentRound = 0;
 
             // Get the player
             player = GetComponentInChildren<Player>();
@@ -36,6 +47,21 @@ namespace Synthesis.Turns
             CreateTimers();
 
             turnsRemaining = 4;
+        }
+
+        private void OnEnable()
+        {
+            onInfect = new EventBinding<Infect>(Infect);
+            EventBus<Infect>.Register(onInfect);
+
+            onSynthesize = new EventBinding<Synthesize>(Synthesize);
+            EventBus<Synthesize>.Register(onSynthesize);
+        }
+
+        private void OnDisable()
+        {
+            EventBus<Infect>.Deregister(onInfect);
+            EventBus<Synthesize>.Deregister(onSynthesize);
         }
 
         private void Start()
@@ -74,6 +100,7 @@ namespace Synthesis.Turns
             // Create states
             StartBattleState startBattle = new StartBattleState(this);
             PlayerTurnState playerTurn = new PlayerTurnState(this, cameraController);
+
             CalculatePointsState calculatePoints = new CalculatePointsState(this, player, cameraController);
             EnemyTurnState enemyTurn = new EnemyTurnState(this);
             CalculateDamageState calculateDamage = new CalculateDamageState(this);
@@ -112,9 +139,10 @@ namespace Synthesis.Turns
                 return;
             }
 
-            // Otherwise, set the end state
+            // Otherwise, set the end state, reset the turns and add to the current round
             state = 5;
             turnsRemaining = 4;
+            currentRound++;
         }
 
         /// <summary>
@@ -136,6 +164,19 @@ namespace Synthesis.Turns
 
             endTurnTimer = new CountdownTimer(3f);
             endTurnTimer.OnTimerStop += () => PassTurn();
+        }
+
+        /// <summary>
+        /// Take the Infect action by changing turn states
+        /// </summary>
+        private void Infect() => SetState(2);
+
+        /// <summary>
+        /// Take the Synthesize action by changing turn states
+        /// </summary>
+        private void Synthesize()
+        {
+            // Synthesize
         }
 
         /// <summary>
