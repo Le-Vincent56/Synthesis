@@ -68,5 +68,20 @@ namespace Synthesis
         {
             return Random.Range(0, 100) < round * 34;
         }
+
+        public void RemoveEvilCreature(int creatureIndex)
+        {
+            if (creatureIndex >= 0 && creatureIndex < evilCreatures.Count)
+            {
+                GameObject creatureToRemove = evilCreatures[creatureIndex];
+                evilCreatures.RemoveAt(creatureIndex);
+                Destroy(creatureToRemove);
+                index--;
+            }
+            else
+            {
+                Debug.LogWarning("Invalid creature index!");
+            }
+        }
     }
 }
