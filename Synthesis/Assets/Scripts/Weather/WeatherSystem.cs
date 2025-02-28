@@ -4,16 +4,10 @@ using UnityEngine;
 
 namespace Synthesis.Weather
 {
-    public enum WeatherType
-    {
-        Clear,
-        Drought,
-        Torrent,
-    }
-
     public class WeatherSystem : MonoBehaviour
     {
         [SerializeField] private WeatherType currentWeather;
+        private Clear clearWeather;
         private int turnsUntilWeatherChange;
         private Dictionary<WeatherType, float> weatherPercentages;
 
@@ -21,14 +15,18 @@ namespace Synthesis.Weather
 
         private void Awake()
         {
+            Clear clear = new Clear();
+            Drought drought = new Drought();
+            Torrent torrent = new Torrent();
+
             weatherPercentages = new Dictionary<WeatherType, float>
             {
-                { WeatherType.Drought, 0.5f },
-                { WeatherType.Torrent, 0.5f }
+                { drought, 0.5f },
+                { torrent, 0.5f }
             };
 
             // Set clear weather to begin wtih
-            currentWeather = WeatherType.Clear;
+            currentWeather = clear;
         }
 
         /// <summary>
@@ -57,17 +55,7 @@ namespace Synthesis.Weather
         /// </summary>
         public void ActivateWeatherEffect()
         {
-            // Check the current Weather
-            switch (currentWeather)
-            {
-                case WeatherType.Clear:
-                    // Clear weather has no effect
-                    break;
-                case WeatherType.Drought:
-                    break;
-                case WeatherType.Torrent:
-                    break;
-            }
+            // Check the types of weather
         }
 
         /// <summary>
@@ -111,7 +99,7 @@ namespace Synthesis.Weather
             }
 
             // Fall back on the Drought weather if no weather was chosen
-            return WeatherType.Drought;
+            return clearWeather;
         }
     }
 }
