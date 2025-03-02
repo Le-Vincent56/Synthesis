@@ -22,5 +22,5 @@ MonoBehaviour:
   multiplierHeal: 1.1
   additiveMutate: 2
   multiplierMutate: 1.1
-  associatedPiece: {fileID: 5093379418373471637, guid: 045c76f218474f14caa6356959cef821, type: 3}
+  associatedPiece: {fileID: 8099366975605549189, guid: 773ab6ff592fb2b4a9f269e8422f384e, type: 3}
   color: {r: 0.5808331, g: 1, b: 0.47484267, a: 1}

@@ -39,19 +39,7 @@ namespace Synthesis.Modifiers.Traits
 
             if (player)
             {
-                foreach (var connector in player.Piece.connectors)
-                {
-                    var con = connector;
-                    while (con.child)
-                    {
-                        con = con.child.connectors[0];
-                    }
-                    var piece = Instantiate(trait.associatedPiece);
-                    piece.transform.position = con.transform.position;
-                    piece.transform.parent = con.transform;
-                    piece.SetPartColor(trait.color);
-                    con.child = piece;
-                }
+                player.AddTrait(trait);
             }
         }
     }
