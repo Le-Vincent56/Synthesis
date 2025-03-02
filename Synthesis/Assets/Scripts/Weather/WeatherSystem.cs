@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -35,7 +34,7 @@ namespace Synthesis.Weather
         public void UpdateWeather()
         {
             // Check if there are still turns until the weather change
-            if(turnsUntilWeatherChange > 0)
+            if (turnsUntilWeatherChange > 0)
             {
                 // Tick down the amount of turns unti the weather change
                 turnsUntilWeatherChange--;
@@ -48,14 +47,9 @@ namespace Synthesis.Weather
 
             // Set a new Weather date
             SetWeatherDate();
-        }
 
-        /// <summary>
-        /// Activate the current Weather effect
-        /// </summary>
-        public void ActivateWeatherEffect()
-        {
-            // Check the types of weather
+            // Start the weather effect
+            currentWeather.StartWeather();
         }
 
         /// <summary>
@@ -72,7 +66,7 @@ namespace Synthesis.Weather
             float totalWeight = 0f;
 
             // Iterate through each KeyValuePair
-            foreach(KeyValuePair<WeatherType, float> weather in weatherPercentages)
+            foreach (KeyValuePair<WeatherType, float> weather in weatherPercentages)
             {
                 // Add the weight to the total weight
                 totalWeight += weather.Value;

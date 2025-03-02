@@ -2613,6 +2613,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 952880627}
+  - component: {fileID: 952880628}
   m_Layer: 0
   m_Name: Weather
   m_TagString: Untagged
@@ -2636,6 +2637,18 @@ Transform:
   - {fileID: 337959238}
   m_Father: {fileID: 23070646}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &952880628
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 952880626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3359e3ebce184948a54e3175efa838e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &982064150
 GameObject:
   m_ObjectHideFlags: 0
@@ -5661,6 +5674,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eddb6176da5844c4e9b177b64a909b63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  baseCombatRating: 10
+  baseCombatRatingAdditives: 0
+  baseCombatRatingMultipliers: 0
+  finalCombatRatingAdditives: 0
+  incomingWiltPercentage: 1
 --- !u!1 &2066098061
 GameObject:
   m_ObjectHideFlags: 0
