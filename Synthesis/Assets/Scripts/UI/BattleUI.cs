@@ -4,8 +4,6 @@ using Synthesis.Mutations;
 using Synthesis.ServiceLocators;
 using Synthesis.UI.Controller;
 using Synthesis.UI.View;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Synthesis.UI
@@ -13,14 +11,19 @@ namespace Synthesis.UI
     public class BattleUI : MonoBehaviour
     {
         [Header("References")]
+        [SerializeField] private MutationCard mutationCardPrefab;
+        [SerializeField] private Transform mutationCardParent;
         [SerializeField] private BattleUIView view;
-        [SerializeField] private MutationPool mutationPool;
+        private MutationPool mutationPool;
         private BattleUIController controller;
 
         private EventBinding<ShowTurnHeader> onShowTurnHeader;
         private EventBinding<HideTurnHeader> onHideTurnHeader;
         private EventBinding<ShowPlayerInfo> onShowPlayerInfo;
         private EventBinding<HidePlayerInfo> onHidePlayerInfo;
+        private EventBinding<ShowSynthesizeShop> onShowSynthesizeShop;
+        private EventBinding<HideSynthesizeShop> onHideSynthesizeShop;
+
 
         private void OnEnable()
         {
@@ -35,6 +38,12 @@ namespace Synthesis.UI
 
             onHidePlayerInfo = new EventBinding<HidePlayerInfo>(HidePlayerInfo);
             EventBus<HidePlayerInfo>.Register(onHidePlayerInfo);
+
+            onShowSynthesizeShop = new EventBinding<ShowSynthesizeShop>(ShowSynthesizeShop);
+            EventBus<ShowSynthesizeShop>.Register(onShowSynthesizeShop);
+
+            onHideSynthesizeShop = new EventBinding<HideSynthesizeShop>(HideSynthesizeShop);
+            EventBus<HideSynthesizeShop>.Register(onHideSynthesizeShop);
         }
 
         private void OnDisable()
@@ -43,20 +52,26 @@ namespace Synthesis.UI
             EventBus<HideTurnHeader>.Deregister(onHideTurnHeader);
             EventBus<ShowPlayerInfo>.Deregister(onShowPlayerInfo);
             EventBus<HidePlayerInfo>.Deregister(onHidePlayerInfo);
+            EventBus<ShowSynthesizeShop>.Deregister(onShowSynthesizeShop);
+            EventBus<HideSynthesizeShop>.Deregister(onHideSynthesizeShop);
         }
 
         private void Start()
         {
             mutationPool = ServiceLocator.ForSceneOf(this).Get<MutationPool>();
 
+            // Build the controller
             controller = new BattleUIController.Builder()
                 .WithMutationsPool(mutationPool)
+                .WithMutationCardPool(mutationCardPrefab, mutationCardParent)
                 .Build(view);
         }
 
-        private void ShowTurnHeader(ShowTurnHeader eventData) => view.ShowTurnHeader(eventData.Text);
-        private void HideTurnHeader() => view.HideTurnHeader();
-        private void ShowPlayerInfo() => view.ShowPlayerInfo();
-        private void HidePlayerInfo() => view.HidePlayerInfo();
+        private void ShowTurnHeader(ShowTurnHeader eventData) => controller.ShowTurnHeader(eventData.Text);
+        private void HideTurnHeader() => controller.HideTurnHeader();
+        private void ShowPlayerInfo() => controller.ShowPlayerInfo();
+        private void HidePlayerInfo() => controller.HidePlayerInfo();
+        private void ShowSynthesizeShop() => controller.ShowSynthesizeShop();
+        private void HideSynthesizeShop() => controller.HideSynthesizeShop();
     }
 }

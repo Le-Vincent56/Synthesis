@@ -55,15 +55,46 @@ namespace Synthesis.Mutations
         }
 
         /// <summary>
-        /// Get a random available Mutation Type
+        /// Gets a List of unique Mutations up to a given number
         /// </summary>
-        public Type GetRandomAvailableMutation()
+        private List<Type> GetUniqueMutations(int count)
         {
-            // Exit case - there are no available Mutations
-            if (availableMutations.Count == 0) return null;
+            // Ensure we do not request more than what is available
+            int maxCount = Mathf.Min(count, availableMutations.Count);
 
-            return availableMutations[UnityEngine.Random.Range(0, availableMutations.Count)];
+            // Create a copy of the available mutations and shuffle it to randomize order
+            List<Type> shuffledMutations = new List<Type>(availableMutations);
+            ShuffleList(shuffledMutations);
+
+            // Create the final list
+            List<Type> selectedMutations = new List<Type>();
+
+            // Iterate a number of ties equal to the given max count
+            for (int i = 0; i < maxCount; i++)
+            {
+                // Add the selected Mutation to the list
+                selectedMutations.Add(shuffledMutations[i]);
+            }
+
+            return selectedMutations;
         }
+
+        /// <summary>
+        /// Fisher-Yates Shuffle Algorithm to shuffle a List in place.
+        /// </summary>
+        private void ShuffleList<T>(List<T> list)
+        {
+            // Iterate throug the list starting from the back
+            for (int i = list.Count - 1; i > 0; i--)
+            {
+                // Pick a random index from the start to the current index
+                int j = UnityEngine.Random.Range(0, i + 1);
+
+                // Swap the list at index i with the list at index j
+                (list[i], list[j]) = (list[j], list[i]);
+            }
+        }
+
 
         /// <summary>
         /// Set Mutation availability
@@ -86,6 +117,42 @@ namespace Synthesis.Mutations
             else
                 // Remove it from the available Mutations list
                 availableMutations.Remove(mutationType);
+        }
+
+        /// <summary>
+        /// Get a List of Mutations from a List of Mutation Types
+        /// </summary>
+        private List<MutationStrategy> GetMutationsFromType(List<Type> mutationTypes)
+        {
+            // Create a list of Mutations
+            List<MutationStrategy> mutations = new List<MutationStrategy>();
+
+            // Iterate through each mutation type
+            foreach (Type mutationType in mutationTypes)
+            {
+                // Get the Mutation instance
+                MutationStrategy mutation = GetMutationInstance(mutationType);
+
+                // Exit case - the Mutation is null
+                if (mutation == null) continue;
+
+                // Add the Mutation to the list
+                mutations.Add(mutation);
+            }
+
+            return mutations;
+        }
+
+        /// <summary>
+        /// Get a List of Mutations up to a certain count
+        /// </summary>
+        public List<MutationStrategy> GetMutations(int count)
+        {
+            // Get a List of unique Mutation Types
+            List<Type> uniqueMutationTypes = GetUniqueMutations(count);
+
+            // Return a List of Mutations from the unique Mutation Types
+            return GetMutationsFromType(uniqueMutationTypes);
         }
 
         /// <summary>

@@ -6,6 +6,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using Synthesis.EventBus.Events.Turns;
 using UnityEngine.EventSystems;
+using Synthesis.Mutations;
+using System.Collections.Generic;
 
 namespace Synthesis.UI.View
 {
@@ -15,7 +17,9 @@ namespace Synthesis.UI.View
         [SerializeField] private CanvasGroup turnHeader;
         [SerializeField] private CanvasGroup playerInformation;
         [SerializeField] private CanvasGroup enemyInformation;
+        [SerializeField] private CanvasGroup synthesizeShop;
         private RectTransform playerInfoRect;
+        private RectTransform synthesizeShopRect;
         private Text turnHeaderText;
         [SerializeField] private SelectableButton infectButton;
         [SerializeField] private SelectableButton synthesizeButton;
@@ -31,12 +35,14 @@ namespace Synthesis.UI.View
         [SerializeField] private float fadeEnemyInfoDuration;
         private Tween fadeTurnHeaderTween;
         private Tween translatePlayerInfoTween;
+        private Tween translateSynthesizeShopTween;
         private Tween fadeEnemyInfoTween;
 
         private void Awake()
         {
             // Get components
             playerInfoRect = playerInformation.GetComponent<RectTransform>();
+            synthesizeShopRect = synthesizeShop.GetComponent<RectTransform>();
             turnHeaderText = turnHeader.GetComponentInChildren<Text>();
 
             // Create the Turn Header fade out timer
@@ -49,10 +55,11 @@ namespace Synthesis.UI.View
 
             // Initialize buttons
             infectButton.Initialize(() => EventBus<Infect>.Raise(new Infect()));
-            synthesizeButton.Initialize(() => EventBus<Synthesize>.Raise(new Synthesize()));
+            synthesizeButton.Initialize(() => EventBus<ShowSynthesizeShop>.Raise(new ShowSynthesizeShop()));
 
             // Translate the player info off screen
             TranslatePlayerInfo(-translateAmount, 0f);
+            TranslateSynthesizeShop(-translateAmount, 0f);
         }
 
         private void OnDestroy()
@@ -63,6 +70,7 @@ namespace Synthesis.UI.View
             // Kill any existing tweens
             fadeTurnHeaderTween?.Kill();
             translatePlayerInfoTween?.Kill();
+            translateSynthesizeShopTween?.Kill();
             fadeEnemyInfoTween?.Kill();
         }
 
@@ -143,6 +151,27 @@ namespace Synthesis.UI.View
         public void HidePlayerInfo() => TranslatePlayerInfo(-translateAmount, translateDuration);
 
         /// <summary>
+        /// Show the Synthesize Shop panel
+        /// </summary>
+        public void ShowSynthesizeShop(List<MutationCard> selectedMutations)
+        {
+            // Hide the Player Info
+            TranslatePlayerInfo(-translateAmount, translateDuration, () =>
+            {
+                // Show the Synthesize Shop
+                TranslateSynthesizeShop(translateAmount, translateDuration, () =>
+                {
+                    EventSystem.current.SetSelectedGameObject(selectedMutations[0].gameObject);
+                });
+            });
+        }
+
+        /// <summary>
+        /// Hide the Syntehsize Shop panel
+        /// </summary>
+        public void HideSynthesizeShop() => TranslateSynthesizeShop(-translateAmount, translateDuration);
+
+        /// <summary>
         /// Handle translating the Player Information
         /// </summary>
         private void TranslatePlayerInfo(float translateAmount, float duration, TweenCallback onComplete = null)
@@ -163,6 +192,27 @@ namespace Synthesis.UI.View
 
             // Set the completion action
             translatePlayerInfoTween.onComplete += onComplete;
+        }
+
+        /// <summary>
+        /// Handle translating the Synthesize Shop
+        /// </summary>
+        private void TranslateSynthesizeShop(float translateAmount, float duration, TweenCallback onComplete = null)
+        {
+            // Kill the the translate tween if it exists
+            translateSynthesizeShopTween?.Kill();
+
+            // Set the translate tween
+            translateSynthesizeShopTween = synthesizeShopRect.DOAnchorPosY(
+                synthesizeShopRect.anchoredPosition.y + translateAmount,
+                duration
+            );
+
+            // Exit case - there's no completion action
+            if (onComplete == null) return;
+
+            // Set the completion action
+            translateSynthesizeShopTween.onComplete += onComplete;
         }
 
         /// <summary>

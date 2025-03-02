@@ -15,4 +15,6 @@ namespace Synthesis.EventBus.Events.UI
     public struct ShowPlayerInfo : IEvent { }
 
     public struct HidePlayerInfo : IEvent { }
+    public struct ShowSynthesizeShop : IEvent { }
+    public struct HideSynthesizeShop : IEvent { }
 }

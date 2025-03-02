@@ -5,6 +5,9 @@ namespace Synthesis.Mutations
 {
     public abstract class MutationStrategy
     {
+        public abstract string Name { get; }
+        public abstract string Description { get; }
+
         protected int trackerIndex;
 
         public int TrackerIndex { get => trackerIndex; set => trackerIndex = value; }

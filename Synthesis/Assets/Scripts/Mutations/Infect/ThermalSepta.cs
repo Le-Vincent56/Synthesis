@@ -10,6 +10,9 @@ namespace Synthesis.Mutations.Infect
     {
         private float localBCRIncrease;
 
+        public override string Name => "Thermal Septa";
+        public override string Description => "In Drought, your base Combat Rating increases by +4% per turn. This bonus rests if Torrent starts.";
+
         public ThermalSepta()
         {
             // Set the local base Combat Rating increase to 0

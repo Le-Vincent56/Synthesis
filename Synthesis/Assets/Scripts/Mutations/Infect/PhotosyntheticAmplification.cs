@@ -5,6 +5,9 @@ namespace Synthesis.Mutations.Infect
 {
     public class PhotosyntheticAmplification : MutationStrategy
     {
+        public override string Name => "Photosynthetic Amplification";
+        public override string Description => "The first Infect in Drought has a 25% higher final Combat Rating";
+
         /// <summary>
         /// The first Infect in Drought has a 25% higher final Combat Rating
         /// </summary>
