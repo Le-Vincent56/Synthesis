@@ -23,3 +23,5 @@ MonoBehaviour:
   multiplierMutate: 1
   associatedPiece: {fileID: 8099366975605549189, guid: 773ab6ff592fb2b4a9f269e8422f384e, type: 3}
   color: {r: 0.2295596, g: 0.5068767, b: 1, a: 1}
+  color1: {r: 0.067738436, g: 0.18941048, b: 0.8616352, a: 1}
+  colorPattern: {r: 0, g: 0, b: 0, a: 1}
