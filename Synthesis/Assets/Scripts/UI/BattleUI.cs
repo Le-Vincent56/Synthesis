@@ -55,5 +55,8 @@ namespace Synthesis.UI
         }
 
         private void ShowTurnHeader(ShowTurnHeader eventData) => view.ShowTurnHeader(eventData.Text);
+        private void HideTurnHeader() => view.HideTurnHeader();
+        private void ShowPlayerInfo() => view.ShowPlayerInfo();
+        private void HidePlayerInfo() => view.HidePlayerInfo();
     }
 }
