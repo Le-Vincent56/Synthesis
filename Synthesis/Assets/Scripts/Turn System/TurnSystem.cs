@@ -1,6 +1,7 @@
 using Synthesis.Creatures;
 using Synthesis.EventBus;
 using Synthesis.EventBus.Events.Turns;
+using Synthesis.EventBus.Events.Weather;
 using Synthesis.ServiceLocators;
 using Synthesis.Timers;
 using Synthesis.Turns.States;
@@ -135,6 +136,8 @@ namespace Synthesis.Turns
                 // Decrement the turns remaining and set the player state
                 turnsRemaining--;
                 state = 1;
+                
+                EventBus<UpdateWeather>.Raise(new UpdateWeather());
 
                 return;
             }

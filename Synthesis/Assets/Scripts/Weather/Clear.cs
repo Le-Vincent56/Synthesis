@@ -1,3 +1,6 @@
+using Synthesis.EventBus;
+using Synthesis.EventBus.Events.Weather;
+
 namespace Synthesis.Weather
 {
     public class Clear : WeatherType
@@ -9,6 +12,8 @@ namespace Synthesis.Weather
         {
             // Restart the number of infects since the start of the Clear Weather
             numberOfInfectsSinceStart = 0;
+            
+            EventBus<ClearWeather>.Raise(new ClearWeather());
         }
     }
 }
