@@ -1,5 +1,9 @@
+using System;
 using System.Collections.Generic;
+using Synthesis.EventBus;
+using Synthesis.EventBus.Events.Weather;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Synthesis.Weather
 {
@@ -9,6 +13,8 @@ namespace Synthesis.Weather
         private Clear clearWeather;
         private int turnsUntilWeatherChange;
         private Dictionary<WeatherType, float> weatherPercentages;
+
+        private EventBinding<UpdateWeather> onUpdateWeather;
 
         public WeatherType CurrentWeather { get => currentWeather; }
 
@@ -26,6 +32,17 @@ namespace Synthesis.Weather
 
             // Set clear weather to begin wtih
             currentWeather = clear;
+        }
+
+        private void OnEnable()
+        {
+            onUpdateWeather = new EventBinding<UpdateWeather>(UpdateWeather);
+            EventBus<UpdateWeather>.Register(onUpdateWeather);
+        }
+
+        private void OnDisable()
+        {
+            EventBus<UpdateWeather>.Deregister(onUpdateWeather);
         }
 
         /// <summary>

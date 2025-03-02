@@ -58,7 +58,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _T: 0.81
+    - _T: 0
     - _TerrainMode: 0
     m_Colors:
     - _LandColor: {r: 0.20125782, g: 0.029745637, b: 0.029745637, a: 0}
