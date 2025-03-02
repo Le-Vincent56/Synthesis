@@ -70,7 +70,7 @@ namespace Synthesis.Creatures
                     con = con.child.connectors[0];
                 }
                 var newPiece = Instantiate(trait.associatedPiece);
-                newPiece.transform.position = con.transform.position;
+                newPiece.transform.position = (con.transform.position + new Vector3(0, 0, 0.01f));
                 newPiece.transform.parent = con.transform;
                 if (oldPiece.primaryColorIn != null || oldPiece.primaryColorIn[0] != null)
                 {

@@ -179,15 +179,15 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 92899fcadc14cf8488fd819c5e0cbd33, type: 3}
---- !u!114 &103255042 stripped
+--- !u!114 &752345672 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3578435588895073367, guid: 92899fcadc14cf8488fd819c5e0cbd33, type: 3}
+  m_CorrespondingSourceObject: {fileID: 1358936985416329542, guid: 92899fcadc14cf8488fd819c5e0cbd33, type: 3}
   m_PrefabInstance: {fileID: 103255041}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab79929a8a7c8014eb66d9eb7b525650, type: 3}
+  m_Script: {fileID: 11500000, guid: da493c94cc6b5a241828467a240a95cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &950130492
@@ -222,7 +222,7 @@ MonoBehaviour:
   navigator:
     traits: []
     type: 2
-  creature: {fileID: 103255042}
+  player: {fileID: 752345672}
   numTraits: 4
 --- !u!4 &950130494
 Transform:

@@ -193,7 +193,7 @@ Transform:
   m_GameObject: {fileID: 8842771228678278262}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.15698242, y: 0.5760264, z: 0}
+  m_LocalPosition: {x: 0.23, y: 0.62, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -211,7 +211,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4299804887161922092, guid: 045c76f218474f14caa6356959cef821, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.963
+      value: 1.09
       objectReference: {fileID: 0}
     - target: {fileID: 5093379418373471637, guid: 045c76f218474f14caa6356959cef821, type: 3}
       propertyPath: secondaryColorIn.Array.data[0]
@@ -269,6 +269,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0.499
       objectReference: {fileID: 0}
+    - target: {fileID: 8927354996149034166, guid: 045c76f218474f14caa6356959cef821, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 5c1c1ece682e41349a04fb8ea992d23a, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
