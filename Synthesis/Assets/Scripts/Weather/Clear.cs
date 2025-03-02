@@ -7,6 +7,9 @@ namespace Synthesis.Weather
         /// </summary>
         public override void StartWeather()
         {
+            // Restart the number of turns since the start of the Clear Weather
+            turnsSinceStart = 0;
+
             // Restart the number of infects since the start of the Clear Weather
             numberOfInfectsSinceStart = 0;
         }

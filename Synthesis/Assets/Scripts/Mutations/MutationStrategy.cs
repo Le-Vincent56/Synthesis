@@ -5,6 +5,10 @@ namespace Synthesis.Mutations
 {
     public abstract class MutationStrategy
     {
-        public abstract float ApplyMutation(BattleCalculator calculator, WeatherSystem weather);
+        protected int trackerIndex;
+
+        public int TrackerIndex { get => trackerIndex; set => trackerIndex = value; }
+
+        public abstract void ApplyMutation(BattleCalculator calculator, WeatherSystem weather);
     }
 }

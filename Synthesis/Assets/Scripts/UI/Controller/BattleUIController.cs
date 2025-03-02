@@ -1,8 +1,6 @@
-using Synthesis.Modifiers.Traits;
+using Synthesis.Mutations;
 using Synthesis.UI.Model;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using Synthesis.UI.View;
 
 namespace Synthesis.UI.Controller
 {
@@ -12,11 +10,36 @@ namespace Synthesis.UI.Controller
         {
             private readonly BattleUIModel model = new BattleUIModel();
 
-            public Builder WithTraitPool(TraitPool traitPool)
+            public Builder WithMutationsPool(MutationPool mutationPool)
             {
-                model.SetTraitPool(traitPool);
+                model.SetMutationPool(mutationPool);
                 return this;
             }
+
+            public BattleUIController Build(BattleUIView view)
+            {
+                return new BattleUIController(model, view);
+            }
+        }
+
+        private BattleUIModel model;
+        private BattleUIView view;
+
+        public BattleUIController(BattleUIModel model, BattleUIView view)
+        {
+            // Set the model and view
+            this.model = model;
+            this.view = view;
+        }
+
+        private void ConnectModel()
+        {
+
+        }
+
+        private void ConnectView()
+        {
+
         }
     }
 }

@@ -1,11 +1,11 @@
 using DG.Tweening;
-using Synthesis.EventBus;
-using Synthesis.EventBus.Events.Turns;
 using Synthesis.EventBus.Events.UI;
+using Synthesis.EventBus;
 using Synthesis.Timers;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Synthesis.EventBus.Events.Turns;
+using UnityEngine.EventSystems;
 
 namespace Synthesis.UI.View
 {
@@ -33,11 +33,6 @@ namespace Synthesis.UI.View
         private Tween translatePlayerInfoTween;
         private Tween fadeEnemyInfoTween;
 
-        private EventBinding<ShowTurnHeader> onShowTurnHeader;
-        private EventBinding<HideTurnHeader> onHideTurnHeader;
-        private EventBinding<ShowPlayerInfo> onShowPlayerInfo;
-        private EventBinding<HidePlayerInfo> onHidePlayerInfo;
-
         private void Awake()
         {
             // Get components
@@ -60,29 +55,6 @@ namespace Synthesis.UI.View
             TranslatePlayerInfo(-translateAmount, 0f);
         }
 
-        private void OnEnable()
-        {
-            onShowTurnHeader = new EventBinding<ShowTurnHeader>(ShowTurnHeader);
-            EventBus<ShowTurnHeader>.Register(onShowTurnHeader);
-
-            onHideTurnHeader = new EventBinding<HideTurnHeader>(HideTurnHeader);
-            EventBus<HideTurnHeader>.Register(onHideTurnHeader);
-
-            onShowPlayerInfo = new EventBinding<ShowPlayerInfo>(ShowPlayerInfo);
-            EventBus<ShowPlayerInfo>.Register(onShowPlayerInfo);
-
-            onHidePlayerInfo = new EventBinding<HidePlayerInfo>(HidePlayerInfo);
-            EventBus<HidePlayerInfo>.Register(onHidePlayerInfo);
-        }
-
-        private void OnDisable()
-        {
-            EventBus<ShowTurnHeader>.Deregister(onShowTurnHeader);
-            EventBus<HideTurnHeader>.Deregister(onHideTurnHeader);
-            EventBus<ShowPlayerInfo>.Deregister(onShowPlayerInfo);
-            EventBus<HidePlayerInfo>.Deregister(onHidePlayerInfo);
-        }
-
         private void OnDestroy()
         {
             // Dispose of timers
@@ -97,7 +69,7 @@ namespace Synthesis.UI.View
         /// <summary>
         /// Show the Turn Header
         /// </summary>
-        private void ShowTurnHeader(ShowTurnHeader eventData)
+        public void ShowTurnHeader(string text)
         {
             // Check if the Turn Header is already active
             if (turnHeaderActive)
@@ -109,14 +81,14 @@ namespace Synthesis.UI.View
                 FadeTurnHeader(0f, () =>
                 {
                     // Show the text
-                    SetAndShowHeaderText(eventData.Text);
+                    SetAndShowHeaderText(text);
                 });
 
                 return;
             }
 
             // Set and show the header
-            SetAndShowHeaderText(eventData.Text);
+            SetAndShowHeaderText(text);
         }
 
         /// <summary>
@@ -137,7 +109,7 @@ namespace Synthesis.UI.View
         /// <summary>
         /// Hide the Turn Header
         /// </summary>
-        private void HideTurnHeader()
+        public void HideTurnHeader()
         {
             // Ensure the fade out timer has stopped
             turnHeaderFadeOutTimer.Pause(true);
@@ -156,7 +128,7 @@ namespace Synthesis.UI.View
         /// <summary>
         /// Show the Player Information panel
         /// </summary>
-        private void ShowPlayerInfo()
+        public void ShowPlayerInfo()
         {
             TranslatePlayerInfo(translateAmount, translateDuration, () =>
             {
@@ -168,7 +140,7 @@ namespace Synthesis.UI.View
         /// <summary>
         /// Hide the Player Information panel
         /// </summary>
-        private void HidePlayerInfo() => TranslatePlayerInfo(-translateAmount, translateDuration);
+        public void HidePlayerInfo() => TranslatePlayerInfo(-translateAmount, translateDuration);
 
         /// <summary>
         /// Handle translating the Player Information
@@ -180,7 +152,7 @@ namespace Synthesis.UI.View
 
             // Set the translate tween
             translatePlayerInfoTween = playerInfoRect.DOAnchorPosY(
-                playerInfoRect.anchoredPosition.y + translateAmount, 
+                playerInfoRect.anchoredPosition.y + translateAmount,
                 duration
             );
 
