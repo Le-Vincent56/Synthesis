@@ -193,7 +193,7 @@ Transform:
   m_GameObject: {fileID: 8842771228678278262}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.15698242, y: 0.5760264, z: 0}
+  m_LocalPosition: {x: 0.23, y: 0.62, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -211,7 +211,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4299804887161922092, guid: 045c76f218474f14caa6356959cef821, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.963
+      value: 1.09
       objectReference: {fileID: 0}
     - target: {fileID: 5093379418373471637, guid: 045c76f218474f14caa6356959cef821, type: 3}
       propertyPath: secondaryColorIn.Array.data[0]
@@ -269,6 +269,14 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0.499
       objectReference: {fileID: 0}
+    - target: {fileID: 8927354996149034166, guid: 045c76f218474f14caa6356959cef821, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 5c1c1ece682e41349a04fb8ea992d23a, type: 3}
+    - target: {fileID: 8927354996149034166, guid: 045c76f218474f14caa6356959cef821, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: dde3944d3f28acb4683bc8658622998e, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -297,6 +305,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da493c94cc6b5a241828467a240a95cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  availablePieces:
+  - {fileID: 4100454789479045916, guid: e440624c4d8a07940ba78d4a9b94a6bc, type: 3}
+  - {fileID: 8099366975605549189, guid: 773ab6ff592fb2b4a9f269e8422f384e, type: 3}
+  - {fileID: 4100454789479045916, guid: e440624c4d8a07940ba78d4a9b94a6bc, type: 3}
+  - {fileID: 8099366975605549189, guid: 773ab6ff592fb2b4a9f269e8422f384e, type: 3}
+  - {fileID: 8099366975605549189, guid: 773ab6ff592fb2b4a9f269e8422f384e, type: 3}
+  - {fileID: 8099366975605549189, guid: 773ab6ff592fb2b4a9f269e8422f384e, type: 3}
   piece: {fileID: 6542575867893166833}
 --- !u!114 &6542575867893166833 stripped
 MonoBehaviour:

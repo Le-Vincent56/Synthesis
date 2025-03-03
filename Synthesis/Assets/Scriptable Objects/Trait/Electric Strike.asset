@@ -20,5 +20,7 @@ MonoBehaviour:
   multiplierHeal: 1
   additiveMutate: 0
   multiplierMutate: 1
-  associatedPiece: {fileID: 5093379418373471637, guid: 045c76f218474f14caa6356959cef821, type: 3}
+  associatedPiece: {fileID: 4100454789479045916, guid: e440624c4d8a07940ba78d4a9b94a6bc, type: 3}
   color: {r: 1, g: 0.8239989, b: 0, a: 1}
+  color1: {r: 0.55660367, g: 1, b: 0.9365413, a: 1}
+  colorPattern: {r: 0, g: 0, b: 0, a: 1}

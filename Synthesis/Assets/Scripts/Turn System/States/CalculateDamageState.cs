@@ -11,7 +11,8 @@ namespace Synthesis.Turns.States
 
         public override void OnEnter()
         {
-            EventBus<SetInfoText>.Raise(new SetInfoText { Text = "Calculating Enemy Damage..." });
+            // Set the text
+            EventBus<ShowTurnHeader>.Raise(new ShowTurnHeader { Text = "ENEMY DAMAGE" });
 
             // Pass the turn
             turnSystem.AwaitPassTurn();

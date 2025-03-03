@@ -12,7 +12,7 @@ namespace Synthesis.Turns.States
 
         public override void OnEnter()
         {
-            EventBus<SetInfoText>.Raise(new SetInfoText { Text = "Enemy Turn" });
+            EventBus<ShowTurnHeader>.Raise(new ShowTurnHeader { Text = "ENEMY TURN" });
 
             turnSystem.AwaitEnemyDamage();
         }

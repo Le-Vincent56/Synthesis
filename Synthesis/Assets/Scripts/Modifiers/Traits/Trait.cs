@@ -21,6 +21,8 @@ namespace Synthesis.Modifiers.Traits
         [SerializeField] protected float multiplierMutate = 1;
         [SerializeField] public CreaturePiece associatedPiece;
         [SerializeField] public Color color = Color.white;
+        [SerializeField] public Color color1 = Color.white;
+        [SerializeField] public Color colorPattern = Color.black;
 
         public MoveType Type { get => type; }
         public string Name { get => name; }
