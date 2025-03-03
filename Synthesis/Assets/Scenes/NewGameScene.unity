@@ -2250,6 +2250,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraController: {fileID: 0}
+  battleCalculator: {fileID: 0}
   player: {fileID: 0}
   state: 0
 --- !u!4 &860320861
@@ -5466,13 +5467,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eddb6176da5844c4e9b177b64a909b63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mutationsTracker: {fileID: 0}
+  weatherSystem: {fileID: 0}
   baseCombatRating: 10
   bcrAdditives: 0
   bcrMultipliers: 0
   fcrAdditives: 0
   incomingWiltPercentage: 1
   bcrPermanentAdditives: 0
-  consecutiveInfects: 0
+  lastAction: 0
 --- !u!1 &2066098061
 GameObject:
   m_ObjectHideFlags: 0

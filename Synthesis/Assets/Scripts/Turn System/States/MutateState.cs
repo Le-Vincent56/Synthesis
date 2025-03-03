@@ -4,11 +4,11 @@ using Synthesis.EventBus;
 
 namespace Synthesis.Turns.States
 {
-    public class UpgradeState : TurnState
+    public class MutateState : TurnState
     {
         private readonly CameraController cameraController;
 
-        public UpgradeState(TurnSystem turnSystem, CameraController cameraController) : base(turnSystem)
+        public MutateState(TurnSystem turnSystem, CameraController cameraController) : base(turnSystem)
         {
             this.cameraController = cameraController;
         }

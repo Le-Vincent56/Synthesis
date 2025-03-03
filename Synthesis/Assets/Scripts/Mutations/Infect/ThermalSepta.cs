@@ -1,4 +1,4 @@
-using Synthesis.Calculator;
+using Synthesis.Battle;
 using Synthesis.Creatures;
 using Synthesis.Weather;
 using UnityEngine;
@@ -11,6 +11,7 @@ namespace Synthesis.Mutations.Infect
 
         public ThermalSepta()
         {
+            // Set properties
             name = "Thermal Septa";
             description = "In Drought, your base Combat Rating increases by +4% per turn. This bonus rests if Torrent starts.";
             partType = MutationPartType.InfectDrought;
@@ -25,7 +26,7 @@ namespace Synthesis.Mutations.Infect
         /// <summary>
         /// In Drought, your base Combat Rating increases by +4% per turn. This bonus rests if Torrent starts.
         /// </summary>
-        public override void ApplyMutation(BattleCalculator calculator, WeatherSystem weather)
+        public override void ApplyMutation(BattleCalculator calculator, WeatherSystem weather, MutationsTracker mutations)
         {
             // Exit case - if the current weather is not Drought
             if (weather.CurrentWeather is not Drought drought)

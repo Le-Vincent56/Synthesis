@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Synthesis.EventBus;
 using Synthesis.EventBus.Events.Weather;
+using Synthesis.ServiceLocators;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -32,6 +33,9 @@ namespace Synthesis.Weather
 
             // Set clear weather to begin wtih
             currentWeather = clear;
+
+            // Register this as service
+            ServiceLocator.ForSceneOf(this).Register(this);
         }
 
         private void OnEnable()

@@ -1,4 +1,4 @@
-using Synthesis.Calculator;
+using Synthesis.Battle;
 using Synthesis.Creatures;
 using Synthesis.Weather;
 using UnityEngine;
@@ -9,8 +9,10 @@ namespace Synthesis.Mutations.Infect
     {
         public MonsoonBloom()
         {
+            // Set properties
             name = "Monsoon Bloom";
             description = "If a Torrent starts mid-battle, your next Infect has +30% base Combat Rating";
+
             partType = MutationPartType.InfectTorrent;
             color0 = new Color(0.0f, 0.65f, 0.1f,1);
             color1 = new Color(0.2f, 0.1f, 1f, 1);
@@ -20,7 +22,7 @@ namespace Synthesis.Mutations.Infect
         /// <summary>
         /// If a Torrent starts mid-battle, your next Infect has +30% base Combat Rating
         /// </summary>
-        public override void ApplyMutation(BattleCalculator calculator, WeatherSystem weather)
+        public override void ApplyMutation(BattleCalculator calculator, WeatherSystem weather, MutationsTracker mutations)
         {
             // Exit case - if the current weather is not Torrent
             if (weather.CurrentWeather is not Torrent torrent) return;

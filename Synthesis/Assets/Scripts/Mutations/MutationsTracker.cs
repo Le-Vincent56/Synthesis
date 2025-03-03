@@ -2,8 +2,8 @@ using Sirenix.OdinInspector;
 using Synthesis.EventBus;
 using Synthesis.EventBus.Events.Turns;
 using System.Collections.Generic;
-using Synthesis.Creatures.Visual;
 using UnityEngine;
+using Synthesis.ServiceLocators;
 
 namespace Synthesis.Mutations
 {
@@ -20,6 +20,8 @@ namespace Synthesis.Mutations
         {
             // Initialize the list of Mutations
             mutations = new List<MutationStrategy>();
+
+            ServiceLocator.ForSceneOf(this).Register(this);
         }
 
         private void OnEnable()

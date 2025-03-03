@@ -1,4 +1,4 @@
-using Synthesis.Calculator;
+using Synthesis.Battle;
 using Synthesis.Weather;
 using System;
 using Synthesis.Creatures;
@@ -27,6 +27,6 @@ namespace Synthesis.Mutations
 
         public int TrackerIndex { get => trackerIndex; set => trackerIndex = value; }
 
-        public abstract void ApplyMutation(BattleCalculator calculator, WeatherSystem weather);
+        public abstract void ApplyMutation(BattleCalculator calculator, WeatherSystem weather, MutationsTracker mutations);
     }
 }

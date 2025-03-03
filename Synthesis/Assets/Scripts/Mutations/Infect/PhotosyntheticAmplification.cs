@@ -1,4 +1,4 @@
-using Synthesis.Calculator;
+using Synthesis.Battle;
 using Synthesis.Creatures;
 using Synthesis.Weather;
 using UnityEngine;
@@ -9,8 +9,10 @@ namespace Synthesis.Mutations.Infect
     {
         public PhotosyntheticAmplification()
         {
+            // Set properties
             name = "Photosynthetic Amplification";
             description = "The first Infect in Drought has a 25% higher final Combat Rating";
+
             partType = MutationPartType.InfectDrought;
             color0 = new Color(0.9f, 0.1f, 0.1f,1);
             color1 = new Color(0.9f, 0.9f, 0.2f, 1);
@@ -20,7 +22,7 @@ namespace Synthesis.Mutations.Infect
         /// <summary>
         /// The first Infect in Drought has a 25% higher final Combat Rating
         /// </summary>
-        public override void ApplyMutation(BattleCalculator calculator, WeatherSystem weather)
+        public override void ApplyMutation(BattleCalculator calculator, WeatherSystem weather, MutationsTracker mutations)
         {
             // Exit case - if the current weather is not Drought
             if (weather.CurrentWeather is not Drought drought) return;

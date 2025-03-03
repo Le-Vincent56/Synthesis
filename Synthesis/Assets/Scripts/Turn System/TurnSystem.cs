@@ -1,3 +1,4 @@
+using Synthesis.Battle;
 using Synthesis.Creatures;
 using Synthesis.EventBus;
 using Synthesis.EventBus.Events.Turns;
@@ -15,6 +16,7 @@ namespace Synthesis.Turns
     {
         [Header("References")]
         [SerializeField] private CameraController cameraController;
+        [SerializeField] private BattleCalculator battleCalculator;
 
         [Header("States")]
         [SerializeField] private Player player;
@@ -44,9 +46,6 @@ namespace Synthesis.Turns
             // Set the current round to 0
             currentRound = 0;
 
-            // Get the player
-            player = GetComponentInChildren<Player>();
-
             // Create the Start Battle Timer
             CreateTimers();
 
@@ -71,8 +70,9 @@ namespace Synthesis.Turns
 
         private void Start()
         {
-            // Set the camera controller
+            // Retrieve services
             cameraController = ServiceLocator.ForSceneOf(this).Get<CameraController>();
+            battleCalculator = ServiceLocator.ForSceneOf(this).Get<BattleCalculator>();
 
             // Set up the State Machine
             SetupStateMachine();
@@ -106,8 +106,8 @@ namespace Synthesis.Turns
             // Create states
             StartBattleState startBattle = new StartBattleState(this);
             PlayerTurnState playerTurn = new PlayerTurnState(this, cameraController);
-            UpgradeState upgradeState = new UpgradeState(this, cameraController);
-            CalculatePointsState calculatePoints = new CalculatePointsState(this, player, cameraController);
+            MutateState mutateState = new MutateState(this, cameraController);
+            CalculatePointsState calculatePoints = new CalculatePointsState(this, battleCalculator, cameraController);
             EnemyTurnState enemyTurn = new EnemyTurnState(this);
             CalculateDamageState calculateDamage = new CalculateDamageState(this);
             EndBattleState endBattle = new EndBattleState(this);
@@ -116,9 +116,9 @@ namespace Synthesis.Turns
             stateMachine.At(startBattle, playerTurn, new FuncPredicate(() => state == 1));
 
             stateMachine.At(playerTurn, calculatePoints, new FuncPredicate(() => state == 2));
-            stateMachine.At(playerTurn, upgradeState, new FuncPredicate(() => state == 3));
+            stateMachine.At(playerTurn, mutateState, new FuncPredicate(() => state == 3));
 
-            stateMachine.At(upgradeState, enemyTurn, new FuncPredicate(() => state == 4));
+            stateMachine.At(mutateState, enemyTurn, new FuncPredicate(() => state == 4));
 
             stateMachine.At(calculatePoints, enemyTurn, new FuncPredicate(() => state == 4));
 
