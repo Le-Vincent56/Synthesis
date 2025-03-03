@@ -3,6 +3,7 @@ using Synthesis.EventBus.Events.UI;
 using Synthesis.EventBus;
 using System.Text;
 using Synthesis.Battle;
+using Synthesis.EventBus.Events.Battle;
 
 namespace Synthesis.Turns.States
 {
@@ -25,14 +26,20 @@ namespace Synthesis.Turns.States
             // Hide the player info
             EventBus<HidePlayerInfo>.Raise(new HidePlayerInfo()); 
 
+            // Calculate combat rating
+            int combatRating = battleCalculator.CalculatePoints();
+
             // Build the info text
             StringBuilder sb = new StringBuilder();
             sb.Append("Dealt ");
-            sb.Append(battleCalculator.CalculatePoints());
+            sb.Append(combatRating);
             sb.Append(" damage");
 
             // Set the text
             EventBus<ShowTurnHeader>.Raise(new ShowTurnHeader{ Text = sb.ToString() });
+
+            // State that the combat rating has been calculated
+            EventBus<CombatRatingCalculated>.Raise(new CombatRatingCalculated { CombatRating = combatRating });
 
             turnSystem.AwaitEnemyTurn();
         }

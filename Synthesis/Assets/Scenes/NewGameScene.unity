@@ -253,7 +253,7 @@ GameObject:
   - component: {fileID: 86057659}
   - component: {fileID: 86057658}
   m_Layer: 5
-  m_Name: Current Rating
+  m_Name: Target Combat Rating Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1120,7 +1120,7 @@ GameObject:
   m_Component:
   - component: {fileID: 497312022}
   m_Layer: 5
-  m_Name: Enemy Damage Bar
+  m_Name: Wilt Bar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2633,6 +2633,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 911898350}
+  - component: {fileID: 911898351}
   m_Layer: 0
   m_Name: Battle Metrics
   m_TagString: Untagged
@@ -2655,6 +2656,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 23070646}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &911898351
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 911898349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e70432717f123db4b9709529e7c78cfe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  difficultyLevel: 0
+  ratingLevelPercentageIncrease: 0.2
+  wiltPerLevelPercentageIncrease: 0.3
+  baseTargetCombatRating: 20
+  currentCombatRating: 0
+  targetCombatRating: 0
+  baseTotalWilt: 50
+  currentWilt: 0
+  totalWilt: 0
 --- !u!1 &942417261
 GameObject:
   m_ObjectHideFlags: 0
@@ -3499,7 +3521,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1328515085}
   m_Layer: 5
-  m_Name: Enemy Damage
+  m_Name: Wilt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3583,14 +3605,18 @@ MonoBehaviour:
   playerInformation: {fileID: 845905984}
   enemyInformation: {fileID: 1550015223}
   synthesizeShop: {fileID: 1481288826}
-  currentTurn: {fileID: 845780345}
-  totalTurns: {fileID: 1956701959}
   infectButton: {fileID: 436544593}
   synthesizeButton: {fileID: 618263263}
+  currentTurn: {fileID: 845780345}
+  totalTurns: {fileID: 1956701959}
+  currentCombatRating: {fileID: 2101289263}
+  targetCombatRating: {fileID: 86057658}
+  currentWilt: {fileID: 1468237219}
+  totalWilt: {fileID: 1942219419}
   actionsShown: 0
   synthesizeShopShown: 0
   turnHeaderActive: 0
-  turnsHighlightColor: {r: 1, g: 0.81960785, b: 0.6627451, a: 1}
+  textHighlightColor: {r: 1, g: 0.81960785, b: 0.6627451, a: 1}
   turnsScaleAmount: 1.35
   turnsScaleDuration: 0.5
   translateDuration: 0.5
@@ -3885,7 +3911,7 @@ GameObject:
   - component: {fileID: 1436316837}
   - component: {fileID: 1436316836}
   m_Layer: 5
-  m_Name: Min Text
+  m_Name: Min Wilt Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4039,7 +4065,7 @@ GameObject:
   - component: {fileID: 1468237220}
   - component: {fileID: 1468237219}
   m_Layer: 5
-  m_Name: Current Text
+  m_Name: Current Wilt Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4960,7 +4986,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1609580720}
   m_Layer: 5
-  m_Name: Enemy Damage Texts
+  m_Name: Wilt Texts
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5804,7 +5830,7 @@ GameObject:
   - component: {fileID: 1942219420}
   - component: {fileID: 1942219419}
   m_Layer: 5
-  m_Name: Max Text
+  m_Name: Max Wilt Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6170,10 +6196,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e70432717f123db4b9709529e7c78cfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  difficultyLevel: 0
+  ratingLevelPercentageIncrease: 0.2
+  wiltPerLevelPercentageIncrease: 0.3
+  baseTargetCombatRating: 20
   currentCombatRating: 0
   targetCombatRating: 0
-  currentPlayerDamage: 0
-  totalPlayerDamage: 0
+  baseTotalWilt: 50
+  currentWilt: 0
+  totalWilt: 0
 --- !u!1 &2066098061
 GameObject:
   m_ObjectHideFlags: 0
@@ -6411,7 +6442,7 @@ GameObject:
   - component: {fileID: 2101289264}
   - component: {fileID: 2101289263}
   m_Layer: 5
-  m_Name: Current Rating
+  m_Name: Current Combat Rating Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

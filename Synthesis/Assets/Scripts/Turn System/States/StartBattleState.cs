@@ -1,4 +1,5 @@
 using Synthesis.EventBus;
+using Synthesis.EventBus.Events.Turns;
 using Synthesis.EventBus.Events.UI;
 
 namespace Synthesis.Turns.States
@@ -11,6 +12,8 @@ namespace Synthesis.Turns.States
 
         public override void OnEnter()
         {
+            EventBus<StartBattle>.Raise(new StartBattle());
+
             EventBus<ShowTurnHeader>.Raise(new ShowTurnHeader{ Text = "ENCOUNTER START" });
 
             turnSystem.AwaitPlayerTurn();

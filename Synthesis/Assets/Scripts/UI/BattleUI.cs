@@ -1,4 +1,5 @@
 using Synthesis.EventBus;
+using Synthesis.EventBus.Events.Battle;
 using Synthesis.EventBus.Events.UI;
 using Synthesis.Mutations;
 using Synthesis.ServiceLocators;
@@ -20,6 +21,8 @@ namespace Synthesis.UI
         private EventBinding<ShowTurnHeader> onShowTurnHeader;
         private EventBinding<HideTurnHeader> onHideTurnHeader;
         private EventBinding<UpdateTurns> onUpdateTurns;
+        private EventBinding<BattleMetricsSet> onBattleMetricsSet;
+        private EventBinding<CombatRatingFinalized> onCombatRatingFinalized;
         private EventBinding<ShowPlayerInfo> onShowPlayerInfo;
         private EventBinding<HidePlayerInfo> onHidePlayerInfo;
         private EventBinding<ShowSynthesizeShop> onShowSynthesizeShop;
@@ -36,6 +39,12 @@ namespace Synthesis.UI
 
             onUpdateTurns = new EventBinding<UpdateTurns>(UpdateTurns);
             EventBus<UpdateTurns>.Register(onUpdateTurns);
+
+            onBattleMetricsSet = new EventBinding<BattleMetricsSet>(BattleMetricsSet);
+            EventBus<BattleMetricsSet>.Register(onBattleMetricsSet);
+
+            onCombatRatingFinalized = new EventBinding<CombatRatingFinalized>(UpdateCurrentCombatRating);
+            EventBus<CombatRatingFinalized>.Register(onCombatRatingFinalized);
 
             onShowPlayerInfo = new EventBinding<ShowPlayerInfo>(ShowPlayerInfo);
             EventBus<ShowPlayerInfo>.Register(onShowPlayerInfo);
@@ -55,6 +64,8 @@ namespace Synthesis.UI
             EventBus<ShowTurnHeader>.Deregister(onShowTurnHeader);
             EventBus<HideTurnHeader>.Deregister(onHideTurnHeader);
             EventBus<UpdateTurns>.Deregister(onUpdateTurns);
+            EventBus<BattleMetricsSet>.Deregister(onBattleMetricsSet);
+            EventBus<CombatRatingFinalized>.Deregister(onCombatRatingFinalized);
             EventBus<ShowPlayerInfo>.Deregister(onShowPlayerInfo);
             EventBus<HidePlayerInfo>.Deregister(onHidePlayerInfo);
             EventBus<ShowSynthesizeShop>.Deregister(onShowSynthesizeShop);
@@ -75,6 +86,16 @@ namespace Synthesis.UI
         private void ShowTurnHeader(ShowTurnHeader eventData) => controller.ShowTurnHeader(eventData.Text);
         private void HideTurnHeader() => controller.HideTurnHeader();
         private void UpdateTurns(UpdateTurns eventData) => controller.UpdateTurns(eventData.CurrentTurn, eventData.TotalTurns);
+        private void BattleMetricsSet(BattleMetricsSet eventData)
+        {
+            controller.SetBattleMetrics(
+                eventData.CurrentCombatRating,
+                eventData.TargetCombatRating,
+                eventData.CurrentWilt,
+                eventData.TotalWilt
+            );
+        }
+        private void UpdateCurrentCombatRating(CombatRatingFinalized eventData) => controller.UpdateCurrentCombatRating(eventData.CombatRating);
         private void ShowPlayerInfo() => controller.ShowPlayerInfo();
         private void HidePlayerInfo() => controller.HidePlayerInfo();
         private void ShowSynthesizeShop() => controller.ShowSynthesizeShop();

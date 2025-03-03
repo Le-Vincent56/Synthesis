@@ -14,7 +14,7 @@ namespace Synthesis.UI.View
 {
     public class BattleUIView : MonoBehaviour
     {
-        [Header("References")]
+        [Header("References - General")]
         [SerializeField] private GameInputReader inputReader;
         [SerializeField] private CanvasGroup turnHeader;
         [SerializeField] private CanvasGroup playerInformation;
@@ -22,21 +22,35 @@ namespace Synthesis.UI.View
         [SerializeField] private CanvasGroup synthesizeShop;
         private RectTransform playerInfoRect;
         private RectTransform synthesizeShopRect;
-        private RectTransform turnsRemainingRect;
         private Text turnHeaderText;
-        [SerializeField] private Text currentTurn;
-        [SerializeField] private Text totalTurns;
+
+        [Header("References - Actions")]
         [SerializeField] private SelectableButton infectButton;
         [SerializeField] private SelectableButton synthesizeButton;
         private SelectableButton[] actionButtons;
         private List<MutationCard> currentMutationCards;
+
+        [Header("References - Turns")]
+        [SerializeField] private Text currentTurn;
+        [SerializeField] private Text totalTurns;
+        private RectTransform turnsRemainingRect;
+
+        [Header("References - Combat Rating")]
+        [SerializeField] private Text currentCombatRating;
+        [SerializeField] private Text targetCombatRating;
+        private RectTransform currentCombatRatingRect;
+        private RectTransform targetCombatRatingRect;
+
+        [Header("References - Wilt")]
+        [SerializeField] private Text currentWilt;
+        [SerializeField] private Text totalWilt;
 
         [Header("Fields")]
         [SerializeField] private bool actionsShown;
         [SerializeField] private bool synthesizeShopShown;
         [SerializeField] private bool turnHeaderActive;
         private Color turnsInitialColor;
-        [SerializeField] private Color turnsHighlightColor;
+        [SerializeField] private Color textHighlightColor;
         private Vector3 turnsInitialScale;
         private Vector3 turnsMaxScale;
         private CountdownTimer turnHeaderFadeOutTimer;
@@ -51,6 +65,10 @@ namespace Synthesis.UI.View
         private Tween fadeTurnHeaderTween;
         private Tween scaleTurnsTween;
         private Tween colorTurnsTween;
+        private Tween scaleCurrentRatingTween;
+        private Tween colorCurrentRatingTween;
+        private Tween scaleTotalRatingTween;
+        private Tween colorTotalRatingTween;
         private Tween translatePlayerInfoTween;
         private Tween translateSynthesizeShopTween;
         private Tween fadeEnemyInfoTween;
@@ -63,6 +81,8 @@ namespace Synthesis.UI.View
             playerInfoRect = playerInformation.GetComponent<RectTransform>();
             synthesizeShopRect = synthesizeShop.GetComponent<RectTransform>();
             turnsRemainingRect = currentTurn.GetComponent<RectTransform>();
+            currentCombatRatingRect = currentCombatRating.GetComponent<RectTransform>();
+            targetCombatRatingRect = targetCombatRating.GetComponent<RectTransform>();
             turnHeaderText = turnHeader.GetComponentInChildren<Text>();
 
             // Set tween variables
@@ -114,6 +134,10 @@ namespace Synthesis.UI.View
             translatePlayerInfoTween?.Kill();
             translateSynthesizeShopTween?.Kill();
             fadeEnemyInfoTween?.Kill();
+            scaleCurrentRatingTween?.Kill();
+            colorCurrentRatingTween?.Kill();
+            scaleTotalRatingTween?.Kill();
+            colorTotalRatingTween?.Kill();
         }
 
         /// <summary>
@@ -275,16 +299,76 @@ namespace Synthesis.UI.View
             this.totalTurns.text = totalTurns.ToString();
 
             // Scale the text
-            ScaleTurns(turnsMaxScale, turnsScaleDuration / 2f, () =>
+            Scale(scaleTurnsTween, turnsRemainingRect, turnsMaxScale, turnsScaleDuration / 2f, () =>
             {
-                ScaleTurns(turnsInitialScale, turnsScaleDuration / 2f);
+                Scale(scaleTurnsTween, turnsRemainingRect, turnsInitialScale, turnsScaleDuration / 2f);
             });
 
             // Color the text
-            ColorTurns(turnsHighlightColor, turnsScaleDuration / 2f, () =>
+            Color(colorTurnsTween, this.currentTurn, textHighlightColor, turnsScaleDuration / 2f, () =>
             {
-                ColorTurns(turnsInitialColor, turnsScaleDuration / 2f);
+                Color(colorTurnsTween, this.currentTurn, turnsInitialColor, turnsScaleDuration / 2f);
             });
+        }
+
+        /// <summary>
+        /// Update the Target Combat Rating text
+        /// </summary>
+        public void UpdateTargetCombatRating(int targetCombatRating)
+        {
+            // Update the text
+            this.targetCombatRating.text = targetCombatRating.ToString();
+
+            // Scale the text
+            Scale(scaleTotalRatingTween, targetCombatRatingRect, turnsMaxScale, turnsScaleDuration / 2f, () =>
+            {
+                Scale(scaleTotalRatingTween, targetCombatRatingRect, turnsInitialScale, turnsScaleDuration / 2f);
+            });
+
+            // Color the text
+            Color(colorTotalRatingTween, this.targetCombatRating, textHighlightColor, turnsScaleDuration / 2f, () =>
+            {
+                Color(colorTotalRatingTween, this.targetCombatRating, turnsInitialColor, turnsScaleDuration / 2f);
+            });
+        }
+
+        /// <summary>
+        /// Update the Current Combat Rating text
+        /// </summary>
+        public void UpdateCurrentCombatRating(int currentCombatRating)
+        {
+            // Update the text
+            this.currentCombatRating.text = currentCombatRating.ToString();
+
+            // Scale the text
+            Scale(scaleCurrentRatingTween, currentCombatRatingRect, turnsMaxScale, turnsScaleDuration / 2f, () =>
+            {
+                Scale(scaleCurrentRatingTween, currentCombatRatingRect, turnsInitialScale, turnsScaleDuration / 2f);
+            });
+
+            // Color the text
+            Color(colorCurrentRatingTween, this.currentCombatRating, textHighlightColor, turnsScaleDuration / 2f, () =>
+            {
+                Color(colorCurrentRatingTween, this.currentCombatRating, turnsInitialColor, turnsScaleDuration / 2f);
+            });
+        }
+
+        /// <summary>
+        /// Update the current Wilt text
+        /// </summary>
+        public void UpdateCurrentWilt(int currentWilt)
+        {
+            // Update the text
+            this.currentWilt.text = currentWilt.ToString();
+        }
+
+        /// <summary>
+        /// Update the total Wilt text
+        /// </summary>
+        public void UpdateTotalWilt(int totalWilt)
+        {
+            // Update the text
+            this.totalWilt.text = totalWilt.ToString();
         }
 
         /// <summary>
@@ -377,13 +461,16 @@ namespace Synthesis.UI.View
             translatePlayerInfoTween.onComplete += onComplete;
         }
 
-        private void ScaleTurns(Vector3 endValue, float duration, TweenCallback onComplete = null)
+        /// <summary>
+        /// Handle scaling tweens
+        /// </summary>
+        private void Scale(Tween scaleTween, RectTransform rectTransform, Vector3 endValue, float duration, TweenCallback onComplete = null)
         {
             // Kill the translate tween if it exists
-            scaleTurnsTween?.Kill();
+            scaleTween?.Kill();
 
             // Set the translate tween
-            scaleTurnsTween = currentTurn.rectTransform.DOScale(
+            scaleTween = rectTransform.DOScale(
                 endValue,
                 duration
             );
@@ -392,16 +479,18 @@ namespace Synthesis.UI.View
             if (onComplete == null) return;
 
             // Set the completion action
-            scaleTurnsTween.onComplete += onComplete;
+            scaleTween.onComplete += onComplete;
         }
 
-        private void ColorTurns(Color endValue, float duration, TweenCallback onComplete = null)
+        /// <summary>
+        /// Handle coloring tweens
+        private void Color(Tween colorTween, Text text, Color endValue, float duration, TweenCallback onComplete = null)
         {
             // Kill the translate tween if it exists
-            colorTurnsTween?.Kill();
+            colorTween?.Kill();
 
             // Set the translate tween
-            colorTurnsTween = currentTurn.DOColor(
+            colorTween = text.DOColor(
                 endValue,
                 duration
             );
@@ -410,7 +499,7 @@ namespace Synthesis.UI.View
             if (onComplete == null) return;
 
             // Set the completion action
-            colorTurnsTween.onComplete += onComplete;
+            colorTween.onComplete += onComplete;
         }
 
         /// <summary>

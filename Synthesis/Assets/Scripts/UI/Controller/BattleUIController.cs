@@ -1,10 +1,8 @@
-using Synthesis.EventBus.Events.UI;
 using Synthesis.Mutations;
 using Synthesis.UI.Model;
 using Synthesis.UI.View;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Pool;
 
 namespace Synthesis.UI.Controller
 {
@@ -70,5 +68,14 @@ namespace Synthesis.UI.Controller
             view.ShowSynthesizeShop(mutationCards);
         }
         public void HideSynthesizeShop() => view.HideSynthesizeShop(mutationCardPool);
+        public void SetBattleMetrics(int currentCombatRating, int targetCombatRating, int currentWilt, int totalWilt)
+        {
+            // Update the view
+            view.UpdateCurrentCombatRating(currentCombatRating);
+            view.UpdateTargetCombatRating(targetCombatRating);
+            view.UpdateCurrentWilt(currentWilt);
+            view.UpdateTotalWilt(totalWilt);
+        }
+        public void UpdateCurrentCombatRating(int currentCombatRating) => view.UpdateCurrentCombatRating(currentCombatRating);
     }
 }

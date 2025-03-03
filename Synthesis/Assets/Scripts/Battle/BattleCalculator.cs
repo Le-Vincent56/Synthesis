@@ -87,7 +87,7 @@ namespace Synthesis.Battle
         /// <summary>
         /// Calculate the player's Combat Rating for this turn
         /// </summary>
-        public float CalculatePoints()
+        public int CalculatePoints()
         {
             // Set base values
             float baseRating = baseCombatRating + bcrPermanentAdditives;
@@ -106,12 +106,12 @@ namespace Synthesis.Battle
             }
 
             // Calculate the Final Combat Rating
-            float finalRating = baseRating + (baseRating * bcrAdditives);             // Add the additive percentage to the base Combat Rating
-            finalRating += baseRating * bcrMultipliers;             // Add the multiplicative percentage to the base Combat Rating
-            finalRating += finalRating * fcrAdditives;              // Add the additive percentage to the final Combat Rating
-            finalRating = Mathf.Round(finalRating);                 // Round the final Combat Rating
+            float finalRating = baseRating + (baseRating * bcrAdditives);   // Add the additive percentage to the base Combat Rating
+            finalRating += baseRating * bcrMultipliers;                     // Add the multiplicative percentage to the base Combat Rating
+            finalRating += finalRating * fcrAdditives;                      // Add the additive percentage to the final Combat Rating
+            int finalRatingInt = (int)Mathf.Round(finalRating);             // Round the final Combat Rating
 
-            return finalRating;
+            return finalRatingInt;
         }
 
         /// <summary>
