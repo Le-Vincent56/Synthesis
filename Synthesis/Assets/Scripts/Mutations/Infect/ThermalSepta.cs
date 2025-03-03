@@ -1,5 +1,7 @@
 using Synthesis.Calculator;
+using Synthesis.Creatures;
 using Synthesis.Weather;
+using UnityEngine;
 
 namespace Synthesis.Mutations.Infect
 {
@@ -11,6 +13,10 @@ namespace Synthesis.Mutations.Infect
         {
             name = "Thermal Septa";
             description = "In Drought, your base Combat Rating increases by +4% per turn. This bonus rests if Torrent starts.";
+            partType = MutationPartType.InfectDrought;
+            color0 = new Color(0.95f, 0.8f, 0,1);
+            color1 = new Color(0.9f, 0.5f, 0.4f, 1);
+            color2 = new Color(1f, 0.5f, 0f, 1f);
 
             // Set the local base Combat Rating increase to 0
             localBCRIncrease = 0f;

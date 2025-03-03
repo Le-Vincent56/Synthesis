@@ -1,6 +1,8 @@
 using Synthesis.Calculator;
 using Synthesis.Weather;
 using System;
+using Synthesis.Creatures;
+using UnityEngine;
 
 namespace Synthesis.Mutations.Infect
 {
@@ -10,6 +12,10 @@ namespace Synthesis.Mutations.Infect
         {
             name = "Verdant Flood";
             description = "In Torrent, every third Infect grants +5 base Combat Rating permanently";
+            partType = MutationPartType.InfectTorrent;
+            color0 = new Color(0.0f, 0.65f, 0.1f,1);
+            color1 = new Color(0.7f, 0.55f, 0.8f,1);
+            color2 = new Color(0, 1f, 1f, 1f);
         }
 
         /// <summary>

@@ -1,5 +1,7 @@
 using Synthesis.Calculator;
+using Synthesis.Creatures;
 using Synthesis.Weather;
+using UnityEngine;
 
 namespace Synthesis.Mutations.Infect
 {
@@ -9,6 +11,10 @@ namespace Synthesis.Mutations.Infect
         {
             name = "Monsoon Bloom";
             description = "If a Torrent starts mid-battle, your next Infect has +30% base Combat Rating";
+            partType = MutationPartType.InfectTorrent;
+            color0 = new Color(0.0f, 0.65f, 0.1f,1);
+            color1 = new Color(0.2f, 0.1f, 1f, 1);
+            color2 = new Color(0, 1f, 1f, 1f);
         }
 
         /// <summary>

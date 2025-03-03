@@ -1,5 +1,7 @@
 using Synthesis.Calculator;
+using Synthesis.Creatures;
 using Synthesis.Weather;
+using UnityEngine;
 
 namespace Synthesis.Mutations.Infect
 {
@@ -9,6 +11,10 @@ namespace Synthesis.Mutations.Infect
         {
             name = "Photosynthetic Amplification";
             description = "The first Infect in Drought has a 25% higher final Combat Rating";
+            partType = MutationPartType.InfectDrought;
+            color0 = new Color(0.9f, 0.1f, 0.1f,1);
+            color1 = new Color(0.9f, 0.9f, 0.2f, 1);
+            color2 = new Color(1f, 0.5f, 0f, 1f);
         }
 
         /// <summary>

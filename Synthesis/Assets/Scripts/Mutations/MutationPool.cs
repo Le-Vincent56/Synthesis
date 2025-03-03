@@ -5,16 +5,19 @@ using Synthesis.Mutations.Infect;
 using Synthesis.ServiceLocators;
 using System;
 using System.Collections.Generic;
+using Synthesis.Creatures.Visual;
 using UnityEngine;
 
 namespace Synthesis.Mutations
 {
+    
     public class MutationPool : MonoBehaviour
     {
         private Dictionary<Type, bool> mutationAvailability;
         private List<Type> availableMutations;
 
         private EventBinding<Synthesize> onSynthesize;
+        
 
         private void Awake()
         {

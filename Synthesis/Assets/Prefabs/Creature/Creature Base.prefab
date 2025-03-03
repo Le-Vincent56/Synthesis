@@ -305,6 +305,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da493c94cc6b5a241828467a240a95cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  availablePieces:
+  - {fileID: 4100454789479045916, guid: e440624c4d8a07940ba78d4a9b94a6bc, type: 3}
+  - {fileID: 8099366975605549189, guid: 773ab6ff592fb2b4a9f269e8422f384e, type: 3}
+  - {fileID: 4100454789479045916, guid: e440624c4d8a07940ba78d4a9b94a6bc, type: 3}
+  - {fileID: 8099366975605549189, guid: 773ab6ff592fb2b4a9f269e8422f384e, type: 3}
+  - {fileID: 8099366975605549189, guid: 773ab6ff592fb2b4a9f269e8422f384e, type: 3}
+  - {fileID: 8099366975605549189, guid: 773ab6ff592fb2b4a9f269e8422f384e, type: 3}
   piece: {fileID: 6542575867893166833}
 --- !u!114 &6542575867893166833 stripped
 MonoBehaviour:
