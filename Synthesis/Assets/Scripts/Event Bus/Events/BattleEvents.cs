@@ -17,4 +17,11 @@ namespace Synthesis.EventBus.Events.Battle
     {
         public int CombatRating;
     }
+
+    public struct WiltApplied : IEvent
+    {
+        public int CurrentWilt;
+    }
+
+    public struct Wilted : IEvent { }
 }

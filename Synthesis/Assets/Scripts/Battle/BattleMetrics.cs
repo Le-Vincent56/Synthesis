@@ -119,13 +119,20 @@ namespace Synthesis.Battle
         /// </summary>
         public void UpdateWilt(int calcualtedWilt)
         {
+            // Add to the current Wilt
             currentWilt += calcualtedWilt;
 
             // Check if the current player damage is greater than or equal to the total player damage
             if (currentWilt >= totalWilt)
             {
-                // TODO: Lose a turn
+                currentWilt = 0;
+
+                // Set Wilted
+                EventBus<Wilted>.Raise(new Wilted());
             }
+
+            // Publish the applied wilt event
+            EventBus<WiltApplied>.Raise(new WiltApplied() { CurrentWilt = currentWilt });
         }
     }
 }
