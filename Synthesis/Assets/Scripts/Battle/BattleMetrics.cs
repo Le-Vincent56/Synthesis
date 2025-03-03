@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Synthesis
+namespace Synthesis.Battle
 {
     public class BattleMetrics : MonoBehaviour
     {
