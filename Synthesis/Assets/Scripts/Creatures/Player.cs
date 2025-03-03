@@ -12,6 +12,7 @@ namespace Synthesis.Creatures
         private Move synthesize = new Move(MoveType.Synthesize);
 
         private MoveInfo moveInfo;
+        private static readonly int Color1 = Shader.PropertyToID("_Color1");
 
         public CreaturePiece Piece { get => piece; }
         public Move Infect { get => infect; }
@@ -72,14 +73,22 @@ namespace Synthesis.Creatures
                 var newPiece = Instantiate(trait.associatedPiece);
                 newPiece.transform.position = (con.transform.position + new Vector3(0, 0, 0.01f));
                 newPiece.transform.parent = con.transform;
-                if (oldPiece.primaryColorIn != null || oldPiece.primaryColorIn[0] != null)
+                if (oldPiece.primaryColorIn != null && newPiece.primaryColorIn.Length > 0 && oldPiece.primaryColorIn[0] != null)
                 {
-                    newPiece.SetPartColor(Color.Lerp(trait.color, oldPiece.primaryColorIn[0].color, 0.4f));
+                    newPiece.SetPartColor(Color.Lerp(trait.color, oldPiece.primaryColorIn[0].material.GetColor(Color1), 0.4f), ColorElement.Primary);
+                    newPiece.SetPartColor(trait.color1, ColorElement.Secondary);
                 }
                 else
                 {
-                    newPiece.SetPartColor(trait.color);
+                    newPiece.SetPartColor(trait.color, ColorElement.Primary);
+                    newPiece.SetPartColor(trait.color1, ColorElement.Secondary);
                 }
+                
+                if (newPiece.tertiaryColorIn != null && newPiece.tertiaryColorIn.Length > 0 && newPiece.tertiaryColorIn[0] != null)
+                {
+                    newPiece.SetPartColor(trait.colorPattern, ColorElement.Tertiary);
+                }
+                
                 con.child = newPiece;
             }
         }

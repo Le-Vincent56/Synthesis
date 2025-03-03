@@ -10,8 +10,10 @@ namespace Synthesis.Creatures.Visual
         [SerializeField] private Vector3 scaleMod;
 
         [SerializeField] public SpriteRenderer[] primaryColorIn;
-        [SerializeField] public SpriteRenderer[] secondaryColorIn;
         [SerializeField] public SpriteRenderer[] tertiaryColorIn;
+        
+        private static readonly int Color0 = Shader.PropertyToID("_Color0");
+        private static readonly int Color1 = Shader.PropertyToID("_Color1");
 
         // Change the size of current part.
         public void SetPartSize(float height, float width)
@@ -49,13 +51,15 @@ namespace Synthesis.Creatures.Visual
                 case ColorElement.Primary:
                     foreach (var spr in primaryColorIn)
                     {
-                        spr.color = color;
+                        //spr.color = color;
+                        spr.material.SetColor(Color0, color);
                     }
                     break;
                 case ColorElement.Secondary:
-                    foreach (var spr in secondaryColorIn)
+                    foreach (var spr in primaryColorIn)
                     {
-                        spr.color = color;
+                        //spr.color = color;
+                        spr.material.SetColor(Color1, color);
                     }
                     break;
                 case ColorElement.Tertiary:
@@ -69,7 +73,7 @@ namespace Synthesis.Creatures.Visual
                     {
                         spr.color = color;
                     }
-                    foreach (var spr in secondaryColorIn)
+                    foreach (var spr in primaryColorIn)
                     {
                         spr.color = color;
                     }
