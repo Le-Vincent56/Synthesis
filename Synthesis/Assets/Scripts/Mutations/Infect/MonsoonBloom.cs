@@ -5,8 +5,11 @@ namespace Synthesis.Mutations.Infect
 {
     public class MonsoonBloom : MutationStrategy
     {
-        public override string Name => "Monsoon Bloom";
-        public override string Description => "If a Torrent starts mid-battle, your next Infect has +30% base Combat Rating";
+        public MonsoonBloom()
+        {
+            name = "Monsoon Bloom";
+            description = "If a Torrent starts mid-battle, your next Infect has +30% base Combat Rating";
+        }
 
         /// <summary>
         /// If a Torrent starts mid-battle, your next Infect has +30% base Combat Rating

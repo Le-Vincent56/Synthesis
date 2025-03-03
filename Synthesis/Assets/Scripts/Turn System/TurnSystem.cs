@@ -1,6 +1,7 @@
 using Synthesis.Creatures;
 using Synthesis.EventBus;
 using Synthesis.EventBus.Events.Turns;
+using Synthesis.EventBus.Events.UI;
 using Synthesis.EventBus.Events.Weather;
 using Synthesis.ServiceLocators;
 using Synthesis.Timers;
@@ -19,11 +20,13 @@ namespace Synthesis.Turns
         [SerializeField] private Player player;
         [SerializeField] private int state;
         private StateMachine stateMachine;
-        private int turnsRemaining;
+        private int currentTurn;
+        private int totalTurns;
         private int currentRound;
 
         private CountdownTimer startBattleTimer;
         private CountdownTimer setPlayerTurnTimer;
+        private CountdownTimer updateTurnTimer;
         private CountdownTimer setEnemyTurnTimer;
         private CountdownTimer setEnemyDamageTimer;
         private CountdownTimer endTurnTimer;
@@ -47,7 +50,8 @@ namespace Synthesis.Turns
             // Create the Start Battle Timer
             CreateTimers();
 
-            turnsRemaining = 4;
+            currentTurn = 1;
+            totalTurns = 5;
         }
 
         private void OnEnable()
@@ -85,6 +89,7 @@ namespace Synthesis.Turns
             // Dispose of Timers
             startBattleTimer?.Dispose();
             setPlayerTurnTimer?.Dispose();
+            updateTurnTimer?.Dispose();
             setEnemyTurnTimer?.Dispose();
             setEnemyDamageTimer?.Dispose();
             endTurnTimer?.Dispose();
@@ -101,7 +106,7 @@ namespace Synthesis.Turns
             // Create states
             StartBattleState startBattle = new StartBattleState(this);
             PlayerTurnState playerTurn = new PlayerTurnState(this, cameraController);
-
+            UpgradeState upgradeState = new UpgradeState(this, cameraController);
             CalculatePointsState calculatePoints = new CalculatePointsState(this, player, cameraController);
             EnemyTurnState enemyTurn = new EnemyTurnState(this);
             CalculateDamageState calculateDamage = new CalculateDamageState(this);
@@ -109,11 +114,19 @@ namespace Synthesis.Turns
 
             // Define state transitions
             stateMachine.At(startBattle, playerTurn, new FuncPredicate(() => state == 1));
+
             stateMachine.At(playerTurn, calculatePoints, new FuncPredicate(() => state == 2));
-            stateMachine.At(calculatePoints, enemyTurn, new FuncPredicate(() => state == 3));
-            stateMachine.At(enemyTurn, calculateDamage, new FuncPredicate(() => state == 4));
-            stateMachine.At(calculateDamage, endBattle, new FuncPredicate(() => state == 5));
+            stateMachine.At(playerTurn, upgradeState, new FuncPredicate(() => state == 3));
+
+            stateMachine.At(upgradeState, enemyTurn, new FuncPredicate(() => state == 4));
+
+            stateMachine.At(calculatePoints, enemyTurn, new FuncPredicate(() => state == 4));
+
+            stateMachine.At(enemyTurn, calculateDamage, new FuncPredicate(() => state == 5));
+
+            stateMachine.At(calculateDamage, endBattle, new FuncPredicate(() => state == 6));
             stateMachine.At(calculateDamage, playerTurn, new FuncPredicate(() => state == 1));
+
             stateMachine.At(endBattle, startBattle, new FuncPredicate(() => state == 0));
 
             // Set initial state
@@ -123,7 +136,7 @@ namespace Synthesis.Turns
         /// <summary>
         /// Set the amount of turns
         /// </summary>
-        public void SetTurns(int turns) => turnsRemaining = turns;
+        public void SetTurns(int turns) => totalTurns = turns;
 
         /// <summary>
         /// Pass the turn
@@ -131,10 +144,10 @@ namespace Synthesis.Turns
         public void PassTurn()
         {
             // Check if there are turns remaining
-            if (turnsRemaining > 0)
+            if (currentTurn <= totalTurns)
             {
                 // Decrement the turns remaining and set the player state
-                turnsRemaining--;
+                currentTurn++;
                 state = 1;
                 
                 EventBus<UpdateWeather>.Raise(new UpdateWeather());
@@ -143,8 +156,9 @@ namespace Synthesis.Turns
             }
 
             // Otherwise, set the end state, reset the turns and add to the current round
-            state = 5;
-            turnsRemaining = 4;
+            state = 6;
+            totalTurns = 5;
+            currentTurn = 1;
             currentRound++;
         }
 
@@ -159,11 +173,14 @@ namespace Synthesis.Turns
             setPlayerTurnTimer = new CountdownTimer(1f);
             setPlayerTurnTimer.OnTimerStop += () => state = 1;
 
+            updateTurnTimer = new CountdownTimer(0.75f);
+            updateTurnTimer.OnTimerStop += () => EventBus<UpdateTurns>.Raise(new UpdateTurns { CurrentTurn = currentTurn, TotalTurns = totalTurns });
+
             setEnemyTurnTimer = new CountdownTimer(3f);
-            setEnemyTurnTimer.OnTimerStop += () => state = 3;
+            setEnemyTurnTimer.OnTimerStop += () => state = 4;
 
             setEnemyDamageTimer = new CountdownTimer(3f);
-            setEnemyDamageTimer.OnTimerStop += () => state = 4;
+            setEnemyDamageTimer.OnTimerStop += () => state = 5;
 
             endTurnTimer = new CountdownTimer(3f);
             endTurnTimer.OnTimerStop += () => PassTurn();
@@ -177,10 +194,7 @@ namespace Synthesis.Turns
         /// <summary>
         /// Take the Synthesize action by changing turn states
         /// </summary>
-        private void Synthesize()
-        {
-            // Synthesize
-        }
+        private void Synthesize() => SetState(3);
 
         /// <summary>
         /// Set the State of the Turn System
@@ -191,6 +205,8 @@ namespace Synthesis.Turns
         /// Start the next battle
         /// </summary>
         public void NextBattle() => startBattleTimer.Start();
+
+        public void UpdateTurns() => updateTurnTimer?.Start();
 
         /// <summary>
         /// Await the player turn phase

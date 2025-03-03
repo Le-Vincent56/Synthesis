@@ -1,8 +1,6 @@
 using Synthesis.EventBus;
 using Synthesis.EventBus.Events.Turns;
 using Synthesis.EventBus.Events.UI;
-using Synthesis.Utilities.StateMachine;
-using UnityEngine;
 
 namespace Synthesis.Turns.States
 {
@@ -31,6 +29,9 @@ namespace Synthesis.Turns.States
 
             EventBus<ShowTurnHeader>.Raise(new ShowTurnHeader { Text = "PLAYER TURN" });
             EventBus<ShowPlayerInfo>.Raise(new ShowPlayerInfo());
+
+            // Update the turn
+            turnSystem.UpdateTurns();
         }
     }
 }

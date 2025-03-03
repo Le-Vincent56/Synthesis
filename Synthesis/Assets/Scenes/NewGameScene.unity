@@ -784,7 +784,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -1338,7 +1338,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -3124,13 +3124,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb228cb7201161b448cdf03423ebdcc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputReader: {fileID: 11400000, guid: b0331d6b828476b468037926eb2c4a67, type: 2}
   turnHeader: {fileID: 1114550336}
   playerInformation: {fileID: 845905984}
   enemyInformation: {fileID: 1550015223}
   synthesizeShop: {fileID: 1481288826}
+  currentTurn: {fileID: 845780345}
+  totalTurns: {fileID: 1956701959}
   infectButton: {fileID: 436544593}
   synthesizeButton: {fileID: 618263263}
+  actionsShown: 0
+  synthesizeShopShown: 0
   turnHeaderActive: 0
+  turnsHighlightColor: {r: 1, g: 0.81960785, b: 0.6627451, a: 1}
+  turnsScaleAmount: 1.35
+  turnsScaleDuration: 0.5
   translateDuration: 0.5
   translateAmount: 1000
   fadeHeaderDuration: 1.5
@@ -4499,7 +4507,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1662278442}
   - component: {fileID: 1662278444}
-  - component: {fileID: 1662278443}
+  - component: {fileID: 1662278445}
   m_Layer: 0
   m_Name: Mutations
   m_TagString: Untagged
@@ -4522,18 +4530,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 23070646}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1662278443
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1662278441}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9da1bdb6071d11b469b8cb41668b0e2c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1662278444
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4546,6 +4542,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b94ad9400bcfaab4d8c8d33d8ef4f2c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1662278445
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1662278441}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9da1bdb6071d11b469b8cb41668b0e2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: mutations
+      Entry: 7
+      Data: 0|System.Collections.Generic.List`1[[Synthesis.Mutations.MutationStrategy,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
 --- !u!1 &1689682098
 GameObject:
   m_ObjectHideFlags: 0

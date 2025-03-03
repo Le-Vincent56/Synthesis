@@ -1,3 +1,5 @@
+using Synthesis.EventBus;
+using Synthesis.EventBus.Events.Turns;
 using Synthesis.Mutations;
 using Synthesis.Mutations.Infect;
 using Synthesis.ServiceLocators;
@@ -12,6 +14,8 @@ namespace Synthesis.Mutations
         private Dictionary<Type, bool> mutationAvailability;
         private List<Type> availableMutations;
 
+        private EventBinding<Synthesize> onSynthesize;
+
         private void Awake()
         {
             // Initialize data sets
@@ -24,7 +28,18 @@ namespace Synthesis.Mutations
             // Register this as a service
             ServiceLocator.ForSceneOf(this).Register(this);
         }
-        
+
+        private void OnEnable()
+        {
+            onSynthesize = new EventBinding<Synthesize>(OnSynthesize);
+            EventBus<Synthesize>.Register(onSynthesize);
+        }
+
+        private void OnDisable()
+        {
+            EventBus<Synthesize>.Deregister(onSynthesize);
+        }
+
         /// <summary>
         /// Fill the Mutation Pool with all mutations
         /// </summary>
@@ -36,6 +51,18 @@ namespace Synthesis.Mutations
             RegisterMutation<MonsoonBloom>();
             RegisterMutation<ThermalSepta>();
             RegisterMutation<MycorrhizalNetwork>();
+        }
+
+        /// <summary>
+        /// Set Mutation Availability after the player gains a Mutation by Synthesizing
+        /// </summary>
+        private void OnSynthesize(Synthesize eventData)
+        {
+            // Extract the Type of the Mutation
+            Type mutationType = eventData.Mutation.GetType();
+
+            // Set its availability to false
+            SetMutationAvailability(mutationType, false);
         }
 
         /// <summary>
@@ -95,15 +122,11 @@ namespace Synthesis.Mutations
             }
         }
 
-
         /// <summary>
         /// Set Mutation availability
         /// </summary>
-        public void SetMutationAvailability<T>(bool isAvailable) where T: MutationStrategy
+        public void SetMutationAvailability(Type mutationType, bool isAvailable)
         {
-            // Extract the Type of the Mutation Strategy
-            Type mutationType = typeof(T);
-
             // Exit case - the Dictionary does not contain the mutation type
             if (!mutationAvailability.ContainsKey(mutationType)) return;
 
@@ -112,11 +135,18 @@ namespace Synthesis.Mutations
 
             // Check if the Mutation is available
             if (isAvailable)
+            {
+                // Exit case - the Mutation is already in the available Mutations list
+                if (availableMutations.Contains(mutationType)) return;
+
                 // Add it to the available Mutations list
                 availableMutations.Add(mutationType);
+            }
             else
+            {
                 // Remove it from the available Mutations list
                 availableMutations.Remove(mutationType);
+            }
         }
 
         /// <summary>

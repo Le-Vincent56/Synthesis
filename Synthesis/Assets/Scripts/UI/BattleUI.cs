@@ -19,6 +19,7 @@ namespace Synthesis.UI
 
         private EventBinding<ShowTurnHeader> onShowTurnHeader;
         private EventBinding<HideTurnHeader> onHideTurnHeader;
+        private EventBinding<UpdateTurns> onUpdateTurns;
         private EventBinding<ShowPlayerInfo> onShowPlayerInfo;
         private EventBinding<HidePlayerInfo> onHidePlayerInfo;
         private EventBinding<ShowSynthesizeShop> onShowSynthesizeShop;
@@ -32,6 +33,9 @@ namespace Synthesis.UI
 
             onHideTurnHeader = new EventBinding<HideTurnHeader>(HideTurnHeader);
             EventBus<HideTurnHeader>.Register(onHideTurnHeader);
+
+            onUpdateTurns = new EventBinding<UpdateTurns>(UpdateTurns);
+            EventBus<UpdateTurns>.Register(onUpdateTurns);
 
             onShowPlayerInfo = new EventBinding<ShowPlayerInfo>(ShowPlayerInfo);
             EventBus<ShowPlayerInfo>.Register(onShowPlayerInfo);
@@ -50,6 +54,7 @@ namespace Synthesis.UI
         {
             EventBus<ShowTurnHeader>.Deregister(onShowTurnHeader);
             EventBus<HideTurnHeader>.Deregister(onHideTurnHeader);
+            EventBus<UpdateTurns>.Deregister(onUpdateTurns);
             EventBus<ShowPlayerInfo>.Deregister(onShowPlayerInfo);
             EventBus<HidePlayerInfo>.Deregister(onHidePlayerInfo);
             EventBus<ShowSynthesizeShop>.Deregister(onShowSynthesizeShop);
@@ -69,6 +74,7 @@ namespace Synthesis.UI
 
         private void ShowTurnHeader(ShowTurnHeader eventData) => controller.ShowTurnHeader(eventData.Text);
         private void HideTurnHeader() => controller.HideTurnHeader();
+        private void UpdateTurns(UpdateTurns eventData) => controller.UpdateTurns(eventData.CurrentTurn, eventData.TotalTurns);
         private void ShowPlayerInfo() => controller.ShowPlayerInfo();
         private void HidePlayerInfo() => controller.HidePlayerInfo();
         private void ShowSynthesizeShop() => controller.ShowSynthesizeShop();

@@ -47,6 +47,7 @@ namespace Synthesis.UI.Controller
 
         public void ShowTurnHeader(string text) => view.ShowTurnHeader(text);
         public void HideTurnHeader() => view.HideTurnHeader();
+        public void UpdateTurns(int currentTurn, int totalTurns) => view.UpdateTurns(currentTurn, totalTurns);
         public void ShowPlayerInfo() => view.ShowPlayerInfo();
         public void HidePlayerInfo() => view.HidePlayerInfo();
         public void ShowSynthesizeShop()
@@ -68,6 +69,6 @@ namespace Synthesis.UI.Controller
             // Show them in the Shop
             view.ShowSynthesizeShop(mutationCards);
         }
-        public void HideSynthesizeShop() => view.HideSynthesizeShop();
+        public void HideSynthesizeShop() => view.HideSynthesizeShop(mutationCardPool);
     }
 }

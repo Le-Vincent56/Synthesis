@@ -1,12 +1,16 @@
 using Synthesis.Calculator;
 using Synthesis.Weather;
+using System;
 
 namespace Synthesis.Mutations.Infect
 {
     public class VerdantFlood : MutationStrategy
     {
-        public override string Name => "Verdant Flood";
-        public override string Description => "In Torrent, every third Infect grants +5 base Combat Rating permanently";
+        public VerdantFlood()
+        {
+            name = "Verdant Flood";
+            description = "In Torrent, every third Infect grants +5 base Combat Rating permanently";
+        }
 
         /// <summary>
         /// In Torrent, every third Infect grants +5 base Combat Rating permanently

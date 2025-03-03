@@ -1,14 +1,19 @@
 using Synthesis.Calculator;
 using Synthesis.Weather;
+using System;
+using UnityEngine;
 
 namespace Synthesis.Mutations
 {
+    [Serializable]
     public abstract class MutationStrategy
     {
-        public abstract string Name { get; }
-        public abstract string Description { get; }
+        [SerializeField] protected int trackerIndex;
+        [SerializeField] protected string name;
+        [SerializeField] protected string description;
 
-        protected int trackerIndex;
+        public string Name { get => name; }
+        public string Description { get => description; }
 
         public int TrackerIndex { get => trackerIndex; set => trackerIndex = value; }
 

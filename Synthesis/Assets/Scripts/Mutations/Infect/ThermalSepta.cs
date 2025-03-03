@@ -1,8 +1,5 @@
 using Synthesis.Calculator;
 using Synthesis.Weather;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 namespace Synthesis.Mutations.Infect
 {
@@ -10,11 +7,11 @@ namespace Synthesis.Mutations.Infect
     {
         private float localBCRIncrease;
 
-        public override string Name => "Thermal Septa";
-        public override string Description => "In Drought, your base Combat Rating increases by +4% per turn. This bonus rests if Torrent starts.";
-
         public ThermalSepta()
         {
+            name = "Thermal Septa";
+            description = "In Drought, your base Combat Rating increases by +4% per turn. This bonus rests if Torrent starts.";
+
             // Set the local base Combat Rating increase to 0
             localBCRIncrease = 0f;
         }

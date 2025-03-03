@@ -1,3 +1,5 @@
+using Synthesis.Mutations;
+
 namespace Synthesis.EventBus.Events.Turns
 {
     public struct StartBattle : IEvent { }
@@ -6,7 +8,10 @@ namespace Synthesis.EventBus.Events.Turns
     public struct EnterAction : IEvent { }
     public struct EnterMutate : IEvent { }
     public struct Infect : IEvent { }
-    public struct Synthesize : IEvent { }
+    public struct Synthesize : IEvent
+    {
+        public MutationStrategy Mutation;
+    }
 
     public struct CalculateCombatPoints : IEvent { }
 

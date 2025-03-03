@@ -5,8 +5,11 @@ namespace Synthesis.Mutations.Infect
 {
     public class MycorrhizalNetwork : MutationStrategy
     {
-        public override string Name => "Mycorrhizal Network";
-        public override string Description => "Infect gains +5% higher base Combat Rating per consecutive use";
+        public MycorrhizalNetwork()
+        {
+            name = "Mycorrhizal Network";
+            description = "Infect gains +5% higher base Combat Rating per consecutive use";
+        }
 
         /// <summary>
         /// Infect gains +5% higher base Combat Rating per consecutive use

@@ -1,11 +1,12 @@
 using DG.Tweening;
+using Synthesis.EventBus;
+using Synthesis.EventBus.Events.Turns;
 using Synthesis.Mutations;
+using System;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using UnityEngine.UIElements;
 
 namespace Synthesis.UI.View
 {
@@ -19,16 +20,18 @@ namespace Synthesis.UI.View
         [Header("Tweening Variables")]
         [SerializeField] private float scaleDuration;
         [SerializeField] private float scaleAmount;
-        [SerializeField] private float translateDuration;
-        [SerializeField] private float translateAmount;
+        [SerializeField] private float submitDuration;
         private Tween scaleTween;
-        private Tween translateTween;
+
+        private Vector3 initialScale;
+        private Vector3 maxScale;
+
+        public Action OnClick = delegate { };
 
         public void OnDestroy()
         {
             // Kill any tweens if they exist
             scaleTween?.Kill();
-            translateTween?.Kill();
         }
 
         /// <summary>
@@ -43,6 +46,9 @@ namespace Synthesis.UI.View
             // Set the Texts
             nameText = texts[0];
             descriptionText = texts[1];
+
+            initialScale = transform.localScale;
+            maxScale = initialScale * scaleAmount;
 
             // Set Rect Transform
             rectTransform = GetComponent<RectTransform>();
@@ -68,59 +74,70 @@ namespace Synthesis.UI.View
             descriptionText.text = string.Empty;
         }
 
-        private void OnClick()
-        {
-
-        }
-
-        
-
-        private void Highlight()
+        /// <summary>
+        /// Select the Mutation card
+        /// </summary>
+        private void Select()
         {
             // Scale and translate
-            Scale(Vector3.one * scaleAmount, scaleDuration);
-            Translate(translateAmount, translateDuration);
+            Scale(maxScale, scaleDuration);
         }
 
-        private void Unhighlight()
+        /// <summary>
+        /// Deselect the Mutation Card
+        /// </summary>
+        private void Deselect()
         {
-            Scale(Vector3.one, scaleDuration);
-            Translate(-translateAmount, translateDuration);
+            Scale(initialScale, scaleDuration);
         }
 
-        private void Scale(Vector3 endValue, float duration)
+        /// <summary>
+        /// Submit the Mutation Card
+        /// </summary>
+        private void Submit()
+        {
+            // Scale inwards
+            Scale(initialScale, submitDuration / 2f, () =>
+            {
+                // Scale back outwards and invoke the OnClick action
+                Scale(maxScale, submitDuration / 2f, () =>
+                {
+                    // Raise the Synthesize event
+                    EventBus<Synthesize>.Raise(new Synthesize()
+                    {
+                        Mutation = mutation
+                    });
+
+                    // Remove any objects from the Event System
+                    EventSystem.current.SetSelectedGameObject(null);
+                });
+            });
+        }
+
+        /// <summary>
+        /// Handle scale tweening for the Mutation Card
+        /// </summary>
+        private void Scale(Vector3 endValue, float duration, TweenCallback onComplete = null)
         {
             // Kill the scale tween if it exists
             scaleTween?.Kill();
 
             // Set the scale tween
             scaleTween = rectTransform.DOScale(endValue, duration);
+
+            // Exit case - there's no completion action
+            if (onComplete == null) return;
+            
+            // Set the completion action
+            scaleTween.onComplete += onComplete;
         }
 
-        private void Translate(float amount, float duration)
-        {
-            // Kill the translate tween if it exists
-            translateTween?.Kill();
+        public void OnSelect(BaseEventData eventData) => Select();
 
-            // Set the translate tween
-            translateTween = rectTransform.DOAnchorPosY(
-                rectTransform.anchoredPosition.y + amount,
-                duration
-            );
-        }
+        public void OnDeselect(BaseEventData eventData) => Deselect();
 
-        public void OnSelect(BaseEventData eventData) => Highlight();
+        public void OnSubmit(BaseEventData eventData) => Submit();
 
-        public void OnDeselect(BaseEventData eventData) => Unhighlight();
-
-        public void OnSubmit(BaseEventData eventData)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void OnPointerClick(PointerEventData eventData)
-        {
-            throw new System.NotImplementedException();
-        }
+        public void OnPointerClick(PointerEventData eventData) => Submit();
     }
 }

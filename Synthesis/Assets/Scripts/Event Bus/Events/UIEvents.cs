@@ -10,6 +10,12 @@ namespace Synthesis.EventBus.Events.UI
         public string Text;
     }
 
+    public struct UpdateTurns : IEvent
+    {
+        public int CurrentTurn;
+        public int TotalTurns;
+    }
+
     public struct HideTurnHeader : IEvent { }
 
     public struct ShowPlayerInfo : IEvent { }

@@ -8,42 +8,67 @@ using Synthesis.EventBus.Events.Turns;
 using UnityEngine.EventSystems;
 using Synthesis.Mutations;
 using System.Collections.Generic;
+using Synthesis.Input;
 
 namespace Synthesis.UI.View
 {
     public class BattleUIView : MonoBehaviour
     {
         [Header("References")]
+        [SerializeField] private GameInputReader inputReader;
         [SerializeField] private CanvasGroup turnHeader;
         [SerializeField] private CanvasGroup playerInformation;
         [SerializeField] private CanvasGroup enemyInformation;
         [SerializeField] private CanvasGroup synthesizeShop;
         private RectTransform playerInfoRect;
         private RectTransform synthesizeShopRect;
+        private RectTransform turnsRemainingRect;
         private Text turnHeaderText;
+        [SerializeField] private Text currentTurn;
+        [SerializeField] private Text totalTurns;
         [SerializeField] private SelectableButton infectButton;
         [SerializeField] private SelectableButton synthesizeButton;
+        private SelectableButton[] actionButtons;
+        private List<MutationCard> currentMutationCards;
 
         [Header("Fields")]
+        [SerializeField] private bool actionsShown;
+        [SerializeField] private bool synthesizeShopShown;
         [SerializeField] private bool turnHeaderActive;
+        private Color turnsInitialColor;
+        [SerializeField] private Color turnsHighlightColor;
+        private Vector3 turnsInitialScale;
+        private Vector3 turnsMaxScale;
         private CountdownTimer turnHeaderFadeOutTimer;
 
         [Header("Tweening Variables")]
+        [SerializeField] private float turnsScaleAmount;
+        [SerializeField] private float turnsScaleDuration;
         [SerializeField] private float translateDuration;
         [SerializeField] private float translateAmount;
         [SerializeField] private float fadeHeaderDuration;
         [SerializeField] private float fadeEnemyInfoDuration;
         private Tween fadeTurnHeaderTween;
+        private Tween scaleTurnsTween;
+        private Tween colorTurnsTween;
         private Tween translatePlayerInfoTween;
         private Tween translateSynthesizeShopTween;
         private Tween fadeEnemyInfoTween;
+
+        public List<MutationCard> CurrentMutationCards { get => currentMutationCards; }
 
         private void Awake()
         {
             // Get components
             playerInfoRect = playerInformation.GetComponent<RectTransform>();
             synthesizeShopRect = synthesizeShop.GetComponent<RectTransform>();
+            turnsRemainingRect = currentTurn.GetComponent<RectTransform>();
             turnHeaderText = turnHeader.GetComponentInChildren<Text>();
+
+            // Set tween variables
+            turnsInitialColor = currentTurn.color;
+            turnsInitialScale = turnsRemainingRect.localScale;
+            turnsMaxScale = turnsInitialScale * turnsScaleAmount;
 
             // Create the Turn Header fade out timer
             turnHeaderFadeOutTimer = new CountdownTimer(2f);
@@ -57,9 +82,26 @@ namespace Synthesis.UI.View
             infectButton.Initialize(() => EventBus<Infect>.Raise(new Infect()));
             synthesizeButton.Initialize(() => EventBus<ShowSynthesizeShop>.Raise(new ShowSynthesizeShop()));
 
+            // Create the Action buttons array
+            actionButtons = new SelectableButton[2]
+            {
+                infectButton,
+                synthesizeButton
+            };
+
             // Translate the player info off screen
             TranslatePlayerInfo(-translateAmount, 0f);
             TranslateSynthesizeShop(-translateAmount, 0f);
+        }
+
+        private void OnEnable()
+        {
+            inputReader.Navigate += NavigateUI;
+        }
+
+        private void OnDisable()
+        {
+            inputReader.Navigate -= NavigateUI;
         }
 
         private void OnDestroy()
@@ -72,6 +114,96 @@ namespace Synthesis.UI.View
             translatePlayerInfoTween?.Kill();
             translateSynthesizeShopTween?.Kill();
             fadeEnemyInfoTween?.Kill();
+        }
+
+        /// <summary>
+        /// Handle Navigation input for the UI
+        /// </summary>
+        private void NavigateUI(Vector2 direction)
+        {
+            // Exit case - there's nothing selected
+            if(EventSystem.current.currentSelectedGameObject == null) return;
+
+            // Exit case - no direction was input
+            if (direction == Vector2.zero) return;
+
+            // Check if the actions are being shown
+            if (actionsShown)
+            {
+                // Exit case - a Selectable button is not selected
+                if (!EventSystem.current.currentSelectedGameObject.TryGetComponent(out SelectableButton actionButton)) return;
+
+                // Get the y-direction of the navigation
+                int yDirection = (int)direction.y;
+
+                // Set the current index
+                int currentIndex = 0;
+
+                // Iterate through the action buttons
+                for (int i = 0; i < actionButtons.Length; i++)
+                {
+                    // Check if the current button is the selected button
+                    if (actionButtons[i] == actionButton)
+                    {
+                        // Set the current index
+                        currentIndex = i;
+                        break;
+                    }
+                }
+
+                currentIndex += yDirection;
+
+                // Check if the current index is out of bounds
+                if (currentIndex < 0 || currentIndex >= actionButtons.Length)
+                {
+                    // Clamp the current index inside of the array bounds
+                    currentIndex = currentIndex < 0 ? actionButtons.Length - 1 : 0;
+                }
+                
+                // Set the selected game object
+                EventSystem.current.SetSelectedGameObject(actionButtons[currentIndex].gameObject);
+
+                return;
+            }
+
+            // Check if the Synthesize Shop is being shown
+            if(synthesizeShopShown)
+            {
+                // Exit case - a Selectable button is not selected
+                if (!EventSystem.current.currentSelectedGameObject.TryGetComponent(out MutationCard card)) return;
+
+                // Get the y-direction of the navigation
+                int xDirection = (int)direction.x;
+
+                // Set the current index
+                int currentIndex = 0;
+
+                // Iterate through the current mutation cards
+                for (int i = 0; i < currentMutationCards.Count; i++)
+                {
+                    // Check if the current card is the selected card
+                    if (currentMutationCards[i] == card)
+                    {
+                        // Set the current index
+                        currentIndex = i;
+                        break;
+                    }
+                }
+
+                currentIndex += xDirection;
+
+                // Check if the current index is out of bounds
+                if (currentIndex < 0 || currentIndex >= currentMutationCards.Count)
+                {
+                    // Clamp the current index inside of the array bounds
+                    currentIndex = currentIndex < 0 ? currentMutationCards.Count - 1 : 0;
+                }
+
+                // Set the selected game object
+                EventSystem.current.SetSelectedGameObject(currentMutationCards[currentIndex].gameObject);
+
+                return;
+            }
         }
 
         /// <summary>
@@ -134,12 +266,37 @@ namespace Synthesis.UI.View
         }
 
         /// <summary>
+        /// Update the turns remaining in combat
+        /// </summary>
+        public void UpdateTurns(int currentTurn, int totalTurns)
+        {
+            // Set the text
+            this.currentTurn.text = currentTurn.ToString();
+            this.totalTurns.text = totalTurns.ToString();
+
+            // Scale the text
+            ScaleTurns(turnsMaxScale, turnsScaleDuration / 2f, () =>
+            {
+                ScaleTurns(turnsInitialScale, turnsScaleDuration / 2f);
+            });
+
+            // Color the text
+            ColorTurns(turnsHighlightColor, turnsScaleDuration / 2f, () =>
+            {
+                ColorTurns(turnsInitialColor, turnsScaleDuration / 2f);
+            });
+        }
+
+        /// <summary>
         /// Show the Player Information panel
         /// </summary>
         public void ShowPlayerInfo()
         {
             TranslatePlayerInfo(translateAmount, translateDuration, () =>
             {
+                // Set that actions are shown
+                actionsShown = true;
+
                 // Select the Infect button
                 EventSystem.current.SetSelectedGameObject(infectButton.gameObject);
             });
@@ -148,19 +305,28 @@ namespace Synthesis.UI.View
         /// <summary>
         /// Hide the Player Information panel
         /// </summary>
-        public void HidePlayerInfo() => TranslatePlayerInfo(-translateAmount, translateDuration);
+        public void HidePlayerInfo() => TranslatePlayerInfo(-translateAmount, translateDuration, () => actionsShown = false);
 
         /// <summary>
         /// Show the Synthesize Shop panel
         /// </summary>
         public void ShowSynthesizeShop(List<MutationCard> selectedMutations)
         {
+            // Set the selected mutations
+            currentMutationCards = selectedMutations;
+
             // Hide the Player Info
             TranslatePlayerInfo(-translateAmount, translateDuration, () =>
             {
+                // Set that actions are not shown
+                actionsShown = false;
+
                 // Show the Synthesize Shop
                 TranslateSynthesizeShop(translateAmount, translateDuration, () =>
                 {
+                    // Set that the synthesize shop is shown
+                    synthesizeShopShown = true;
+
                     EventSystem.current.SetSelectedGameObject(selectedMutations[0].gameObject);
                 });
             });
@@ -169,7 +335,24 @@ namespace Synthesis.UI.View
         /// <summary>
         /// Hide the Syntehsize Shop panel
         /// </summary>
-        public void HideSynthesizeShop() => TranslateSynthesizeShop(-translateAmount, translateDuration);
+        public void HideSynthesizeShop(MutationCardPool pool)
+        {
+            TranslateSynthesizeShop(-translateAmount, translateDuration, () =>
+            {
+                // Iterate through each Mutation Card
+                foreach (MutationCard card in currentMutationCards)
+                {
+                    // Release each card back to the pool
+                    pool.Release(card);
+                }
+
+                // Set that the synthesize shop is not shown
+                synthesizeShopShown = false;
+
+                // Clear the list of current mutation cards
+                currentMutationCards.Clear();
+            });
+        } 
 
         /// <summary>
         /// Handle translating the Player Information
@@ -192,6 +375,42 @@ namespace Synthesis.UI.View
 
             // Set the completion action
             translatePlayerInfoTween.onComplete += onComplete;
+        }
+
+        private void ScaleTurns(Vector3 endValue, float duration, TweenCallback onComplete = null)
+        {
+            // Kill the translate tween if it exists
+            scaleTurnsTween?.Kill();
+
+            // Set the translate tween
+            scaleTurnsTween = currentTurn.rectTransform.DOScale(
+                endValue,
+                duration
+            );
+
+            // Exit case - there's no completion action
+            if (onComplete == null) return;
+
+            // Set the completion action
+            scaleTurnsTween.onComplete += onComplete;
+        }
+
+        private void ColorTurns(Color endValue, float duration, TweenCallback onComplete = null)
+        {
+            // Kill the translate tween if it exists
+            colorTurnsTween?.Kill();
+
+            // Set the translate tween
+            colorTurnsTween = currentTurn.DOColor(
+                endValue,
+                duration
+            );
+
+            // Exit case - there's no completion action
+            if (onComplete == null) return;
+
+            // Set the completion action
+            colorTurnsTween.onComplete += onComplete;
         }
 
         /// <summary>

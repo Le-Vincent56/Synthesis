@@ -1,14 +1,18 @@
-using Synthesis.Mutations;
+using Sirenix.OdinInspector;
+using Synthesis.EventBus;
+using Synthesis.EventBus.Events.Turns;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Synthesis
+namespace Synthesis.Mutations
 {
-    public class MutationsTracker : MonoBehaviour
+    public class MutationsTracker : SerializedMonoBehaviour
     {
-        private List<MutationStrategy> mutations;
+        [SerializeField] private List<MutationStrategy> mutations = new List<MutationStrategy>();
 
         public List<MutationStrategy> Mutations { get => mutations; }
+
+        private EventBinding<Synthesize> onSynthesize;
 
         private void Awake()
         {
@@ -16,11 +20,25 @@ namespace Synthesis
             mutations = new List<MutationStrategy>();
         }
 
+        private void OnEnable()
+        {
+            onSynthesize = new EventBinding<Synthesize>(AddMutation);
+            EventBus<Synthesize>.Register(onSynthesize);
+        }
+
+        private void OnDisable()
+        {
+            EventBus<Synthesize>.Deregister(onSynthesize);
+        }
+
         /// <summary>
         /// Add a Mutation to the Mutations Tracker
         /// </summary>
-        public void AddMutation(MutationStrategy mutation)
+        public void AddMutation(Synthesize eventData)
         {
+            // Get the Mutation from the Event Data
+            MutationStrategy mutation = eventData.Mutation;
+
             // Add the Mutation
             mutations.Add(mutation);
 
