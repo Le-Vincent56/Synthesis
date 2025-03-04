@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using Synthesis.Creatures;
-using Synthesis.Modifiers.Traits;
 
 namespace Synthesis
 {
@@ -32,51 +31,51 @@ namespace Synthesis
 
         public void ShowTraitsFunction()
         {
-            foreach (var trait in creature.Infect.Traits)
-            {
-                //Debug.Log($"Trait found: {trait.Name}");
-                switch (trait.Name)
-                {
-                    case "Expand Limbs":
-                        expandLimbsButton.gameObject.SetActive(true);
-                        break;
-                    case "Electric Strike":
-                        electricStrikeButton.gameObject.SetActive(true);
-                        break;
-                    case "Fire Bolt":
-                        fireBoltButton.gameObject.SetActive(true);
-                        break;
-                    case "Water Wave":
-                        waterWaveButton.gameObject.SetActive(true);
-                        break;
-                    default:
-                        Debug.LogWarning($"No button found for trait: {trait.Name}");
-                        break;
-                }
-            }
+            //foreach (var trait in creature.Infect.Traits)
+            //{
+            //    //Debug.Log($"Trait found: {trait.Name}");
+            //    switch (trait.Name)
+            //    {
+            //        case "Expand Limbs":
+            //            expandLimbsButton.gameObject.SetActive(true);
+            //            break;
+            //        case "Electric Strike":
+            //            electricStrikeButton.gameObject.SetActive(true);
+            //            break;
+            //        case "Fire Bolt":
+            //            fireBoltButton.gameObject.SetActive(true);
+            //            break;
+            //        case "Water Wave":
+            //            waterWaveButton.gameObject.SetActive(true);
+            //            break;
+            //        default:
+            //            Debug.LogWarning($"No button found for trait: {trait.Name}");
+            //            break;
+            //    }
+            //}
 
-            foreach (var trait in creature.Synthesize.Traits)
-            {
-                //Debug.Log($"Trait found: {trait.Name}");
-                switch (trait.Name)
-                {
-                    case "Expand Limbs":
-                        expandLimbsButton.gameObject.SetActive(true);
-                        break;
-                    case "Electric Strike":
-                        electricStrikeButton.gameObject.SetActive(true);
-                        break;
-                    case "Fire Bolt":
-                        fireBoltButton.gameObject.SetActive(true);
-                        break;
-                    case "Water Wave":
-                        waterWaveButton.gameObject.SetActive(true);
-                        break;
-                    default:
-                        Debug.LogWarning($"No button found for trait: {trait.Name}");
-                        break;
-                }
-            }
+            //foreach (var trait in creature.Synthesize.Traits)
+            //{
+            //    //Debug.Log($"Trait found: {trait.Name}");
+            //    switch (trait.Name)
+            //    {
+            //        case "Expand Limbs":
+            //            expandLimbsButton.gameObject.SetActive(true);
+            //            break;
+            //        case "Electric Strike":
+            //            electricStrikeButton.gameObject.SetActive(true);
+            //            break;
+            //        case "Fire Bolt":
+            //            fireBoltButton.gameObject.SetActive(true);
+            //            break;
+            //        case "Water Wave":
+            //            waterWaveButton.gameObject.SetActive(true);
+            //            break;
+            //        default:
+            //            Debug.LogWarning($"No button found for trait: {trait.Name}");
+            //            break;
+            //    }
+            //}
         }
     }
 }

@@ -1,9 +1,9 @@
 using System;
+using DG.Tweening;
 using Synthesis.Creatures.Visual;
 using Synthesis.EventBus;
+using Synthesis.EventBus.Events.Creatures;
 using Synthesis.EventBus.Events.Turns;
-using Synthesis.Modifiers;
-using Synthesis.Modifiers.Traits;
 using Synthesis.Mutations;
 using UnityEngine;
 
@@ -20,114 +20,81 @@ namespace Synthesis.Creatures
         // TODO: Make actual weather variations
     }
     
-    public class Player : MonoBehaviour, ICreature
+    public class Player : MonoBehaviour
     {
         [SerializeField] private CreaturePiece[] availablePieces;
         
         [SerializeField] private CreaturePiece piece;
-        private Move infect = new Move(MoveType.Attack);
-        private Move synthesize = new Move(MoveType.Synthesize);
-
-        private MoveInfo moveInfo;
         private static readonly int Color1 = Shader.PropertyToID("_Color1");
 
         private EventBinding<Synthesize> onSynthesize;
+        private EventBinding<PlayerAttack> onPlayerAttack;
+
+        [Header("Tweening Variables")]
+        [SerializeField] private float jumpPower = 1f;
+        [SerializeField] private float jumpDuration = 0.5f;
+        private Tween jumpTween;
 
         public CreaturePiece Piece { get => piece; }
-        public Move Infect { get => infect; }
-        public Move Synthesize { get => synthesize; }
 
         // Methods
         private void OnEnable()
         {
             onSynthesize = new EventBinding<Synthesize>(OnSynthesize);
             EventBus<Synthesize>.Register(onSynthesize);
+
+            onPlayerAttack = new EventBinding<PlayerAttack>(PlayAttack);
+            EventBus<PlayerAttack>.Register(onPlayerAttack);
         }
 
         private void OnDisable()
         {
             EventBus<Synthesize>.Deregister(onSynthesize);
+            EventBus<PlayerAttack>.Deregister(onPlayerAttack);
+        }
+
+        private void OnDestroy()
+        {
+            // Kill the jump tween if it exists
+            jumpTween?.Kill();
         }
 
         private void OnSynthesize(Synthesize eventData)
         {
             UpdateCreatureVisual(eventData.Mutation);
         }
-        
-        /// <summary>
-        /// Adds a random trait to a move of the creature.
-        /// </summary>
-        private void AddRandomTrait(MoveType moveType)
+
+        private void PlayAttack()
         {
-            var trait = TraitPoolManager.Instance.traitPool.GetRandomTrait();
-            AddTrait(trait, moveType);
+            // Get the jump positions
+            float toY = transform.localPosition.y + jumpPower;
+            float fromY = transform.localPosition.y;
+
+            // Activate the jump
+            Jump(toY, jumpDuration / 2f, () => Jump(fromY, jumpDuration / 2f));
         }
 
         /// <summary>
-        /// Adds a new trait to a move of the creature
+        /// Jump the player
         /// </summary>
-        private bool AddTrait(Trait trait, MoveType moveType)
+        private void Jump(float endValue, float duration, TweenCallback onComplete = null)
         {
-            UpdateCreatureVisual(trait);
-            return moveType switch
-            {
-                MoveType.Attack => infect.AddTrait(trait),
-                MoveType.Synthesize => synthesize.AddTrait(trait),
-                MoveType.Both => infect.AddTrait(trait) && synthesize.AddTrait(trait),
-                _ => false
-            };
+            // Kill the jump tween if it exists
+            jumpTween?.Kill();
+
+            // Create a new jump tween
+            jumpTween = transform.DOLocalMoveY(endValue, duration);
+
+            // Set the easing
+            jumpTween.SetEase(Ease.OutQuad);
+
+            // Exit case - if there is no completion action
+            if (onComplete == null) return;
+
+            // Set the completion action
+            jumpTween.onComplete += onComplete;
         }
 
-        public bool AddTrait(Trait trait)
-        {
-            if (trait.Type == MoveType.Attack || trait.Type == MoveType.Both)
-            {
-                return AddTrait(trait, MoveType.Attack);
-            }
-            else
-            {
-                return AddTrait(trait, MoveType.Synthesize);
-            }
-        }
-
-        /// <summary>
-        /// Updates creature based on trait added.
-        /// </summary>
-        /// <param name="trait"></param>
-        private void UpdateCreatureVisual(Trait trait)
-        {
-            foreach (var connector in piece.connectors)
-            {
-                var con = connector;
-                var oldPiece = piece;
-                while (con.child)
-                {
-                    oldPiece = con.child;
-                    con = con.child.connectors[0];
-                }
-                var newPiece = Instantiate(trait.associatedPiece);
-                newPiece.transform.position = (con.transform.position + new Vector3(0, 0, 0.01f));
-                newPiece.transform.parent = con.transform;
-                if (oldPiece.primaryColorIn != null && newPiece.primaryColorIn.Length > 0 && oldPiece.primaryColorIn[0] != null)
-                {
-                    newPiece.SetPartColor(Color.Lerp(trait.color, oldPiece.primaryColorIn[0].material.GetColor(Color1), 0.4f), ColorElement.Primary);
-                    newPiece.SetPartColor(trait.color1, ColorElement.Secondary);
-                }
-                else
-                {
-                    newPiece.SetPartColor(trait.color, ColorElement.Primary);
-                    newPiece.SetPartColor(trait.color1, ColorElement.Secondary);
-                }
-                
-                if (newPiece.tertiaryColorIn != null && newPiece.tertiaryColorIn.Length > 0 && newPiece.tertiaryColorIn[0] != null)
-                {
-                    newPiece.SetPartColor(trait.colorPattern, ColorElement.Tertiary);
-                }
-                
-                con.child = newPiece;
-            }
-        }
-        
         /// <summary>
         /// Updates creature based on mutation added.
         /// </summary>
@@ -164,18 +131,6 @@ namespace Synthesis.Creatures
                 
                 con.child = newPiece;
             }
-        }
-
-        /// <summary>
-        /// Calculate the points
-        /// </summary>
-        public float CalculatePoints()
-        {
-            moveInfo = new MoveInfo(MoveType.Attack, 10);
-
-            infect.ActivateStrategy(ref moveInfo);
-
-            return moveInfo.attack.FinalValue;
         }
     }
 }

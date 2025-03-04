@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using Synthesis.Input;
 using Synthesis.ServiceLocators;
 using Synthesis.EventBus.Events.Battle;
+using Cinemachine;
 
 namespace Synthesis.UI.View
 {
@@ -447,28 +448,36 @@ namespace Synthesis.UI.View
         }
 
         /// <summary>
+        /// Update instantly the combat rating display
+        /// </summary>
+        public void UpdateCombatRatingHard(int currentCombatRating)
+        {
+            combatRatingDisplay.text = currentCombatRating.ToString();
+        }
+
+        /// <summary>
         /// Update the combat rating display
         /// </summary>
-        public void UpdateCombatRatingDisplay(int currentCombatRating)
+        public void UpdateCombatRatingDisplay(int combatRatingCalculated, int combatRatingFull)
         {
-            int previousCombatRating = int.Parse(this.currentCombatRating.text);
+            int previousCombatRating = int.Parse(currentCombatRating.text);
 
             // Update the number climbing
 
-            FadeText(combatRatingDisplayFadeTween, combatRatingDisplay, 1f, 0.15f, () =>
+            FadeText(combatRatingDisplayFadeTween, combatRatingDisplay, 1f, 0.5f, () =>
             {
                 // Scale upwards
-                Scale(combatRatingDisplayScaleTween, combatRatingDisplayRect, turnsMaxScale, 0.25f, () =>
+                Scale(combatRatingDisplayScaleTween, combatRatingDisplayRect, turnsMaxScale, 0.4f, () =>
                 {
-                    UpdateInCombatRatingNumber(previousCombatRating, currentCombatRating, () =>
+                    UpdateInCombatRatingNumber(previousCombatRating, combatRatingFull, () =>
                     {
                         // Scale downwards
-                        Scale(combatRatingDisplayScaleTween, combatRatingDisplayRect, turnsInitialScale, 0.25f, () =>
+                        Scale(combatRatingDisplayScaleTween, combatRatingDisplayRect, turnsInitialScale, 0.4f, () =>
                         {
                             // Fade out
-                            FadeText(combatRatingDisplayFadeTween, combatRatingDisplay, 0f, 0.15f, () =>
+                            FadeText(combatRatingDisplayFadeTween, combatRatingDisplay, 0f, 0.5f, () =>
                             {
-                                EventBus<CombatRatingFinalized>.Raise(new CombatRatingFinalized() { CombatRating = currentCombatRating });
+                                EventBus<CombatRatingFinalized>.Raise(new CombatRatingFinalized() { CombatRating = combatRatingCalculated });
 
                             });
                         });
@@ -750,6 +759,8 @@ namespace Synthesis.UI.View
             {
                 combatRatingDisplay.text = value.ToString();
             });
+
+            combatRatingNumberTween.SetEase(Ease.InOutQuart);
 
             // Exit case - there's no completion action
             if (onComplete == null) return;

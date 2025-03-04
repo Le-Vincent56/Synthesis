@@ -29,7 +29,7 @@ namespace Synthesis.Mutations.Infect
             if (weather.CurrentWeather is not Torrent torrent) return;
 
             // Exit case - if there are infects since the start of the Drought
-            if (torrent.NumberOfInfectsSinceStart % 3 != 0) return;
+            if (torrent.NumberOfInfectsSinceStart != 0 && torrent.NumberOfInfectsSinceStart % 3 == 0) return;
 
             // Increase the base Combat Rating permanently by 5
             calculator.IncreaseBasePermenentAdditive(5f);

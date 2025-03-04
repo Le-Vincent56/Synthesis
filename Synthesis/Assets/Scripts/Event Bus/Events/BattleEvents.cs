@@ -10,7 +10,8 @@ namespace Synthesis.EventBus.Events.Battle
 
     public struct CombatRatingCalculated : IEvent
     {
-        public int CombatRating;
+        public int CombatRatingPointsCalculated;
+        public int CombatRatingCurrent;
     }
 
     public struct CombatRatingFinalized : IEvent

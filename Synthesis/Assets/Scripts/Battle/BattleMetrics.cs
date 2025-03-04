@@ -1,6 +1,7 @@
 using Synthesis.EventBus;
 using Synthesis.EventBus.Events.Battle;
 using Synthesis.EventBus.Events.Turns;
+using Synthesis.ServiceLocators;
 using UnityEngine;
 
 namespace Synthesis.Battle
@@ -9,7 +10,7 @@ namespace Synthesis.Battle
     {
         [Header("Scaling")]
         [SerializeField] private int difficultyLevel;
-        [SerializeField] private float ratingLevelPercentageIncrease = 0.20f; // 20% increase per level
+        [SerializeField] private float ratingLevelPercentageIncrease = 0.50f; // 20% increase per level
         [SerializeField] private float wiltPerLevelPercentageIncrease = 0.10f; // 10% increase per level
 
         [Header("Combat Rating")]
@@ -26,10 +27,14 @@ namespace Synthesis.Battle
         private EventBinding<CombatRatingFinalized> onCombatRatingFinalized;
         private EventBinding<ApplyWilt> onApplyWilt;
 
+        public int CurrentCombatRating { get => currentCombatRating; }
+
         private void Awake()
         {
             // Set the initial difficulty level
             difficultyLevel = 0;
+
+            ServiceLocator.ForSceneOf(this).Register(this);
         }
 
         private void OnEnable()
@@ -117,6 +122,8 @@ namespace Synthesis.Battle
 
                 // Move to the next battle
                 EventBus<WinBattle>.Raise(new WinBattle());
+
+                return;
             }
 
             EventBus<CombatRatingCalculationFinished>.Raise(new CombatRatingCalculationFinished());

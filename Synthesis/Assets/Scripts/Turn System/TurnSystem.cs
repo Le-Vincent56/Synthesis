@@ -18,6 +18,7 @@ namespace Synthesis.Turns
         [Header("References")]
         [SerializeField] private CameraController cameraController;
         [SerializeField] private BattleCalculator battleCalculator;
+        [SerializeField] private BattleMetrics metrics;
         [SerializeField] private SpawnCreaturesEvil spawnCreaturesEvil;
 
         [Header("States")]
@@ -89,6 +90,7 @@ namespace Synthesis.Turns
             // Retrieve services
             cameraController = ServiceLocator.ForSceneOf(this).Get<CameraController>();
             battleCalculator = ServiceLocator.ForSceneOf(this).Get<BattleCalculator>();
+            metrics = ServiceLocator.ForSceneOf(this).Get<BattleMetrics>();
             spawnCreaturesEvil = ServiceLocator.ForSceneOf(this).Get<SpawnCreaturesEvil>();
 
             // Set up the State Machine
@@ -124,9 +126,9 @@ namespace Synthesis.Turns
             StartBattleState startBattle = new StartBattleState(this);
             PlayerTurnState playerTurn = new PlayerTurnState(this, cameraController);
             MutateState mutateState = new MutateState(this, cameraController);
-            CalculatePointsState calculatePoints = new CalculatePointsState(this, battleCalculator, cameraController);
+            CalculatePointsState calculatePoints = new CalculatePointsState(this, battleCalculator, metrics, cameraController);
             EnemyTurnState enemyTurn = new EnemyTurnState(this);
-            CalculateDamageState calculateDamage = new CalculateDamageState(this, spawnCreaturesEvil);
+            CalculateDamageState calculateDamage = new CalculateDamageState(this, cameraController, spawnCreaturesEvil);
             EndBattleState endBattle = new EndBattleState(this);
 
             // Define state transitions
@@ -270,7 +272,7 @@ namespace Synthesis.Turns
         {
             // Set the state to 6
             state = 6;
-            totalTurns = 5;
+            totalTurns = 7;
             currentTurn = 1;
             currentRound++;
         }

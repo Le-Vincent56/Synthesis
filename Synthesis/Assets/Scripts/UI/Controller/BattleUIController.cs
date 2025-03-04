@@ -71,12 +71,13 @@ namespace Synthesis.UI.Controller
         public void SetBattleMetrics(int currentCombatRating, int targetCombatRating, int currentWilt, int totalWilt)
         {
             // Update the view
+            view.UpdateCombatRatingHard(currentCombatRating);
             view.UpdateCurrentCombatRating(currentCombatRating);
             view.UpdateTargetCombatRating(targetCombatRating);
             view.UpdateCurrentWilt(currentWilt, totalWilt);
             view.UpdateTotalWilt(totalWilt);
         }
-        public void UpdateCombatRatingDisplay(int currentCombatRating) => view.UpdateCombatRatingDisplay(currentCombatRating);
+        public void UpdateCombatRatingDisplay(int combatRatingCalculated, int combatRatingFull) => view.UpdateCombatRatingDisplay(combatRatingCalculated, combatRatingFull);
         public void UpdateCurrentCombatRating(int currentCombatRating) => view.UpdateCurrentCombatRating(currentCombatRating);
         public void UpdateWilt(int currentWilt, int totalWilt) => view.UpdateCurrentWilt(currentWilt, totalWilt);
         public void SetCanSynthesize(bool canSynthesize) => view.SetCanSynthesize(canSynthesize);

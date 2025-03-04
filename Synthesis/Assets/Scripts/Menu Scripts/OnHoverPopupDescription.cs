@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using Synthesis.Creatures;
-using Synthesis.Modifiers.Traits;
 using TMPro;
 
 namespace Synthesis
@@ -12,7 +11,7 @@ namespace Synthesis
     {
         public GameObject popupPanel; // UI panel containing description text
         private Player creature; 
-        public TraitPool traitPool;
+        //public TraitPool traitPool;
 
         public Button expandLimbsButton, electricStrikeButton, fireBoltButton, waterWaveButton;
         public Button buyButton1, buyButton2, buyButton3, buyButton4;
@@ -61,19 +60,19 @@ namespace Synthesis
 
         private void ShowDescription(string traitName)
         {
-            if (popupPanel != null && traitPool != null)
-            {
-                popupPanel.SetActive(true);
-                Trait trait = traitPool.GetTraitByName(traitName);
-                if (trait != null)
-                {
-                    descriptionText.text = trait.Description;
-                }
-                else
-                {
-                    descriptionText.text = "No description available.";
-                }
-            }
+            //if (popupPanel != null && traitPool != null)
+            //{
+            //    popupPanel.SetActive(true);
+            //    Trait trait = traitPool.GetTraitByName(traitName);
+            //    if (trait != null)
+            //    {
+            //        descriptionText.text = trait.Description;
+            //    }
+            //    else
+            //    {
+            //        descriptionText.text = "No description available.";
+            //    }
+            //}
         }
 
         private void HideDescription()

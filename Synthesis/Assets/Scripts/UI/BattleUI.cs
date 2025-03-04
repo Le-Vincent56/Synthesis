@@ -110,7 +110,7 @@ namespace Synthesis.UI
                 eventData.TotalWilt
             );
         }
-        private void UpdateCombatRatingDisplay(CombatRatingCalculated eventData) => controller.UpdateCombatRatingDisplay(eventData.CombatRating);
+        private void UpdateCombatRatingDisplay(CombatRatingCalculated eventData) => controller.UpdateCombatRatingDisplay(eventData.CombatRatingPointsCalculated, eventData.CombatRatingCurrent);
         private void UpdateCurrentCombatRating(CombatRatingFinalized eventData) => controller.UpdateCurrentCombatRating(eventData.CombatRating);
         private void ShowPlayerInfo() => controller.ShowPlayerInfo();
         private void HidePlayerInfo() => controller.HidePlayerInfo();
