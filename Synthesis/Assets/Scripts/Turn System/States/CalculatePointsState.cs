@@ -29,19 +29,8 @@ namespace Synthesis.Turns.States
             // Calculate combat rating
             int combatRating = battleCalculator.CalculatePoints();
 
-            // Build the info text
-            StringBuilder sb = new StringBuilder();
-            sb.Append("Dealt ");
-            sb.Append(combatRating);
-            sb.Append(" damage");
-
-            // Set the text
-            EventBus<ShowTurnHeader>.Raise(new ShowTurnHeader{ Text = sb.ToString() });
-
             // State that the combat rating has been calculated
             EventBus<CombatRatingCalculated>.Raise(new CombatRatingCalculated { CombatRating = combatRating });
-
-            turnSystem.AwaitEnemyTurn();
         }
     }
 }

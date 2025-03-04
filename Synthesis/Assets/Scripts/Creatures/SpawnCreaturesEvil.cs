@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Synthesis.Turns;
+using Synthesis.ServiceLocators;
 
 namespace Synthesis
 {
@@ -11,6 +12,14 @@ namespace Synthesis
         private int index = 0;
         private int lastCheckedRound = 0;
         private TurnSystem turnSystem; // Reference to TurnSystem
+
+        public int EvilCreaturesCount { get => evilCreatures.Count; }
+
+        private void Awake()
+        {
+            // Register this as a service
+            ServiceLocator.ForSceneOf(this).Register(this);
+        }
 
         private void Start()
         {

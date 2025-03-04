@@ -8,6 +8,8 @@ using Synthesis.EventBus.Events.Turns;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using Synthesis.Input;
+using Synthesis.ServiceLocators;
+using Synthesis.EventBus.Events.Battle;
 
 namespace Synthesis.UI.View
 {
@@ -19,6 +21,7 @@ namespace Synthesis.UI.View
         [SerializeField] private CanvasGroup playerInformation;
         [SerializeField] private CanvasGroup enemyInformation;
         [SerializeField] private CanvasGroup synthesizeShop;
+        private PauseView pauseView;
         private RectTransform playerInfoRect;
         private RectTransform synthesizeShopRect;
         private Text turnHeaderText;
@@ -26,17 +29,20 @@ namespace Synthesis.UI.View
         [Header("References - Actions")]
         [SerializeField] private SelectableButton infectButton;
         [SerializeField] private SelectableButton synthesizeButton;
-        private SelectableButton[] actionButtons;
+        private List<SelectableButton> actionButtons;
         private List<MutationCard> currentMutationCards;
 
         [Header("References - Turns")]
         [SerializeField] private Text currentTurn;
         [SerializeField] private Text totalTurns;
         private RectTransform turnsRemainingRect;
+        private RectTransform totalTurnsRect;
 
         [Header("References - Combat Rating")]
+        [SerializeField] private Text combatRatingDisplay;
         [SerializeField] private Text currentCombatRating;
         [SerializeField] private Text targetCombatRating;
+        private RectTransform combatRatingDisplayRect;
         private RectTransform currentCombatRatingRect;
         private RectTransform targetCombatRatingRect;
 
@@ -65,10 +71,13 @@ namespace Synthesis.UI.View
         [SerializeField] private float translateAmount;
         [SerializeField] private float fadeHeaderDuration;
         [SerializeField] private float wiltFillDuration;
+        [SerializeField] private float combatRatingDisplayDuration;
         [SerializeField] private float fadeEnemyInfoDuration;
         private Tween fadeTurnHeaderTween;
         private Tween scaleTurnsTween;
         private Tween colorTurnsTween;
+        private Tween scaleTurnsTotalTween;
+        private Tween colorTurnsTotalTween;
         private Tween scaleCurrentRatingTween;
         private Tween colorCurrentRatingTween;
         private Tween scaleTotalRatingTween;
@@ -79,6 +88,9 @@ namespace Synthesis.UI.View
         private Tween wiltTextTween;
         private Tween wiltNumberTween;
         private Tween fadeEnemyInfoTween;
+        private Tween combatRatingDisplayFadeTween;
+        private Tween combatRatingDisplayScaleTween;
+        private Tween combatRatingNumberTween;
 
         public List<MutationCard> CurrentMutationCards { get => currentMutationCards; }
 
@@ -88,6 +100,8 @@ namespace Synthesis.UI.View
             playerInfoRect = playerInformation.GetComponent<RectTransform>();
             synthesizeShopRect = synthesizeShop.GetComponent<RectTransform>();
             turnsRemainingRect = currentTurn.GetComponent<RectTransform>();
+            totalTurnsRect = totalTurns.GetComponent<RectTransform>();
+            combatRatingDisplayRect = combatRatingDisplay.GetComponent<RectTransform>();
             currentCombatRatingRect = currentCombatRating.GetComponent<RectTransform>();
             targetCombatRatingRect = targetCombatRating.GetComponent<RectTransform>();
             wiltFillRect = wiltFill.GetComponent<RectTransform>();
@@ -112,7 +126,7 @@ namespace Synthesis.UI.View
             synthesizeButton.Initialize(() => EventBus<ShowSynthesizeShop>.Raise(new ShowSynthesizeShop()));
 
             // Create the Action buttons array
-            actionButtons = new SelectableButton[2]
+            actionButtons = new List<SelectableButton>()
             {
                 infectButton,
                 synthesizeButton
@@ -133,6 +147,12 @@ namespace Synthesis.UI.View
             inputReader.Navigate -= NavigateUI;
         }
 
+        private void Start()
+        {
+            // Get services
+            pauseView = ServiceLocator.ForSceneOf(this).Get<PauseView>();
+        }
+
         private void OnDestroy()
         {
             // Dispose of timers
@@ -150,6 +170,13 @@ namespace Synthesis.UI.View
             wiltFillTween?.Kill();
             wiltTextTween?.Kill();
             wiltNumberTween?.Kill();
+            scaleTurnsTween?.Kill();
+            colorTurnsTween?.Kill();
+            scaleTurnsTotalTween?.Kill();
+            colorTurnsTotalTween?.Kill();
+            combatRatingDisplayScaleTween?.Kill();
+            combatRatingDisplayFadeTween?.Kill();
+            combatRatingNumberTween?.Kill();
         }
 
         /// <summary>
@@ -157,6 +184,9 @@ namespace Synthesis.UI.View
         /// </summary>
         private void NavigateUI(Vector2 direction)
         {
+            // Exit case - if paused
+            if (pauseView.Paused) return;
+
             // Exit case - there's nothing selected
             if(EventSystem.current.currentSelectedGameObject == null) return;
 
@@ -169,14 +199,16 @@ namespace Synthesis.UI.View
                 // Exit case - a Selectable button is not selected
                 if (!EventSystem.current.currentSelectedGameObject.TryGetComponent(out SelectableButton actionButton)) return;
 
+                if (!actionButtons.Contains(actionButton)) return;
+
                 // Get the y-direction of the navigation
-                int yDirection = (int)direction.y;
+                int yDirection = -(int)direction.y;
 
                 // Set the current index
                 int currentIndex = 0;
 
                 // Iterate through the action buttons
-                for (int i = 0; i < actionButtons.Length; i++)
+                for (int i = 0; i < actionButtons.Count; i++)
                 {
                     // Check if the current button is the selected button
                     if (actionButtons[i] == actionButton)
@@ -195,10 +227,10 @@ namespace Synthesis.UI.View
                     currentIndex += yDirection;
 
                     // Check if the current index is out of bounds
-                    if (currentIndex < 0 || currentIndex >= actionButtons.Length)
+                    if (currentIndex < 0 || currentIndex >= actionButtons.Count)
                     {
                         // Clamp the current index inside of the array bounds
-                        currentIndex = currentIndex < 0 ? actionButtons.Length - 1 : 0;
+                        currentIndex = currentIndex < 0 ? actionButtons.Count - 1 : 0;
                     }
 
                     // Check if the button to select is not interactable
@@ -209,10 +241,10 @@ namespace Synthesis.UI.View
                     }
 
                     // Check if the current index is out of bounds
-                    if (currentIndex < 0 || currentIndex >= actionButtons.Length)
+                    if (currentIndex < 0 || currentIndex >= actionButtons.Count)
                     {
                         // Clamp the current index inside of the array bounds
-                        currentIndex = currentIndex < 0 ? actionButtons.Length - 1 : 0;
+                        currentIndex = currentIndex < 0 ? actionButtons.Count - 1 : 0;
                     }
 
                     // Check if the button is interactable
@@ -331,21 +363,45 @@ namespace Synthesis.UI.View
         /// </summary>
         public void UpdateTurns(int currentTurn, int totalTurns)
         {
+            // Get the last turn values
+            int lastCurrentTurn = int.Parse(this.currentTurn.text);
+            int lastTotalTurns = int.Parse(this.totalTurns.text);
+
             // Set the text
             this.currentTurn.text = currentTurn.ToString();
             this.totalTurns.text = totalTurns.ToString();
 
-            // Scale the text
-            Scale(scaleTurnsTween, turnsRemainingRect, turnsMaxScale, turnsScaleDuration / 2f, () =>
+            // Check if there was a change in the current turn
+            if(lastCurrentTurn != currentTurn)
             {
-                Scale(scaleTurnsTween, turnsRemainingRect, turnsInitialScale, turnsScaleDuration / 2f);
-            });
+                // Scale the text
+                Scale(scaleTurnsTween, turnsRemainingRect, turnsMaxScale, turnsScaleDuration / 2f, () =>
+                {
+                    Scale(scaleTurnsTween, turnsRemainingRect, turnsInitialScale, turnsScaleDuration / 2f);
+                });
 
-            // Color the text
-            Color(colorTurnsTween, this.currentTurn, textHighlightColor, turnsScaleDuration / 2f, () =>
+                // Color the text
+                Color(colorTurnsTween, this.currentTurn, textHighlightColor, turnsScaleDuration / 2f, () =>
+                {
+                    Color(colorTurnsTween, this.currentTurn, turnsInitialColor, turnsScaleDuration / 2f);
+                });
+            }
+
+            // Check if there was a change in the total turns
+            if (lastTotalTurns != totalTurns)
             {
-                Color(colorTurnsTween, this.currentTurn, turnsInitialColor, turnsScaleDuration / 2f);
-            });
+                // Scale the text
+                Scale(scaleTurnsTotalTween, totalTurnsRect, turnsMaxScale, turnsScaleDuration / 2f, () =>
+                {
+                    Scale(scaleTurnsTotalTween, totalTurnsRect, turnsInitialScale, turnsScaleDuration / 2f);
+                });
+
+                // Color the text
+                Color(colorTurnsTotalTween, this.totalTurns, textHighlightColor, turnsScaleDuration / 2f, () =>
+                {
+                    Color(colorTurnsTotalTween, this.totalTurns, turnsInitialColor, turnsScaleDuration / 2f);
+                });
+            }
         }
 
         /// <summary>
@@ -387,6 +443,37 @@ namespace Synthesis.UI.View
             Color(colorCurrentRatingTween, this.currentCombatRating, textHighlightColor, turnsScaleDuration / 2f, () =>
             {
                 Color(colorCurrentRatingTween, this.currentCombatRating, turnsInitialColor, turnsScaleDuration / 2f);
+            });
+        }
+
+        /// <summary>
+        /// Update the combat rating display
+        /// </summary>
+        public void UpdateCombatRatingDisplay(int currentCombatRating)
+        {
+            int previousCombatRating = int.Parse(this.currentCombatRating.text);
+
+            // Update the number climbing
+
+            FadeText(combatRatingDisplayFadeTween, combatRatingDisplay, 1f, 0.15f, () =>
+            {
+                // Scale upwards
+                Scale(combatRatingDisplayScaleTween, combatRatingDisplayRect, turnsMaxScale, 0.25f, () =>
+                {
+                    UpdateInCombatRatingNumber(previousCombatRating, currentCombatRating, () =>
+                    {
+                        // Scale downwards
+                        Scale(combatRatingDisplayScaleTween, combatRatingDisplayRect, turnsInitialScale, 0.25f, () =>
+                        {
+                            // Fade out
+                            FadeText(combatRatingDisplayFadeTween, combatRatingDisplay, 0f, 0.15f, () =>
+                            {
+                                EventBus<CombatRatingFinalized>.Raise(new CombatRatingFinalized() { CombatRating = currentCombatRating });
+
+                            });
+                        });
+                    });
+                });
             });
         }
 
@@ -523,6 +610,24 @@ namespace Synthesis.UI.View
         }
 
         /// <summary>
+        /// Handle fading for text
+        /// </summary>
+        private void FadeText(Tween fadeTween, Text text, float endValue, float duration, TweenCallback onComplete = null)
+        {
+            // Kill the fade tween if it exists
+            fadeTween?.Kill();
+
+            // Set the fade tween
+            fadeTween = text.DOFade(endValue, duration);
+
+            // Exit case - there's no completion action
+            if (onComplete == null) return;
+
+            // Set the completion action
+            fadeTween.onComplete += onComplete;
+        }
+
+        /// <summary>
         /// Handle scaling tweens
         /// </summary>
         private void Scale(Tween scaleTween, RectTransform rectTransform, Vector3 endValue, float duration, TweenCallback onComplete = null)
@@ -631,6 +736,26 @@ namespace Synthesis.UI.View
 
             // Set the completion action
             wiltFillTween.onComplete += onComplete;
+        }
+
+        /// <summary>
+        /// Update the number climbing for the in-combat combat rating display
+        /// </summary>
+        public void UpdateInCombatRatingNumber(int previousRating, int currentRating, TweenCallback onComplete = null)
+        {
+            // Kill the combat rating tween if it exists
+            combatRatingNumberTween?.Kill();
+
+            combatRatingNumberTween = DOVirtual.Int(previousRating, currentRating, combatRatingDisplayDuration, value =>
+            {
+                combatRatingDisplay.text = value.ToString();
+            });
+
+            // Exit case - there's no completion action
+            if (onComplete == null) return;
+
+            // Set the completion action
+            combatRatingNumberTween.onComplete += onComplete;
         }
 
         /// <summary>

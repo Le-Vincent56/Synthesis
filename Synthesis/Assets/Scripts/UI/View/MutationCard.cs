@@ -10,7 +10,7 @@ using UnityEngine.UI;
 
 namespace Synthesis.UI.View
 {
-    public class MutationCard : MonoBehaviour, ISelectHandler, ISubmitHandler, IDeselectHandler, IPointerClickHandler
+    public class MutationCard : MonoBehaviour, ISelectHandler, ISubmitHandler, IDeselectHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
     {
         private MutationStrategy mutation;
         private RectTransform rectTransform;
@@ -137,6 +137,8 @@ namespace Synthesis.UI.View
         public void OnDeselect(BaseEventData eventData) => Deselect();
 
         public void OnSubmit(BaseEventData eventData) => Submit();
+        public void OnPointerEnter(PointerEventData eventData) => Select();
+        public void OnPointerExit(PointerEventData eventData) => Deselect();
 
         public void OnPointerClick(PointerEventData eventData) => Submit();
     }

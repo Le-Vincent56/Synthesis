@@ -10,7 +10,7 @@ namespace Synthesis.Battle
         [Header("Scaling")]
         [SerializeField] private int difficultyLevel;
         [SerializeField] private float ratingLevelPercentageIncrease = 0.20f; // 20% increase per level
-        [SerializeField] private float wiltPerLevelPercentageIncrease = 0.30f; // 30% increase per level
+        [SerializeField] private float wiltPerLevelPercentageIncrease = 0.10f; // 10% increase per level
 
         [Header("Combat Rating")]
         [SerializeField] private int baseTargetCombatRating = 20;
@@ -23,7 +23,7 @@ namespace Synthesis.Battle
         [SerializeField] private int totalWilt;
 
         private EventBinding<StartBattle> onStartBattle;
-        private EventBinding<CombatRatingCalculated> onCombatRatingCalculated;
+        private EventBinding<CombatRatingFinalized> onCombatRatingFinalized;
         private EventBinding<ApplyWilt> onApplyWilt;
 
         private void Awake()
@@ -37,8 +37,8 @@ namespace Synthesis.Battle
             onStartBattle = new EventBinding<StartBattle>(SetMetrics);
             EventBus<StartBattle>.Register(onStartBattle);
 
-            onCombatRatingCalculated = new EventBinding<CombatRatingCalculated>(UpdateCombatRating);
-            EventBus<CombatRatingCalculated>.Register(onCombatRatingCalculated);
+            onCombatRatingFinalized = new EventBinding<CombatRatingFinalized>(UpdateCombatRating);
+            EventBus<CombatRatingFinalized>.Register(onCombatRatingFinalized);
 
             onApplyWilt = new EventBinding<ApplyWilt>(UpdateWilt);
             EventBus<ApplyWilt>.Register(onApplyWilt);
@@ -47,7 +47,7 @@ namespace Synthesis.Battle
         private void OnDisable()
         {
             EventBus<StartBattle>.Deregister(onStartBattle);
-            EventBus<CombatRatingCalculated>.Deregister(onCombatRatingCalculated);
+            EventBus<CombatRatingFinalized>.Deregister(onCombatRatingFinalized);
             EventBus<ApplyWilt>.Deregister(onApplyWilt);
         }
 
@@ -104,7 +104,7 @@ namespace Synthesis.Battle
         /// <summary>
         /// Update the current Combat Rating
         /// </summary>
-        private void UpdateCombatRating(CombatRatingCalculated eventData)
+        private void UpdateCombatRating(CombatRatingFinalized eventData)
         {
             // Update the current combat rating
             currentCombatRating += eventData.CombatRating;
@@ -119,8 +119,7 @@ namespace Synthesis.Battle
                 EventBus<WinBattle>.Raise(new WinBattle());
             }
 
-            // Publish the finalized Combat Rating
-            EventBus<CombatRatingFinalized>.Raise(new CombatRatingFinalized { CombatRating = currentCombatRating });
+            EventBus<CombatRatingCalculationFinished>.Raise(new CombatRatingCalculationFinished());
         }
 
         /// <summary>

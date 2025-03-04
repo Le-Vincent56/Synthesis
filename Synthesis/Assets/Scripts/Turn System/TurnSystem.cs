@@ -1,6 +1,7 @@
 using Synthesis.Battle;
 using Synthesis.Creatures;
 using Synthesis.EventBus;
+using Synthesis.EventBus.Events.Battle;
 using Synthesis.EventBus.Events.Turns;
 using Synthesis.EventBus.Events.UI;
 using Synthesis.EventBus.Events.Weather;
@@ -17,6 +18,7 @@ namespace Synthesis.Turns
         [Header("References")]
         [SerializeField] private CameraController cameraController;
         [SerializeField] private BattleCalculator battleCalculator;
+        [SerializeField] private SpawnCreaturesEvil spawnCreaturesEvil;
 
         [Header("States")]
         [SerializeField] private Player player;
@@ -35,8 +37,9 @@ namespace Synthesis.Turns
 
         private EventBinding<Infect> onInfect;
         private EventBinding<Synthesize> onSynthesize;
+        private EventBinding<CombatRatingCalculationFinished> onCombatRatingCalculationFinished;
         private EventBinding<WinBattle> onEndBattle;
-
+        private EventBinding<Wilted> onWilted;
         public int CurrentRound { get => currentRound; }
 
         private void Awake()
@@ -62,15 +65,23 @@ namespace Synthesis.Turns
             onSynthesize = new EventBinding<Synthesize>(Synthesize);
             EventBus<Synthesize>.Register(onSynthesize);
 
+            onCombatRatingCalculationFinished = new EventBinding<CombatRatingCalculationFinished>(GoToEnemyTurn);
+            EventBus<CombatRatingCalculationFinished>.Register(onCombatRatingCalculationFinished);
+
             onEndBattle = new EventBinding<WinBattle>(WinBattle);
             EventBus<WinBattle>.Register(onEndBattle);
+
+            onWilted = new EventBinding<Wilted>(LoseTurn);
+            EventBus<Wilted>.Register(onWilted);
         }
 
         private void OnDisable()
         {
             EventBus<Infect>.Deregister(onInfect);
             EventBus<Synthesize>.Deregister(onSynthesize);
+            EventBus<CombatRatingCalculationFinished>.Deregister(onCombatRatingCalculationFinished);
             EventBus<WinBattle>.Deregister(onEndBattle);
+            EventBus<Wilted>.Deregister(onWilted);
         }
 
         private void Start()
@@ -78,6 +89,7 @@ namespace Synthesis.Turns
             // Retrieve services
             cameraController = ServiceLocator.ForSceneOf(this).Get<CameraController>();
             battleCalculator = ServiceLocator.ForSceneOf(this).Get<BattleCalculator>();
+            spawnCreaturesEvil = ServiceLocator.ForSceneOf(this).Get<SpawnCreaturesEvil>();
 
             // Set up the State Machine
             SetupStateMachine();
@@ -114,7 +126,7 @@ namespace Synthesis.Turns
             MutateState mutateState = new MutateState(this, cameraController);
             CalculatePointsState calculatePoints = new CalculatePointsState(this, battleCalculator, cameraController);
             EnemyTurnState enemyTurn = new EnemyTurnState(this);
-            CalculateDamageState calculateDamage = new CalculateDamageState(this);
+            CalculateDamageState calculateDamage = new CalculateDamageState(this, spawnCreaturesEvil);
             EndBattleState endBattle = new EndBattleState(this);
 
             // Define state transitions
@@ -166,6 +178,24 @@ namespace Synthesis.Turns
         }
 
         /// <summary>
+        /// Lose a turn
+        /// </summary>
+        private void LoseTurn()
+        {
+            // Lose a turn
+            totalTurns--;
+
+            // Check if the current turn is less than the total turns
+            if (currentTurn <= totalTurns) return;
+
+            // Lose the battle immediately
+            EventBus<LoseBattle>.Raise(new LoseBattle());
+
+            // Update the amount of turns in the UI
+            EventBus<UpdateTurns>.Raise(new UpdateTurns() { CurrentTurn = currentTurn, TotalTurns = totalTurns });
+        }
+
+        /// <summary>
         /// Create the Start Battle Timer
         /// </summary>
         private void CreateTimers()
@@ -199,6 +229,8 @@ namespace Synthesis.Turns
         /// </summary>
         private void Synthesize() => SetState(3);
 
+        private void GoToEnemyTurn(CombatRatingCalculationFinished eventData) => state = 4;
+
         /// <summary>
         /// Set the State of the Turn System
         /// </summary>
@@ -209,6 +241,9 @@ namespace Synthesis.Turns
         /// </summary>
         public void NextBattle() => startBattleTimer.Start();
 
+        /// <summary>
+        /// Update the turns
+        /// </summary>
         public void UpdateTurns() => updateTurnTimer?.Start();
 
         /// <summary>

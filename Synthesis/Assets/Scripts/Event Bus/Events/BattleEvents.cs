@@ -18,6 +18,8 @@ namespace Synthesis.EventBus.Events.Battle
         public int CombatRating;
     }
 
+    public struct CombatRatingCalculationFinished : IEvent { }
+
     public struct ApplyWilt : IEvent
     {
         public int WiltToApply;

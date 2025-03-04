@@ -23,6 +23,7 @@ namespace Synthesis.UI
         private EventBinding<HideTurnHeader> onHideTurnHeader;
         private EventBinding<UpdateTurns> onUpdateTurns;
         private EventBinding<BattleMetricsSet> onBattleMetricsSet;
+        private EventBinding<CombatRatingCalculated> onCombatRatingCalculated;
         private EventBinding<CombatRatingFinalized> onCombatRatingFinalized;
         private EventBinding<ShowPlayerInfo> onShowPlayerInfo;
         private EventBinding<HidePlayerInfo> onHidePlayerInfo;
@@ -44,6 +45,9 @@ namespace Synthesis.UI
 
             onBattleMetricsSet = new EventBinding<BattleMetricsSet>(BattleMetricsSet);
             EventBus<BattleMetricsSet>.Register(onBattleMetricsSet);
+
+            onCombatRatingCalculated = new EventBinding<CombatRatingCalculated>(UpdateCombatRatingDisplay);
+            EventBus<CombatRatingCalculated>.Register(onCombatRatingCalculated);
 
             onCombatRatingFinalized = new EventBinding<CombatRatingFinalized>(UpdateCurrentCombatRating);
             EventBus<CombatRatingFinalized>.Register(onCombatRatingFinalized);
@@ -73,6 +77,7 @@ namespace Synthesis.UI
             EventBus<HideTurnHeader>.Deregister(onHideTurnHeader);
             EventBus<UpdateTurns>.Deregister(onUpdateTurns);
             EventBus<BattleMetricsSet>.Deregister(onBattleMetricsSet);
+            EventBus<CombatRatingCalculated>.Deregister(onCombatRatingCalculated);
             EventBus<CombatRatingFinalized>.Deregister(onCombatRatingFinalized);
             EventBus<ShowPlayerInfo>.Deregister(onShowPlayerInfo);
             EventBus<HidePlayerInfo>.Deregister(onHidePlayerInfo);
@@ -105,6 +110,7 @@ namespace Synthesis.UI
                 eventData.TotalWilt
             );
         }
+        private void UpdateCombatRatingDisplay(CombatRatingCalculated eventData) => controller.UpdateCombatRatingDisplay(eventData.CombatRating);
         private void UpdateCurrentCombatRating(CombatRatingFinalized eventData) => controller.UpdateCurrentCombatRating(eventData.CombatRating);
         private void ShowPlayerInfo() => controller.ShowPlayerInfo();
         private void HidePlayerInfo() => controller.HidePlayerInfo();

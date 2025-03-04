@@ -145,6 +145,15 @@ namespace Synthesis.Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""3b1821c3-c580-4d0f-ac95-e3ec2e8a757a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -598,6 +607,17 @@ namespace Synthesis.Input
                     ""action"": ""SpeedUp"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e207f28f-32b0-4de5-bea9-19eb2d03689f"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -658,6 +678,7 @@ namespace Synthesis.Input
             m_UI_AltModifier = m_UI.FindAction("AltModifier", throwIfNotFound: true);
             m_UI_ShiftModifier = m_UI.FindAction("ShiftModifier", throwIfNotFound: true);
             m_UI_SpeedUp = m_UI.FindAction("SpeedUp", throwIfNotFound: true);
+            m_UI_Pause = m_UI.FindAction("Pause", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -732,6 +753,7 @@ namespace Synthesis.Input
         private readonly InputAction m_UI_AltModifier;
         private readonly InputAction m_UI_ShiftModifier;
         private readonly InputAction m_UI_SpeedUp;
+        private readonly InputAction m_UI_Pause;
         public struct UIActions
         {
             private @GameInputActions m_Wrapper;
@@ -749,6 +771,7 @@ namespace Synthesis.Input
             public InputAction @AltModifier => m_Wrapper.m_UI_AltModifier;
             public InputAction @ShiftModifier => m_Wrapper.m_UI_ShiftModifier;
             public InputAction @SpeedUp => m_Wrapper.m_UI_SpeedUp;
+            public InputAction @Pause => m_Wrapper.m_UI_Pause;
             public InputActionMap Get() { return m_Wrapper.m_UI; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -797,6 +820,9 @@ namespace Synthesis.Input
                 @SpeedUp.started += instance.OnSpeedUp;
                 @SpeedUp.performed += instance.OnSpeedUp;
                 @SpeedUp.canceled += instance.OnSpeedUp;
+                @Pause.started += instance.OnPause;
+                @Pause.performed += instance.OnPause;
+                @Pause.canceled += instance.OnPause;
             }
 
             private void UnregisterCallbacks(IUIActions instance)
@@ -840,6 +866,9 @@ namespace Synthesis.Input
                 @SpeedUp.started -= instance.OnSpeedUp;
                 @SpeedUp.performed -= instance.OnSpeedUp;
                 @SpeedUp.canceled -= instance.OnSpeedUp;
+                @Pause.started -= instance.OnPause;
+                @Pause.performed -= instance.OnPause;
+                @Pause.canceled -= instance.OnPause;
             }
 
             public void RemoveCallbacks(IUIActions instance)
@@ -899,6 +928,7 @@ namespace Synthesis.Input
             void OnAltModifier(InputAction.CallbackContext context);
             void OnShiftModifier(InputAction.CallbackContext context);
             void OnSpeedUp(InputAction.CallbackContext context);
+            void OnPause(InputAction.CallbackContext context);
         }
     }
 }

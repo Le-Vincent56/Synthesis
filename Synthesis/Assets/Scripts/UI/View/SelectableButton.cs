@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace Synthesis.UI.View
 {
-    public class SelectableButton : MonoBehaviour, ISelectHandler, IDeselectHandler, ISubmitHandler, IPointerDownHandler
+    public class SelectableButton : MonoBehaviour, ISelectHandler, IDeselectHandler, ISubmitHandler, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
     {
         [Header("References")]
         [SerializeField] private Image highlightImage;
@@ -24,6 +24,7 @@ namespace Synthesis.UI.View
         [SerializeField] private float glowDuration;
         private Tween colorTween;
         private Tween fadeTween;
+        private Tween fadeGroupTween;
         private Tween expandTween;
 
         public bool Interactable { get => interactable; }
@@ -32,6 +33,8 @@ namespace Synthesis.UI.View
         {
             // Kill the highlight tween if it exists
             fadeTween?.Kill();
+            colorTween?.Kill();
+            fadeGroupTween?.Kill();
             expandTween?.Kill();
         }
 
@@ -90,7 +93,11 @@ namespace Synthesis.UI.View
 
         public void OnSubmit(BaseEventData eventData) => Glow();
 
-        public void OnPointerDown(PointerEventData eventData) => Glow();
+        public void OnPointerEnter(PointerEventData eventData) => Highlight(true);
+
+        public void OnPointerExit(PointerEventData eventData) => Highlight(false);
+
+        public void OnPointerClick(PointerEventData eventData) => Glow();
 
         /// <summary>
         /// Handle highlighting for the selectable button
@@ -127,6 +134,8 @@ namespace Synthesis.UI.View
             // Set the highlight tween
             fadeTween = highlightImage.DOFade(endValue, highlightDuration);
 
+            fadeTween.SetUpdate(true);
+
             // Set the easing type
             fadeTween.SetEase(Ease.InQuad);
         }
@@ -137,13 +146,15 @@ namespace Synthesis.UI.View
         private void FadeGroup(float endValue, TweenCallback onComplete = null)
         {
             // Kill the highlight tween if it exists
-            fadeTween?.Kill();
+            fadeGroupTween?.Kill();
 
             // Set the highlight tween
-            fadeTween = canvasGroup.DOFade(endValue, highlightDuration);
+            fadeGroupTween = canvasGroup.DOFade(endValue, highlightDuration);
 
             // Set the easing type
-            fadeTween.SetEase(Ease.InQuad);
+            fadeGroupTween.SetEase(Ease.InQuad);
+
+            fadeGroupTween.SetUpdate(true);
 
             // Exit case - there's no completion action
             if (onComplete == null) return;
@@ -165,6 +176,8 @@ namespace Synthesis.UI.View
 
             // Set the easing type
             expandTween.SetEase(Ease.InQuad);
+
+            expandTween.SetUpdate(true);
 
             // Exit case - there's no completion action
             if (onComplete == null) return;
@@ -202,6 +215,8 @@ namespace Synthesis.UI.View
 
             // Set the easing type
             colorTween.SetEase(Ease.InQuad);
+
+            colorTween.SetUpdate(true);
 
             // Exit case - there's no completion action
             if (onComplete == null) return;

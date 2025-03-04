@@ -6,13 +6,18 @@ namespace Synthesis.Turns.States
 {
     public class CalculateDamageState : TurnState
     {
-        public CalculateDamageState(TurnSystem turnSystem) : base(turnSystem)
+        private readonly SpawnCreaturesEvil spawnCreaturesEvil;
+
+        public CalculateDamageState(TurnSystem turnSystem, SpawnCreaturesEvil spawnCreaturesEvil) : base(turnSystem)
         {
+            this.spawnCreaturesEvil = spawnCreaturesEvil;
         }
 
         public override void OnEnter()
         {
-            EventBus<ApplyWilt>.Raise(new ApplyWilt() { WiltToApply = 10 });
+            int wiltToApply = 5 * spawnCreaturesEvil.EvilCreaturesCount;
+
+            EventBus<ApplyWilt>.Raise(new ApplyWilt() { WiltToApply = wiltToApply });
 
             // Set the text
             EventBus<ShowTurnHeader>.Raise(new ShowTurnHeader { Text = "ENEMY DAMAGE" });
