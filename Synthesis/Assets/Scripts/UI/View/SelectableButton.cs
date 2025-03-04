@@ -9,9 +9,13 @@ namespace Synthesis.UI.View
     public class SelectableButton : MonoBehaviour, ISelectHandler, IDeselectHandler, ISubmitHandler, IPointerDownHandler
     {
         [Header("References")]
-        [SerializeField] private Image image;
+        [SerializeField] private Image highlightImage;
+        [SerializeField] private CanvasGroup canvasGroup;
         private RectTransform imageTransform;
         private Button button;
+
+        [Header("Fields")]
+        [SerializeField] private bool interactable;
 
         [Header("Tweening Variables")]
         [SerializeField] private Color glowColor;
@@ -21,6 +25,8 @@ namespace Synthesis.UI.View
         private Tween colorTween;
         private Tween fadeTween;
         private Tween expandTween;
+
+        public bool Interactable { get => interactable; }
 
         private void OnDestroy()
         {
@@ -36,14 +42,46 @@ namespace Synthesis.UI.View
         {
             // Get components
             button = GetComponent<Button>();
-            imageTransform = image.GetComponent<RectTransform>();
+            imageTransform = highlightImage.GetComponent<RectTransform>();
 
             // Set the initial color
-            initialColor = image.color;
+            initialColor = highlightImage.color;
             initialColor.a = 1f;
 
             // Set button event listener
             button.onClick.AddListener(() => onClick());
+        }
+
+        /// <summary>
+        /// Enable the Selectable Button
+        /// </summary>
+        public void Enable()
+        {
+            // Set interactable
+            interactable = true;
+            button.interactable = true;
+
+            FadeGroup(1f, () =>
+            {
+                canvasGroup.interactable = true;
+                canvasGroup.blocksRaycasts = true;
+            });
+        }
+
+        /// <summary>
+        /// Disable the Selectable Button
+        /// </summary>
+        public void Disable()
+        {
+            // Set un-interactable
+            interactable = false;
+            button.interactable = false;
+
+            FadeGroup(0.25f, () =>
+            {
+                canvasGroup.interactable = false;
+                canvasGroup.blocksRaycasts = false;
+            });
         }
 
         public void OnSelect(BaseEventData eventData) => Highlight(true);
@@ -59,6 +97,9 @@ namespace Synthesis.UI.View
         /// </summary>
         private void Highlight(bool selected)
         {
+            // Exit case - not active
+            if (!interactable) return;
+
             // Check if selected
             if(selected)
             {
@@ -84,10 +125,31 @@ namespace Synthesis.UI.View
             fadeTween?.Kill();
 
             // Set the highlight tween
-            fadeTween = image.DOFade(endValue, highlightDuration);
+            fadeTween = highlightImage.DOFade(endValue, highlightDuration);
 
             // Set the easing type
             fadeTween.SetEase(Ease.InQuad);
+        }
+
+        /// <summary>
+        /// Handdle the button group fading
+        /// </summary>
+        private void FadeGroup(float endValue, TweenCallback onComplete = null)
+        {
+            // Kill the highlight tween if it exists
+            fadeTween?.Kill();
+
+            // Set the highlight tween
+            fadeTween = canvasGroup.DOFade(endValue, highlightDuration);
+
+            // Set the easing type
+            fadeTween.SetEase(Ease.InQuad);
+
+            // Exit case - there's no completion action
+            if (onComplete == null) return;
+
+            // Set the completion action
+            fadeTween.onComplete += onComplete;
         }
 
         /// <summary>
@@ -116,6 +178,9 @@ namespace Synthesis.UI.View
         /// </summary>
         private void Glow()
         {
+            // Exit case - not active
+            if (!interactable) return;
+
             // Change the color to the glow color
             ChangeColor(glowColor, () =>
             {
@@ -133,7 +198,7 @@ namespace Synthesis.UI.View
             colorTween?.Kill();
 
             // Set the color tween
-            colorTween = image.DOColor(endValue, glowDuration / 2f);
+            colorTween = highlightImage.DOColor(endValue, glowDuration / 2f);
 
             // Set the easing type
             colorTween.SetEase(Ease.InQuad);

@@ -78,5 +78,6 @@ namespace Synthesis.UI.Controller
         }
         public void UpdateCurrentCombatRating(int currentCombatRating) => view.UpdateCurrentCombatRating(currentCombatRating);
         public void UpdateWilt(int currentWilt, int totalWilt) => view.UpdateCurrentWilt(currentWilt, totalWilt);
+        public void SetCanSynthesize(bool canSynthesize) => view.SetCanSynthesize(canSynthesize);
     }
 }

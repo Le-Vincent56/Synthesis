@@ -30,11 +30,14 @@ namespace Synthesis.Battle
 
         [Header("Actions")]
         [SerializeField] private Action lastAction;
+        [SerializeField] private int infectsSinceStartOfBattle;
 
         private EventBinding<Infect> onInfect;
         private EventBinding<Synthesize> onSynthesize;
+        private EventBinding<StartBattle> onStartBattle;
 
         public Action LastAction { get => lastAction; }
+        public int InfectsSinceStartofBattle { get => infectsSinceStartOfBattle; }
 
         private void Awake()
         {
@@ -49,12 +52,16 @@ namespace Synthesis.Battle
 
             onSynthesize = new EventBinding<Synthesize>(OnSynthesize);
             EventBus<Synthesize>.Register(onSynthesize);
+
+            onStartBattle = new EventBinding<StartBattle>(SetStartOfBattleVariables);
+            EventBus<StartBattle>.Register(onStartBattle);
         }
 
         private void OnDisable()
         {
             EventBus<Infect>.Deregister(onInfect);
             EventBus<Synthesize>.Deregister(onSynthesize);
+            EventBus<StartBattle>.Deregister(onStartBattle);
         }
 
         private void Start()
@@ -117,11 +124,24 @@ namespace Synthesis.Battle
         /// <summary>
         /// Set the last action to Infect
         /// </summary>
-        private void OnInfect() => lastAction = Action.Infect;
+        private void OnInfect()
+        {
+            // Set the last action
+            lastAction = Action.Infect;
+
+            // Increment the number of Infects since the start of the battle
+            infectsSinceStartOfBattle++;
+        }
 
         /// <summary>
         /// Set the last action to Synthesize
         /// </summary>
         private void OnSynthesize() => lastAction = Action.Synthesize;
+
+        private void SetStartOfBattleVariables()
+        {
+            // Reset the number of infects since the start of the battle
+            infectsSinceStartOfBattle = 0;
+        }
     }
 }

@@ -1,5 +1,5 @@
 {
-    "name": "GameplayActions",
+    "name": "GameInputActions",
     "maps": [
         {
             "name": "UI",
@@ -109,6 +109,15 @@
                     "type": "Button",
                     "id": "0789d4c3-f7b5-4153-9161-2fd83d977c69",
                     "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SpeedUp",
+                    "type": "Button",
+                    "id": "b61459af-cc62-4259-89f6-9704ab1109f3",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -552,6 +561,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "ShiftModifier",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b78f8344-d670-4564-b178-af6dd51f4138",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard and Mouse",
+                    "action": "SpeedUp",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

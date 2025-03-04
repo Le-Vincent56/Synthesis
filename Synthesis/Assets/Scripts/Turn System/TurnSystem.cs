@@ -35,6 +35,7 @@ namespace Synthesis.Turns
 
         private EventBinding<Infect> onInfect;
         private EventBinding<Synthesize> onSynthesize;
+        private EventBinding<WinBattle> onEndBattle;
 
         public int CurrentRound { get => currentRound; }
 
@@ -50,7 +51,7 @@ namespace Synthesis.Turns
             CreateTimers();
 
             currentTurn = 1;
-            totalTurns = 5;
+            totalTurns = 7;
         }
 
         private void OnEnable()
@@ -60,12 +61,16 @@ namespace Synthesis.Turns
 
             onSynthesize = new EventBinding<Synthesize>(Synthesize);
             EventBus<Synthesize>.Register(onSynthesize);
+
+            onEndBattle = new EventBinding<WinBattle>(WinBattle);
+            EventBus<WinBattle>.Register(onEndBattle);
         }
 
         private void OnDisable()
         {
             EventBus<Infect>.Deregister(onInfect);
             EventBus<Synthesize>.Deregister(onSynthesize);
+            EventBus<WinBattle>.Deregister(onEndBattle);
         }
 
         private void Start()
@@ -121,6 +126,7 @@ namespace Synthesis.Turns
             stateMachine.At(mutateState, enemyTurn, new FuncPredicate(() => state == 4));
 
             stateMachine.At(calculatePoints, enemyTurn, new FuncPredicate(() => state == 4));
+            stateMachine.At(calculatePoints, endBattle, new FuncPredicate(() => state == 6));
 
             stateMachine.At(enemyTurn, calculateDamage, new FuncPredicate(() => state == 5));
 
@@ -144,7 +150,7 @@ namespace Synthesis.Turns
         public void PassTurn()
         {
             // Check if there are turns remaining
-            if (currentTurn <= totalTurns)
+            if (currentTurn < totalTurns)
             {
                 // Decrement the turns remaining and set the player state
                 currentTurn++;
@@ -155,11 +161,8 @@ namespace Synthesis.Turns
                 return;
             }
 
-            // Otherwise, set the end state, reset the turns and add to the current round
-            state = 6;
-            totalTurns = 5;
-            currentTurn = 1;
-            currentRound++;
+            // Lose the battle
+            EventBus<LoseBattle>.Raise(new LoseBattle());
         }
 
         /// <summary>
@@ -227,5 +230,14 @@ namespace Synthesis.Turns
         /// Await the end turn phase
         /// </summary>
         public void AwaitPassTurn() => endTurnTimer?.Start();
+
+        private void WinBattle()
+        {
+            // Set the state to 6
+            state = 6;
+            totalTurns = 5;
+            currentTurn = 1;
+            currentRound++;
+        }
     }
 }

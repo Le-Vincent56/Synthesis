@@ -1,7 +1,7 @@
 using Synthesis.Battle;
 using Synthesis.Weather;
 
-namespace Synthesis.Mutations
+namespace Synthesis.Mutations.Infect
 {
     public class AdaptiveChloroplast : MutationStrategy
     {

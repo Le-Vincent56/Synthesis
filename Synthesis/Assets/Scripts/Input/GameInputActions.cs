@@ -136,6 +136,15 @@ namespace Synthesis.Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SpeedUp"",
+                    ""type"": ""Button"",
+                    ""id"": ""b61459af-cc62-4259-89f6-9704ab1109f3"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -578,6 +587,17 @@ namespace Synthesis.Input
                     ""action"": ""ShiftModifier"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b78f8344-d670-4564-b178-af6dd51f4138"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard and Mouse"",
+                    ""action"": ""SpeedUp"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -637,6 +657,7 @@ namespace Synthesis.Input
             m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
             m_UI_AltModifier = m_UI.FindAction("AltModifier", throwIfNotFound: true);
             m_UI_ShiftModifier = m_UI.FindAction("ShiftModifier", throwIfNotFound: true);
+            m_UI_SpeedUp = m_UI.FindAction("SpeedUp", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -710,6 +731,7 @@ namespace Synthesis.Input
         private readonly InputAction m_UI_TrackedDeviceOrientation;
         private readonly InputAction m_UI_AltModifier;
         private readonly InputAction m_UI_ShiftModifier;
+        private readonly InputAction m_UI_SpeedUp;
         public struct UIActions
         {
             private @GameInputActions m_Wrapper;
@@ -726,6 +748,7 @@ namespace Synthesis.Input
             public InputAction @TrackedDeviceOrientation => m_Wrapper.m_UI_TrackedDeviceOrientation;
             public InputAction @AltModifier => m_Wrapper.m_UI_AltModifier;
             public InputAction @ShiftModifier => m_Wrapper.m_UI_ShiftModifier;
+            public InputAction @SpeedUp => m_Wrapper.m_UI_SpeedUp;
             public InputActionMap Get() { return m_Wrapper.m_UI; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -771,6 +794,9 @@ namespace Synthesis.Input
                 @ShiftModifier.started += instance.OnShiftModifier;
                 @ShiftModifier.performed += instance.OnShiftModifier;
                 @ShiftModifier.canceled += instance.OnShiftModifier;
+                @SpeedUp.started += instance.OnSpeedUp;
+                @SpeedUp.performed += instance.OnSpeedUp;
+                @SpeedUp.canceled += instance.OnSpeedUp;
             }
 
             private void UnregisterCallbacks(IUIActions instance)
@@ -811,6 +837,9 @@ namespace Synthesis.Input
                 @ShiftModifier.started -= instance.OnShiftModifier;
                 @ShiftModifier.performed -= instance.OnShiftModifier;
                 @ShiftModifier.canceled -= instance.OnShiftModifier;
+                @SpeedUp.started -= instance.OnSpeedUp;
+                @SpeedUp.performed -= instance.OnSpeedUp;
+                @SpeedUp.canceled -= instance.OnSpeedUp;
             }
 
             public void RemoveCallbacks(IUIActions instance)
@@ -869,6 +898,7 @@ namespace Synthesis.Input
             void OnTrackedDeviceOrientation(InputAction.CallbackContext context);
             void OnAltModifier(InputAction.CallbackContext context);
             void OnShiftModifier(InputAction.CallbackContext context);
+            void OnSpeedUp(InputAction.CallbackContext context);
         }
     }
 }

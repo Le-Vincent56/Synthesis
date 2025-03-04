@@ -11,6 +11,7 @@ namespace Synthesis.Input
         public UnityAction<Vector2> Navigate = delegate { };
         public UnityAction<Vector2> Point = delegate { };
         public UnityAction<Vector2> Scrollwheel = delegate { };
+        public UnityAction<bool> SpeedUp = delegate { };
         public UnityAction<bool> Submit = delegate { };
         public UnityAction<bool> Cancel = delegate { };
         public UnityAction<bool> Click = delegate { };
@@ -62,6 +63,23 @@ namespace Synthesis.Input
         {
             // Invoke the event and pass in the read value
             Scrollwheel.Invoke(context.ReadValue<Vector2>());
+        }
+
+        public void OnSpeedUp(InputAction.CallbackContext context)
+        {
+            // Check the context phase
+            switch (context.phase)
+            {
+                // If starting, invoke with true
+                case InputActionPhase.Started:
+                    SpeedUp.Invoke(true);
+                    break;
+
+                // If canceled, invoke with false
+                case InputActionPhase.Canceled:
+                    SpeedUp.Invoke(false);
+                    break;
+            }
         }
 
         public void OnSubmit(InputAction.CallbackContext context)

@@ -1,5 +1,6 @@
 using Synthesis.EventBus;
 using Synthesis.EventBus.Events.Battle;
+using Synthesis.EventBus.Events.Mutations;
 using Synthesis.EventBus.Events.UI;
 using Synthesis.Mutations;
 using Synthesis.ServiceLocators;
@@ -28,6 +29,7 @@ namespace Synthesis.UI
         private EventBinding<ShowSynthesizeShop> onShowSynthesizeShop;
         private EventBinding<HideSynthesizeShop> onHideSynthesizeShop;
         private EventBinding<WiltApplied> onWiltApplied;
+        private EventBinding<SetCanSynthesize> onSynthesize;
 
         private void OnEnable()
         {
@@ -60,6 +62,9 @@ namespace Synthesis.UI
 
             onWiltApplied = new EventBinding<WiltApplied>(UpdateWilt);
             EventBus<WiltApplied>.Register(onWiltApplied);
+
+            onSynthesize = new EventBinding<SetCanSynthesize>(CheckCanSynthesize);
+            EventBus<SetCanSynthesize>.Register(onSynthesize);
         }
 
         private void OnDisable()
@@ -74,6 +79,7 @@ namespace Synthesis.UI
             EventBus<ShowSynthesizeShop>.Deregister(onShowSynthesizeShop);
             EventBus<HideSynthesizeShop>.Deregister(onHideSynthesizeShop);
             EventBus<WiltApplied>.Deregister(onWiltApplied);
+            EventBus<SetCanSynthesize>.Deregister(onSynthesize);
         }
 
         private void Start()
@@ -105,5 +111,7 @@ namespace Synthesis.UI
         private void ShowSynthesizeShop() => controller.ShowSynthesizeShop();
         private void HideSynthesizeShop() => controller.HideSynthesizeShop();
         private void UpdateWilt(WiltApplied eventData) => controller.UpdateWilt(eventData.CurrentWilt, eventData.TotalWilt);
+
+        private void CheckCanSynthesize(SetCanSynthesize eventData) => controller.SetCanSynthesize(eventData.CanSynthesize);
     }
 }

@@ -187,15 +187,40 @@ namespace Synthesis.UI.View
                     }
                 }
 
-                currentIndex += yDirection;
+                SelectableButton buttonToSelect = null;
 
-                // Check if the current index is out of bounds
-                if (currentIndex < 0 || currentIndex >= actionButtons.Length)
+                // Loop until a Tab is selected
+                while (buttonToSelect == null)
                 {
-                    // Clamp the current index inside of the array bounds
-                    currentIndex = currentIndex < 0 ? actionButtons.Length - 1 : 0;
+                    currentIndex += yDirection;
+
+                    // Check if the current index is out of bounds
+                    if (currentIndex < 0 || currentIndex >= actionButtons.Length)
+                    {
+                        // Clamp the current index inside of the array bounds
+                        currentIndex = currentIndex < 0 ? actionButtons.Length - 1 : 0;
+                    }
+
+                    // Check if the button to select is not interactable
+                    if (!actionButtons[currentIndex].Interactable)
+                    {
+                        // Skip over it
+                        currentIndex += yDirection;
+                    }
+
+                    // Check if the current index is out of bounds
+                    if (currentIndex < 0 || currentIndex >= actionButtons.Length)
+                    {
+                        // Clamp the current index inside of the array bounds
+                        currentIndex = currentIndex < 0 ? actionButtons.Length - 1 : 0;
+                    }
+
+                    // Check if the button is interactable
+                    if (actionButtons[currentIndex].Interactable)
+                        // If so, select the button
+                        buttonToSelect = actionButtons[currentIndex];
                 }
-                
+
                 // Set the selected game object
                 EventSystem.current.SetSelectedGameObject(actionButtons[currentIndex].gameObject);
 
@@ -387,6 +412,24 @@ namespace Synthesis.UI.View
         {
             // Update the text
             this.totalWilt.text = totalWilt.ToString();
+        }
+
+        /// <summary>
+        /// Set whether or not the player can synthesize
+        /// </summary>
+        public void SetCanSynthesize(bool canSynthesize)
+        {
+            // Check if the player can synthesize
+            if (canSynthesize)
+            {
+                // Enable the synthesize button
+                synthesizeButton.Enable();
+            }
+            else
+            {
+                // Disable the synthesize button
+                synthesizeButton.Disable();
+            }
         }
 
         /// <summary>

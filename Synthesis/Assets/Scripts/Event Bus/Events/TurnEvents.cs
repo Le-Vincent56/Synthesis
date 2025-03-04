@@ -21,8 +21,7 @@ namespace Synthesis.EventBus.Events.Turns
 
     public struct CalculateDamageThreshold : IEvent { }
 
-    public struct EndBattle : IEvent
-    {
-        public bool Continue;
-    }
+    public struct WinBattle : IEvent { }
+
+    public struct LoseBattle : IEvent { }
 }

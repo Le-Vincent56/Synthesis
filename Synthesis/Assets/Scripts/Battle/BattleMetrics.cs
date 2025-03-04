@@ -112,7 +112,11 @@ namespace Synthesis.Battle
             // Check if the current Combat Rating is greater than or equal to the target Combat Rating
             if (currentCombatRating >= targetCombatRating)
             {
-                // TODO: Move to the next battle
+                // Increase the difficulty level
+                difficultyLevel++;
+
+                // Move to the next battle
+                EventBus<WinBattle>.Raise(new WinBattle());
             }
 
             // Publish the finalized Combat Rating

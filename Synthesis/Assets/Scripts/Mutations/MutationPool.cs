@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using Synthesis.Creatures.Visual;
 using UnityEngine;
+using Synthesis.EventBus.Events.Mutations;
 
 namespace Synthesis.Mutations
 {
@@ -54,6 +55,9 @@ namespace Synthesis.Mutations
             RegisterMutation<MonsoonBloom>();
             RegisterMutation<ThermalSepta>();
             RegisterMutation<MycorrhizalNetwork>();
+            RegisterMutation<AdaptiveChloroplast>();
+            RegisterMutation<RecursiveSpores>();
+            RegisterMutation<UnstableMutagen>();
         }
 
         /// <summary>
@@ -150,6 +154,9 @@ namespace Synthesis.Mutations
                 // Remove it from the available Mutations list
                 availableMutations.Remove(mutationType);
             }
+
+            // Check if the player can synthesize
+            EventBus<SetCanSynthesize>.Raise(new SetCanSynthesize() { CanSynthesize = availableMutations.Count > 0 });
         }
 
         /// <summary>
@@ -186,6 +193,18 @@ namespace Synthesis.Mutations
 
             // Return a List of Mutations from the unique Mutation Types
             return GetMutationsFromType(uniqueMutationTypes);
+        }
+
+        /// <summary>
+        /// Get a random Mutation
+        /// </summary>
+        public MutationStrategy GetRandomMutation()
+        {
+            // Get a random type from the available Mutations
+            Type mutationType = availableMutations[UnityEngine.Random.Range(0, availableMutations.Count)];
+
+            // Return an instance of the Mutation
+            return GetMutationInstance(mutationType);
         }
 
         /// <summary>
