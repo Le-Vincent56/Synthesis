@@ -27,7 +27,7 @@ namespace Synthesis.UI
         private EventBinding<HidePlayerInfo> onHidePlayerInfo;
         private EventBinding<ShowSynthesizeShop> onShowSynthesizeShop;
         private EventBinding<HideSynthesizeShop> onHideSynthesizeShop;
-
+        private EventBinding<WiltApplied> onWiltApplied;
 
         private void OnEnable()
         {
@@ -57,6 +57,9 @@ namespace Synthesis.UI
 
             onHideSynthesizeShop = new EventBinding<HideSynthesizeShop>(HideSynthesizeShop);
             EventBus<HideSynthesizeShop>.Register(onHideSynthesizeShop);
+
+            onWiltApplied = new EventBinding<WiltApplied>(UpdateWilt);
+            EventBus<WiltApplied>.Register(onWiltApplied);
         }
 
         private void OnDisable()
@@ -70,6 +73,7 @@ namespace Synthesis.UI
             EventBus<HidePlayerInfo>.Deregister(onHidePlayerInfo);
             EventBus<ShowSynthesizeShop>.Deregister(onShowSynthesizeShop);
             EventBus<HideSynthesizeShop>.Deregister(onHideSynthesizeShop);
+            EventBus<WiltApplied>.Deregister(onWiltApplied);
         }
 
         private void Start()
@@ -100,5 +104,6 @@ namespace Synthesis.UI
         private void HidePlayerInfo() => controller.HidePlayerInfo();
         private void ShowSynthesizeShop() => controller.ShowSynthesizeShop();
         private void HideSynthesizeShop() => controller.HideSynthesizeShop();
+        private void UpdateWilt(WiltApplied eventData) => controller.UpdateWilt(eventData.CurrentWilt, eventData.TotalWilt);
     }
 }

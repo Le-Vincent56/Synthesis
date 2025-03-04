@@ -6,7 +6,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using Synthesis.EventBus.Events.Turns;
 using UnityEngine.EventSystems;
-using Synthesis.Mutations;
 using System.Collections.Generic;
 using Synthesis.Input;
 
@@ -44,6 +43,10 @@ namespace Synthesis.UI.View
         [Header("References - Wilt")]
         [SerializeField] private Text currentWilt;
         [SerializeField] private Text totalWilt;
+        [SerializeField] private Image wiltFill;
+        [SerializeField] private Text currentWiltText;
+        private RectTransform wiltFillRect;
+        private RectTransform currentWiltRect;
 
         [Header("Fields")]
         [SerializeField] private bool actionsShown;
@@ -61,6 +64,7 @@ namespace Synthesis.UI.View
         [SerializeField] private float translateDuration;
         [SerializeField] private float translateAmount;
         [SerializeField] private float fadeHeaderDuration;
+        [SerializeField] private float wiltFillDuration;
         [SerializeField] private float fadeEnemyInfoDuration;
         private Tween fadeTurnHeaderTween;
         private Tween scaleTurnsTween;
@@ -71,6 +75,9 @@ namespace Synthesis.UI.View
         private Tween colorTotalRatingTween;
         private Tween translatePlayerInfoTween;
         private Tween translateSynthesizeShopTween;
+        private Tween wiltFillTween;
+        private Tween wiltTextTween;
+        private Tween wiltNumberTween;
         private Tween fadeEnemyInfoTween;
 
         public List<MutationCard> CurrentMutationCards { get => currentMutationCards; }
@@ -83,6 +90,8 @@ namespace Synthesis.UI.View
             turnsRemainingRect = currentTurn.GetComponent<RectTransform>();
             currentCombatRatingRect = currentCombatRating.GetComponent<RectTransform>();
             targetCombatRatingRect = targetCombatRating.GetComponent<RectTransform>();
+            wiltFillRect = wiltFill.GetComponent<RectTransform>();
+            currentWiltRect = currentWilt.GetComponent<RectTransform>();
             turnHeaderText = turnHeader.GetComponentInChildren<Text>();
 
             // Set tween variables
@@ -138,6 +147,9 @@ namespace Synthesis.UI.View
             colorCurrentRatingTween?.Kill();
             scaleTotalRatingTween?.Kill();
             colorTotalRatingTween?.Kill();
+            wiltFillTween?.Kill();
+            wiltTextTween?.Kill();
+            wiltNumberTween?.Kill();
         }
 
         /// <summary>
@@ -356,10 +368,16 @@ namespace Synthesis.UI.View
         /// <summary>
         /// Update the current Wilt text
         /// </summary>
-        public void UpdateCurrentWilt(int currentWilt)
+        public void UpdateCurrentWilt(int currentWilt, int totalWilt)
         {
-            // Update the text
-            this.currentWilt.text = currentWilt.ToString();
+            // Get the previous wilt value
+            int previousWilt = int.Parse(this.currentWilt.text);
+
+            // Get the fill percentage
+            float fillPercentage = (float)currentWilt / totalWilt;
+
+            // Lerp the fill
+            FillWilt(fillPercentage, previousWilt, currentWilt);
         }
 
         /// <summary>
@@ -539,6 +557,37 @@ namespace Synthesis.UI.View
 
             // Set the completion action
             fadeTurnHeaderTween.onComplete += onComplete;
+        }
+
+        /// <summary>
+        /// Handle filling the Wilt bar
+        /// </summary>
+        private void FillWilt(float endValue, int previousWilt, int currentWilt, TweenCallback onComplete = null)
+        {
+            // Kill the fill tween if it exists
+            wiltFillTween?.Kill();
+            wiltTextTween?.Kill();
+
+            // Set the fill tween
+            wiltFillTween = wiltFill.DOFillAmount(endValue, wiltFillDuration);
+
+            // Calculate target X position
+            float targetX = wiltFillRect.rect.width * endValue;
+
+            // Animate Current Wilt Text to the right edge of the Fill
+            wiltTextTween = currentWiltRect.DOAnchorPosX(targetX, wiltFillDuration);
+
+            // Animate the number change
+            wiltNumberTween = DOVirtual.Int(previousWilt, currentWilt, wiltFillDuration, value =>
+            {
+                this.currentWilt.text = value.ToString();
+            });
+
+            // Exit case - there's no completion action
+            if (onComplete == null) return;
+
+            // Set the completion action
+            wiltFillTween.onComplete += onComplete;
         }
 
         /// <summary>

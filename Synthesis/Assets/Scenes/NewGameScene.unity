@@ -3613,6 +3613,8 @@ MonoBehaviour:
   targetCombatRating: {fileID: 86057658}
   currentWilt: {fileID: 1468237219}
   totalWilt: {fileID: 1942219419}
+  wiltFill: {fileID: 2129627958}
+  currentWiltText: {fileID: 1468237219}
   actionsShown: 0
   synthesizeShopShown: 0
   turnHeaderActive: 0
@@ -3622,6 +3624,7 @@ MonoBehaviour:
   translateDuration: 0.5
   translateAmount: 1000
   fadeHeaderDuration: 1.5
+  wiltFillDuration: 1
   fadeEnemyInfoDuration: 0.5
 --- !u!114 &1343266942
 MonoBehaviour:
@@ -4085,8 +4088,8 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1609580720}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.45, y: 0}
-  m_AnchorMax: {x: 0.55, y: 0.38371146}
+  m_AnchorMin: {x: 0.032662235, y: 0}
+  m_AnchorMax: {x: 0.13278368, y: 0.38371146}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -4123,7 +4126,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 750
+  m_Text: 0
 --- !u!222 &1468237220
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4177,7 +4180,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1481288824}
   m_Enabled: 1
-  m_Alpha: 0
+  m_Alpha: 1
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -6635,7 +6638,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 0
-  m_FillAmount: 0.5
+  m_FillAmount: 0
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0

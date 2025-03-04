@@ -24,6 +24,7 @@ namespace Synthesis.Battle
 
         private EventBinding<StartBattle> onStartBattle;
         private EventBinding<CombatRatingCalculated> onCombatRatingCalculated;
+        private EventBinding<ApplyWilt> onApplyWilt;
 
         private void Awake()
         {
@@ -38,12 +39,16 @@ namespace Synthesis.Battle
 
             onCombatRatingCalculated = new EventBinding<CombatRatingCalculated>(UpdateCombatRating);
             EventBus<CombatRatingCalculated>.Register(onCombatRatingCalculated);
+
+            onApplyWilt = new EventBinding<ApplyWilt>(UpdateWilt);
+            EventBus<ApplyWilt>.Register(onApplyWilt);
         }
 
         private void OnDisable()
         {
             EventBus<StartBattle>.Deregister(onStartBattle);
             EventBus<CombatRatingCalculated>.Deregister(onCombatRatingCalculated);
+            EventBus<ApplyWilt>.Deregister(onApplyWilt);
         }
 
         /// <summary>
@@ -117,10 +122,10 @@ namespace Synthesis.Battle
         /// <summary>
         /// Update the current Player Damage
         /// </summary>
-        public void UpdateWilt(int calcualtedWilt)
+        public void UpdateWilt(ApplyWilt eventData)
         {
             // Add to the current Wilt
-            currentWilt += calcualtedWilt;
+            currentWilt += eventData.WiltToApply;
 
             // Check if the current player damage is greater than or equal to the total player damage
             if (currentWilt >= totalWilt)
@@ -132,7 +137,7 @@ namespace Synthesis.Battle
             }
 
             // Publish the applied wilt event
-            EventBus<WiltApplied>.Raise(new WiltApplied() { CurrentWilt = currentWilt });
+            EventBus<WiltApplied>.Raise(new WiltApplied() { CurrentWilt = currentWilt, TotalWilt = totalWilt });
         }
     }
 }
