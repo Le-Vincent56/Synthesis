@@ -47,6 +47,11 @@ namespace Synthesis
             {
                 SpawnEvilCreature();
 
+                if (round > 3)
+                {
+                    round = 3;
+                }
+
                 for (int i = 1; i < round; i++)
                 {
                     if (RandomChance(round))
@@ -59,17 +64,20 @@ namespace Synthesis
 
         private void SpawnEvilCreature()
         {
-            if (evilCreaturePrefab != null)
+            if (EvilCreaturesCount < 4)
             {
-                GameObject creature = Instantiate(evilCreaturePrefab, transform.position, transform.rotation);
-                creature.transform.parent = transform;
-                creature.transform.localPosition = new Vector3((3 * (index + 1)), 2.5f, 0);
-                evilCreatures.Add(creature);
-                index++;
-            }
-            else
-            {
-                Debug.LogError("Failed to load CreatureEvil prefab");
+                if (evilCreaturePrefab != null)
+                {
+                    GameObject creature = Instantiate(evilCreaturePrefab, transform.position, transform.rotation);
+                    creature.transform.parent = transform;
+                    creature.transform.localPosition = new Vector3((3 * (index + 1)), 2.5f, 0);
+                    evilCreatures.Add(creature);
+                    index++;
+                }
+                else
+                {
+                    Debug.LogError("Failed to load CreatureEvil prefab");
+                }
             }
         }
 

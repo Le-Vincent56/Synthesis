@@ -61,7 +61,7 @@ Material:
     - _T: 0
     - _TerrainMode: 0
     m_Colors:
-    - _LandColor: {r: 0.20125782, g: 0.029745637, b: 0.029745637, a: 0}
+    - _LandColor: {r: 0.2901961, g: 0.52156866, b: 0.21176471, a: 1}
     - _Offset: {r: 0, g: 0.18, b: 0, a: 0}
     - _Tiling: {r: 1, g: 0.66, b: 0, a: 0}
   m_BuildTextureStacks: []
