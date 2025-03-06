@@ -1,3 +1,5 @@
+using Synthesis.Mutations;
+
 namespace Synthesis.EventBus.Events.UI
 {
     public struct SetInfoText : IEvent
@@ -23,4 +25,9 @@ namespace Synthesis.EventBus.Events.UI
     public struct HidePlayerInfo : IEvent { }
     public struct ShowSynthesizeShop : IEvent { }
     public struct HideSynthesizeShop : IEvent { }
+
+    public struct HighlightMutation : IEvent
+    {
+        public MutationStrategy mutation;
+    }
 }

@@ -113,21 +113,15 @@ namespace Synthesis.Creatures
                 var newPiece = Instantiate(availablePieces[(int)mutation.PartType]);
                 newPiece.transform.position = (con.transform.position + new Vector3(0, 0, 0.01f));
                 newPiece.transform.parent = con.transform;
+                Color bleedColor = Color.clear;
+                float bleedrate = 0.0f;
                 if (oldPiece.primaryColorIn != null && newPiece.primaryColorIn.Length > 0 && oldPiece.primaryColorIn[0] != null)
                 {
-                    newPiece.SetPartColor(Color.Lerp(mutation.Color0, oldPiece.primaryColorIn[0].material.GetColor(Color1), 0.4f), ColorElement.Primary);
-                    newPiece.SetPartColor(mutation.Color1, ColorElement.Secondary);
-                }
-                else
-                {
-                    newPiece.SetPartColor(mutation.Color0, ColorElement.Primary);
-                    newPiece.SetPartColor(mutation.Color1, ColorElement.Secondary);
+                    bleedColor = oldPiece.primaryColorIn[0].material.GetColor(Color1);
+                    bleedrate = 0.4f;
                 }
                 
-                if (newPiece.tertiaryColorIn != null && newPiece.tertiaryColorIn.Length > 0 && newPiece.tertiaryColorIn[0] != null)
-                {
-                    newPiece.SetPartColor(mutation.Color2, ColorElement.Tertiary);
-                }
+                newPiece.SetMutation(mutation, bleedColor, bleedrate);
                 
                 con.child = newPiece;
             }
