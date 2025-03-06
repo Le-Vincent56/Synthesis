@@ -419,6 +419,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jumpPower: 1
   jumpDuration: 0.35
+  spriteRenderer: {fileID: 6562368029188017222}
 --- !u!1 &9177780404267764804
 GameObject:
   m_ObjectHideFlags: 0

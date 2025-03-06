@@ -5,6 +5,7 @@ using Synthesis.EventBus;
 using Synthesis.EventBus.Events.Creatures;
 using Synthesis.EventBus.Events.Turns;
 using Synthesis.Mutations;
+using Synthesis.ServiceLocators;
 using UnityEngine;
 
 namespace Synthesis.Creatures
@@ -35,7 +36,14 @@ namespace Synthesis.Creatures
         [SerializeField] private float jumpDuration = 0.5f;
         private Tween jumpTween;
 
+        private CameraController cameraController;
+
         public CreaturePiece Piece { get => piece; }
+
+        private void Start()
+        {
+            cameraController = ServiceLocator.ForSceneOf(this).Get<CameraController>();
+        }
 
         // Methods
         private void OnEnable()
@@ -71,7 +79,11 @@ namespace Synthesis.Creatures
             float fromY = transform.localPosition.y;
 
             // Activate the jump
-            Jump(toY, jumpDuration / 2f, () => Jump(fromY, jumpDuration / 2f));
+            Jump(toY, jumpDuration / 2f, () => 
+            { 
+                cameraController.GenerateImpulse();
+                Jump(fromY, jumpDuration / 2f);
+            });
         }
 
         /// <summary>

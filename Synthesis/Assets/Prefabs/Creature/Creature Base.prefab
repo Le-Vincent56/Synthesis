@@ -313,8 +313,8 @@ MonoBehaviour:
   - {fileID: 8099366975605549189, guid: 773ab6ff592fb2b4a9f269e8422f384e, type: 3}
   - {fileID: 8099366975605549189, guid: 773ab6ff592fb2b4a9f269e8422f384e, type: 3}
   piece: {fileID: 6542575867893166833}
-  jumpPower: 1
-  jumpDuration: 0.25
+  jumpPower: 2
+  jumpDuration: 0.5
 --- !u!114 &6542575867893166833 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5093379418373471637, guid: 045c76f218474f14caa6356959cef821, type: 3}

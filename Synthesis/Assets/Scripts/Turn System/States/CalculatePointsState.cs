@@ -29,15 +29,16 @@ namespace Synthesis.Turns.States
                 // Generate impulse and have enemies attack
                 EventBus<PlayerAttack>.Raise(new PlayerAttack());
 
-                this.cameraController.GenerateImpulse();
-
                 // Start the next timer
                 calculatePointsTimer.Start();
             };
+            
+            
 
             calculatePointsTimer = new CountdownTimer(0.75f);
             calculatePointsTimer.OnTimerStop += () =>
             {
+                EventBus<EnemyHit>.Raise(new EnemyHit());
                 // Calculate combat rating
                 int calculatedFester = this.battleCalculator.CalculatePoints();
                 int currentFester = metrics.CurrentFester + calculatedFester;
