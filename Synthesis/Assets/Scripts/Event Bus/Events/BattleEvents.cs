@@ -2,24 +2,26 @@ namespace Synthesis.EventBus.Events.Battle
 {
     public struct BattleMetricsSet : IEvent
     {
-        public int CurrentCombatRating;
+        public int CurrentFester;
         public int CurrentWilt;
-        public int TargetCombatRating;
+        public int TargetFester;
         public int TotalWilt;
     }
 
-    public struct CombatRatingCalculated : IEvent
+    public struct FesterCalculated : IEvent
     {
-        public int CombatRatingPointsCalculated;
-        public int CombatRatingCurrent;
+        public int CalculatedFester;
+        public int CurrentFester;
+        public int TargetFester;
     }
 
-    public struct CombatRatingFinalized : IEvent
+    public struct FesterFinalized : IEvent
     {
-        public int CombatRating;
+        public int CalculatedFester;
+        public int TargetFester;
     }
 
-    public struct CombatRatingCalculationFinished : IEvent { }
+    public struct FesterFinished : IEvent { }
 
     public struct ApplyWilt : IEvent
     {

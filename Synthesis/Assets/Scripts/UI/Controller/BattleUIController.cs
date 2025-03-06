@@ -68,17 +68,16 @@ namespace Synthesis.UI.Controller
             view.ShowSynthesizeShop(mutationCards);
         }
         public void HideSynthesizeShop() => view.HideSynthesizeShop(mutationCardPool);
-        public void SetBattleMetrics(int currentCombatRating, int targetCombatRating, int currentWilt, int totalWilt)
+        public void SetBattleMetrics(int currentFester, int targetFester, int currentWilt, int totalWilt)
         {
             // Update the view
-            view.UpdateCombatRatingHard(currentCombatRating);
-            view.UpdateCurrentCombatRating(currentCombatRating);
-            view.UpdateTargetCombatRating(targetCombatRating);
+            view.UpdateCurrentFester(currentFester, targetFester);
+            view.UpdateTargetFester(targetFester);
             view.UpdateCurrentWilt(currentWilt, totalWilt);
             view.UpdateTotalWilt(totalWilt);
         }
-        public void UpdateCombatRatingDisplay(int combatRatingCalculated, int combatRatingFull) => view.UpdateCombatRatingDisplay(combatRatingCalculated, combatRatingFull);
-        public void UpdateCurrentCombatRating(int currentCombatRating) => view.UpdateCurrentCombatRating(currentCombatRating);
+        public void UpdateCombatRatingDisplay(int calculatedFester, int currentFester, int targetFester) => view.UpdateFesterDamageDisplay(calculatedFester, currentFester, targetFester);
+        public void UpdateCurrentCombatRating(int currentFester, int targetFester) => view.UpdateCurrentFester(currentFester, targetFester);
         public void UpdateWilt(int currentWilt, int totalWilt) => view.UpdateCurrentWilt(currentWilt, totalWilt);
         public void SetCanSynthesize(bool canSynthesize) => view.SetCanSynthesize(canSynthesize);
     }

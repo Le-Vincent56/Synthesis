@@ -13,10 +13,10 @@ namespace Synthesis.Battle
         [SerializeField] private float ratingLevelPercentageIncrease = 0.50f; // 20% increase per level
         [SerializeField] private float wiltPerLevelPercentageIncrease = 0.10f; // 10% increase per level
 
-        [Header("Combat Rating")]
-        [SerializeField] private int baseTargetCombatRating = 20;
-        [SerializeField] private int currentCombatRating;
-        [SerializeField] private int targetCombatRating;
+        [Header("Fester")]
+        [SerializeField] private int baseFester = 20;
+        [SerializeField] private int currentFester;
+        [SerializeField] private int targetFester;
 
         [Header("Wilt")]
         [SerializeField] private int baseTotalWilt = 50;
@@ -24,10 +24,11 @@ namespace Synthesis.Battle
         [SerializeField] private int totalWilt;
 
         private EventBinding<StartBattle> onStartBattle;
-        private EventBinding<CombatRatingFinalized> onCombatRatingFinalized;
+        private EventBinding<FesterFinalized> onCombatRatingFinalized;
         private EventBinding<ApplyWilt> onApplyWilt;
 
-        public int CurrentCombatRating { get => currentCombatRating; }
+        public int CurrentFester { get => currentFester; }
+        public int TargetFester { get => targetFester; }
 
         private void Awake()
         {
@@ -42,8 +43,8 @@ namespace Synthesis.Battle
             onStartBattle = new EventBinding<StartBattle>(SetMetrics);
             EventBus<StartBattle>.Register(onStartBattle);
 
-            onCombatRatingFinalized = new EventBinding<CombatRatingFinalized>(UpdateCombatRating);
-            EventBus<CombatRatingFinalized>.Register(onCombatRatingFinalized);
+            onCombatRatingFinalized = new EventBinding<FesterFinalized>(UpdateCombatRating);
+            EventBus<FesterFinalized>.Register(onCombatRatingFinalized);
 
             onApplyWilt = new EventBinding<ApplyWilt>(UpdateWilt);
             EventBus<ApplyWilt>.Register(onApplyWilt);
@@ -52,7 +53,7 @@ namespace Synthesis.Battle
         private void OnDisable()
         {
             EventBus<StartBattle>.Deregister(onStartBattle);
-            EventBus<CombatRatingFinalized>.Deregister(onCombatRatingFinalized);
+            EventBus<FesterFinalized>.Deregister(onCombatRatingFinalized);
             EventBus<ApplyWilt>.Deregister(onApplyWilt);
         }
 
@@ -62,7 +63,7 @@ namespace Synthesis.Battle
         private void SetMetrics()
         {
             // Set the current values
-            currentCombatRating = 0;
+            currentFester = 0;
             currentWilt = 0;
 
             // Calculate the target combat rating
@@ -74,9 +75,9 @@ namespace Synthesis.Battle
             // Publish the metrics
             EventBus<BattleMetricsSet>.Raise(new BattleMetricsSet
             {
-                CurrentCombatRating = currentCombatRating,
+                CurrentFester = currentFester,
                 CurrentWilt = currentWilt,
-                TargetCombatRating = targetCombatRating,
+                TargetFester = targetFester,
                 TotalWilt = totalWilt
             });
         }
@@ -91,7 +92,7 @@ namespace Synthesis.Battle
             float ratingIncrease = ratingLevelPercentageIncrease * difficultyLevel;
 
             // Calculate the new target combat rating
-            targetCombatRating = Mathf.RoundToInt(baseTargetCombatRating + (baseTargetCombatRating * ratingIncrease));
+            targetFester = Mathf.RoundToInt(baseFester + (baseFester * ratingIncrease));
         }
 
         /// <summary>
@@ -109,13 +110,13 @@ namespace Synthesis.Battle
         /// <summary>
         /// Update the current Combat Rating
         /// </summary>
-        private void UpdateCombatRating(CombatRatingFinalized eventData)
+        private void UpdateCombatRating(FesterFinalized eventData)
         {
             // Update the current combat rating
-            currentCombatRating += eventData.CombatRating;
+            currentFester += eventData.CalculatedFester;
 
             // Check if the current Combat Rating is greater than or equal to the target Combat Rating
-            if (currentCombatRating >= targetCombatRating)
+            if (currentFester >= targetFester)
             {
                 // Increase the difficulty level
                 difficultyLevel++;
@@ -126,7 +127,7 @@ namespace Synthesis.Battle
                 return;
             }
 
-            EventBus<CombatRatingCalculationFinished>.Raise(new CombatRatingCalculationFinished());
+            EventBus<FesterFinished>.Raise(new FesterFinished());
         }
 
         /// <summary>

@@ -39,11 +39,17 @@ namespace Synthesis.Turns.States
             calculatePointsTimer.OnTimerStop += () =>
             {
                 // Calculate combat rating
-                int combatRatingCalculated = this.battleCalculator.CalculatePoints();
-                int combatRatingFull = metrics.CurrentCombatRating + combatRatingCalculated;
+                int calculatedFester = this.battleCalculator.CalculatePoints();
+                int currentFester = metrics.CurrentFester + calculatedFester;
+                int targetFester = metrics.TargetFester;
 
                 // State that the combat rating has been calculated
-                EventBus<CombatRatingCalculated>.Raise(new CombatRatingCalculated { CombatRatingPointsCalculated = combatRatingCalculated, CombatRatingCurrent = combatRatingFull });
+                EventBus<FesterCalculated>.Raise(new FesterCalculated() 
+                { 
+                    CalculatedFester = calculatedFester, 
+                    CurrentFester = currentFester,
+                    TargetFester = targetFester
+                });
             };
         }
 

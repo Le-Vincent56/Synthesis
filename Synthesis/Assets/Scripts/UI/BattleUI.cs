@@ -24,8 +24,8 @@ namespace Synthesis.UI
         private EventBinding<HideTurnHeader> onHideTurnHeader;
         private EventBinding<UpdateTurns> onUpdateTurns;
         private EventBinding<BattleMetricsSet> onBattleMetricsSet;
-        private EventBinding<CombatRatingCalculated> onCombatRatingCalculated;
-        private EventBinding<CombatRatingFinalized> onCombatRatingFinalized;
+        private EventBinding<FesterCalculated> onCombatRatingCalculated;
+        private EventBinding<FesterFinalized> onCombatRatingFinalized;
         private EventBinding<ShowPlayerInfo> onShowPlayerInfo;
         private EventBinding<HidePlayerInfo> onHidePlayerInfo;
         private EventBinding<ShowSynthesizeShop> onShowSynthesizeShop;
@@ -48,11 +48,11 @@ namespace Synthesis.UI
             onBattleMetricsSet = new EventBinding<BattleMetricsSet>(BattleMetricsSet);
             EventBus<BattleMetricsSet>.Register(onBattleMetricsSet);
 
-            onCombatRatingCalculated = new EventBinding<CombatRatingCalculated>(UpdateCombatRatingDisplay);
-            EventBus<CombatRatingCalculated>.Register(onCombatRatingCalculated);
+            onCombatRatingCalculated = new EventBinding<FesterCalculated>(UpdateCombatRatingDisplay);
+            EventBus<FesterCalculated>.Register(onCombatRatingCalculated);
 
-            onCombatRatingFinalized = new EventBinding<CombatRatingFinalized>(UpdateCurrentCombatRating);
-            EventBus<CombatRatingFinalized>.Register(onCombatRatingFinalized);
+            onCombatRatingFinalized = new EventBinding<FesterFinalized>(UpdateCurrentCombatRating);
+            EventBus<FesterFinalized>.Register(onCombatRatingFinalized);
 
             onShowPlayerInfo = new EventBinding<ShowPlayerInfo>(ShowPlayerInfo);
             EventBus<ShowPlayerInfo>.Register(onShowPlayerInfo);
@@ -82,8 +82,8 @@ namespace Synthesis.UI
             EventBus<HideTurnHeader>.Deregister(onHideTurnHeader);
             EventBus<UpdateTurns>.Deregister(onUpdateTurns);
             EventBus<BattleMetricsSet>.Deregister(onBattleMetricsSet);
-            EventBus<CombatRatingCalculated>.Deregister(onCombatRatingCalculated);
-            EventBus<CombatRatingFinalized>.Deregister(onCombatRatingFinalized);
+            EventBus<FesterCalculated>.Deregister(onCombatRatingCalculated);
+            EventBus<FesterFinalized>.Deregister(onCombatRatingFinalized);
             EventBus<ShowPlayerInfo>.Deregister(onShowPlayerInfo);
             EventBus<HidePlayerInfo>.Deregister(onHidePlayerInfo);
             EventBus<ShowSynthesizeShop>.Deregister(onShowSynthesizeShop);
@@ -110,14 +110,14 @@ namespace Synthesis.UI
         private void BattleMetricsSet(BattleMetricsSet eventData)
         {
             controller.SetBattleMetrics(
-                eventData.CurrentCombatRating,
-                eventData.TargetCombatRating,
+                eventData.CurrentFester,
+                eventData.TargetFester,
                 eventData.CurrentWilt,
                 eventData.TotalWilt
             );
         }
-        private void UpdateCombatRatingDisplay(CombatRatingCalculated eventData) => controller.UpdateCombatRatingDisplay(eventData.CombatRatingPointsCalculated, eventData.CombatRatingCurrent);
-        private void UpdateCurrentCombatRating(CombatRatingFinalized eventData) => controller.UpdateCurrentCombatRating(eventData.CombatRating);
+        private void UpdateCombatRatingDisplay(FesterCalculated eventData) => controller.UpdateCombatRatingDisplay(eventData.CalculatedFester, eventData.CurrentFester, eventData.TargetFester);
+        private void UpdateCurrentCombatRating(FesterFinalized eventData) => controller.UpdateCurrentCombatRating(eventData.CalculatedFester, eventData.TargetFester);
         private void ShowPlayerInfo() => controller.ShowPlayerInfo();
         private void HidePlayerInfo() => controller.HidePlayerInfo();
         private void ShowSynthesizeShop() => controller.ShowSynthesizeShop();

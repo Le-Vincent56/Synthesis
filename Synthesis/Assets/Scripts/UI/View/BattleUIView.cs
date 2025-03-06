@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using Synthesis.Input;
 using Synthesis.ServiceLocators;
 using Synthesis.EventBus.Events.Battle;
-using Cinemachine;
 
 namespace Synthesis.UI.View
 {
@@ -39,13 +38,14 @@ namespace Synthesis.UI.View
         private RectTransform turnsRemainingRect;
         private RectTransform totalTurnsRect;
 
-        [Header("References - Combat Rating")]
-        [SerializeField] private Text combatRatingDisplay;
-        [SerializeField] private Text currentCombatRating;
-        [SerializeField] private Text targetCombatRating;
+        [Header("References - Fester")]
+        [SerializeField] private Text festerDisplay;
+        [SerializeField] private Text currentFester;
+        [SerializeField] private Text targetFester;
+        [SerializeField] private Image festerFill;
         private RectTransform combatRatingDisplayRect;
-        private RectTransform currentCombatRatingRect;
-        private RectTransform targetCombatRatingRect;
+        private RectTransform festerFillRect;
+        private RectTransform currentFesterRect;
 
         [Header("References - Wilt")]
         [SerializeField] private Text currentWilt;
@@ -84,8 +84,6 @@ namespace Synthesis.UI.View
         private Tween colorTurnsTween;
         private Tween scaleTurnsTotalTween;
         private Tween colorTurnsTotalTween;
-        private Tween scaleCurrentRatingTween;
-        private Tween colorCurrentRatingTween;
         private Tween scaleTotalRatingTween;
         private Tween colorTotalRatingTween;
         private Tween translatePlayerInfoTween;
@@ -93,6 +91,9 @@ namespace Synthesis.UI.View
         private Tween wiltFillTween;
         private Tween wiltTextTween;
         private Tween wiltNumberTween;
+        private Tween festerFillTween;
+        private Tween festerTextTween;
+        private Tween festerNumberTween;
         private Tween fadeEnemyInfoTween;
         private Tween combatRatingDisplayFadeTween;
         private Tween combatRatingDisplayScaleTween;
@@ -107,10 +108,10 @@ namespace Synthesis.UI.View
             synthesizeShopRect = synthesizeShop.GetComponent<RectTransform>();
             turnsRemainingRect = currentTurn.GetComponent<RectTransform>();
             totalTurnsRect = totalTurns.GetComponent<RectTransform>();
-            combatRatingDisplayRect = combatRatingDisplay.GetComponent<RectTransform>();
-            currentCombatRatingRect = currentCombatRating.GetComponent<RectTransform>();
-            targetCombatRatingRect = targetCombatRating.GetComponent<RectTransform>();
+            combatRatingDisplayRect = festerDisplay.GetComponent<RectTransform>();
             wiltFillRect = wiltFill.GetComponent<RectTransform>();
+            festerFillRect = festerFill.GetComponent<RectTransform>();
+            currentFesterRect = currentFester.GetComponent<RectTransform>();
             currentWiltRect = currentWilt.GetComponent<RectTransform>();
             turnHeaderText = turnHeader.GetComponentInChildren<Text>();
 
@@ -169,13 +170,14 @@ namespace Synthesis.UI.View
             translatePlayerInfoTween?.Kill();
             translateSynthesizeShopTween?.Kill();
             fadeEnemyInfoTween?.Kill();
-            scaleCurrentRatingTween?.Kill();
-            colorCurrentRatingTween?.Kill();
             scaleTotalRatingTween?.Kill();
             colorTotalRatingTween?.Kill();
             wiltFillTween?.Kill();
             wiltTextTween?.Kill();
             wiltNumberTween?.Kill();
+            festerFillTween?.Kill();
+            festerTextTween?.Kill();
+            festerNumberTween?.Kill();
             scaleTurnsTween?.Kill();
             colorTurnsTween?.Kill();
             scaleTurnsTotalTween?.Kill();
@@ -411,79 +413,32 @@ namespace Synthesis.UI.View
         }
 
         /// <summary>
-        /// Update the Target Combat Rating text
+        /// Update the Fester damage display
         /// </summary>
-        public void UpdateTargetCombatRating(int targetCombatRating)
+        public void UpdateFesterDamageDisplay(int calculatedFester, int currentFester, int targetFester)
         {
-            // Update the text
-            this.targetCombatRating.text = targetCombatRating.ToString();
-
-            // Scale the text
-            Scale(scaleTotalRatingTween, targetCombatRatingRect, turnsMaxScale, turnsScaleDuration / 2f, () =>
-            {
-                Scale(scaleTotalRatingTween, targetCombatRatingRect, turnsInitialScale, turnsScaleDuration / 2f);
-            });
-
-            // Color the text
-            Color(colorTotalRatingTween, this.targetCombatRating, textHighlightColor, turnsScaleDuration / 2f, () =>
-            {
-                Color(colorTotalRatingTween, this.targetCombatRating, turnsInitialColor, turnsScaleDuration / 2f);
-            });
-        }
-
-        /// <summary>
-        /// Update the Current Combat Rating text
-        /// </summary>
-        public void UpdateCurrentCombatRating(int currentCombatRating)
-        {
-            // Update the text
-            this.currentCombatRating.text = currentCombatRating.ToString();
-
-            // Scale the text
-            Scale(scaleCurrentRatingTween, currentCombatRatingRect, turnsMaxScale, turnsScaleDuration / 2f, () =>
-            {
-                Scale(scaleCurrentRatingTween, currentCombatRatingRect, turnsInitialScale, turnsScaleDuration / 2f);
-            });
-
-            // Color the text
-            Color(colorCurrentRatingTween, this.currentCombatRating, textHighlightColor, turnsScaleDuration / 2f, () =>
-            {
-                Color(colorCurrentRatingTween, this.currentCombatRating, turnsInitialColor, turnsScaleDuration / 2f);
-            });
-        }
-
-        /// <summary>
-        /// Update instantly the combat rating display
-        /// </summary>
-        public void UpdateCombatRatingHard(int currentCombatRating)
-        {
-            combatRatingDisplay.text = currentCombatRating.ToString();
-        }
-
-        /// <summary>
-        /// Update the combat rating display
-        /// </summary>
-        public void UpdateCombatRatingDisplay(int combatRatingCalculated, int combatRatingFull)
-        {
-            int previousCombatRating = int.Parse(currentCombatRating.text);
+            int previousCombatRating = int.Parse(this.currentFester.text);
 
             // Update the number climbing
-
-            FadeText(combatRatingDisplayFadeTween, combatRatingDisplay, 1f, 0.5f, () =>
+            FadeText(combatRatingDisplayFadeTween, festerDisplay, 1f, 0.5f, () =>
             {
                 // Scale upwards
                 Scale(combatRatingDisplayScaleTween, combatRatingDisplayRect, turnsMaxScale, 0.4f, () =>
                 {
-                    UpdateInCombatRatingNumber(previousCombatRating, combatRatingFull, () =>
+                    UpdateInCombatRatingNumber(previousCombatRating, currentFester, () =>
                     {
                         // Scale downwards
                         Scale(combatRatingDisplayScaleTween, combatRatingDisplayRect, turnsInitialScale, 0.4f, () =>
                         {
                             // Fade out
-                            FadeText(combatRatingDisplayFadeTween, combatRatingDisplay, 0f, 0.5f, () =>
+                            FadeText(combatRatingDisplayFadeTween, festerDisplay, 0f, 0.5f, () =>
                             {
-                                EventBus<CombatRatingFinalized>.Raise(new CombatRatingFinalized() { CombatRating = combatRatingCalculated });
-
+                                EventBus<FesterFinalized>.Raise(new FesterFinalized()
+                                {
+                                    CalculatedFester = calculatedFester,
+                                    TargetFester = targetFester
+                                }
+                                );
                             });
                         });
                     });
@@ -492,7 +447,7 @@ namespace Synthesis.UI.View
         }
 
         /// <summary>
-        /// Update the current Wilt text
+        /// Update the current Wilt bar
         /// </summary>
         public void UpdateCurrentWilt(int currentWilt, int totalWilt)
         {
@@ -507,12 +462,39 @@ namespace Synthesis.UI.View
         }
 
         /// <summary>
+        /// Udpate the current Fester bar
+        /// </summary>
+        public void UpdateCurrentFester(int calculatedFester, int targetFester)
+        {
+            // Get the previous combat rating value
+            int previousFester = int.Parse(this.currentFester.text);
+
+            // Get the current fester
+            int currentFester = previousFester + calculatedFester;
+
+            // Get the fill percentage
+            float fillPercentage = (float)currentFester / targetFester;
+
+            // Lerp the fill
+            FillFester(fillPercentage, previousFester, currentFester);
+        }
+
+        /// <summary>
         /// Update the total Wilt text
         /// </summary>
         public void UpdateTotalWilt(int totalWilt)
         {
             // Update the text
             this.totalWilt.text = totalWilt.ToString();
+        }
+
+        /// <summary>
+        /// Update the total Fester text
+        /// </summary>
+        public void UpdateTargetFester(int targetFester)
+        {
+            // Update the text
+            this.targetFester.text = targetFester.ToString();
         }
 
         /// <summary>
@@ -736,9 +718,10 @@ namespace Synthesis.UI.View
         /// </summary>
         private void FillWilt(float endValue, int previousWilt, int currentWilt, TweenCallback onComplete = null)
         {
-            // Kill the fill tween if it exists
+            // Kill the fill tweens if they exists
             wiltFillTween?.Kill();
             wiltTextTween?.Kill();
+            wiltNumberTween?.Kill();
 
             // Set the fill tween
             wiltFillTween = wiltFill.DOFillAmount(endValue, wiltFillDuration);
@@ -746,13 +729,45 @@ namespace Synthesis.UI.View
             // Calculate target X position
             float targetX = wiltFillRect.rect.width * endValue;
 
-            // Animate Current Wilt Text to the right edge of the Fill
+            // Animate current Wilt Text to the right edge of the Fill
             wiltTextTween = currentWiltRect.DOAnchorPosX(targetX, wiltFillDuration);
 
             // Animate the number change
             wiltNumberTween = DOVirtual.Int(previousWilt, currentWilt, wiltFillDuration, value =>
             {
                 this.currentWilt.text = value.ToString();
+            });
+
+            // Exit case - there's no completion action
+            if (onComplete == null) return;
+
+            // Set the completion action
+            wiltFillTween.onComplete += onComplete;
+        }
+
+        /// <summary>
+        /// Handle filling the Fester bar
+        /// </summary>
+        private void FillFester(float endValue, int previousFester, int currentFester, TweenCallback onComplete = null)
+        {
+            // Kill the fill tweens if they exist
+            festerFillTween?.Kill();
+            festerTextTween?.Kill();
+            festerNumberTween?.Kill();
+
+            // Set the fill tween
+            festerFillTween = festerFill.DOFillAmount(endValue, wiltFillDuration);
+
+            // Calculate target X position
+            float targetX = festerFillRect.rect.width * endValue;
+
+            // Animate current Wilt Text to the right edge of the Fill
+            festerTextTween = currentFesterRect.DOAnchorPosX(targetX, wiltFillDuration);
+
+            // Animate the number change
+            festerNumberTween = DOVirtual.Int(previousFester, currentFester, wiltFillDuration, value =>
+            {
+                this.currentFester.text = value.ToString();
             });
 
             // Exit case - there's no completion action
@@ -772,7 +787,7 @@ namespace Synthesis.UI.View
 
             combatRatingNumberTween = DOVirtual.Int(previousRating, currentRating, combatRatingDisplayDuration, value =>
             {
-                combatRatingDisplay.text = value.ToString();
+                festerDisplay.text = value.ToString();
             });
 
             combatRatingNumberTween.SetEase(Ease.InOutQuart);

@@ -38,7 +38,7 @@ namespace Synthesis.Turns
 
         private EventBinding<Infect> onInfect;
         private EventBinding<Synthesize> onSynthesize;
-        private EventBinding<CombatRatingCalculationFinished> onCombatRatingCalculationFinished;
+        private EventBinding<FesterFinished> onCombatRatingCalculationFinished;
         private EventBinding<WinBattle> onEndBattle;
         private EventBinding<Wilted> onWilted;
         public int CurrentRound { get => currentRound; }
@@ -66,8 +66,8 @@ namespace Synthesis.Turns
             onSynthesize = new EventBinding<Synthesize>(Synthesize);
             EventBus<Synthesize>.Register(onSynthesize);
 
-            onCombatRatingCalculationFinished = new EventBinding<CombatRatingCalculationFinished>(GoToEnemyTurn);
-            EventBus<CombatRatingCalculationFinished>.Register(onCombatRatingCalculationFinished);
+            onCombatRatingCalculationFinished = new EventBinding<FesterFinished>(GoToEnemyTurn);
+            EventBus<FesterFinished>.Register(onCombatRatingCalculationFinished);
 
             onEndBattle = new EventBinding<WinBattle>(WinBattle);
             EventBus<WinBattle>.Register(onEndBattle);
@@ -80,7 +80,7 @@ namespace Synthesis.Turns
         {
             EventBus<Infect>.Deregister(onInfect);
             EventBus<Synthesize>.Deregister(onSynthesize);
-            EventBus<CombatRatingCalculationFinished>.Deregister(onCombatRatingCalculationFinished);
+            EventBus<FesterFinished>.Deregister(onCombatRatingCalculationFinished);
             EventBus<WinBattle>.Deregister(onEndBattle);
             EventBus<Wilted>.Deregister(onWilted);
         }
@@ -231,7 +231,7 @@ namespace Synthesis.Turns
         /// </summary>
         private void Synthesize() => SetState(3);
 
-        private void GoToEnemyTurn(CombatRatingCalculationFinished eventData) => state = 4;
+        private void GoToEnemyTurn(FesterFinished eventData) => state = 4;
 
         /// <summary>
         /// Set the State of the Turn System
