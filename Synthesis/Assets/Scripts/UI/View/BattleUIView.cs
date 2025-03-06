@@ -54,6 +54,11 @@ namespace Synthesis.UI.View
         [SerializeField] private Text currentWiltText;
         private RectTransform wiltFillRect;
         private RectTransform currentWiltRect;
+        
+        [Header("References - Mutations")]
+        [SerializeField] private MutationTag mutationTagPrefab;
+        [SerializeField] private Transform mutationTagParent;
+        private List<MutationTag> mutationTags;
 
         [Header("Fields")]
         [SerializeField] private bool actionsShown;
@@ -593,7 +598,17 @@ namespace Synthesis.UI.View
                 // Clear the list of current mutation cards
                 currentMutationCards.Clear();
             });
-        } 
+        }
+
+        /// <summary>
+        /// Add a tag to the UI list
+        /// </summary>
+        public void AddMutationTag(Synthesize eventData)
+        {
+            MutationTag tag = Instantiate(mutationTagPrefab, mutationTagParent, false);
+            tag.Initialize();
+            tag.SetData(eventData.Mutation);
+        }
 
         /// <summary>
         /// Handle translating the Player Information
