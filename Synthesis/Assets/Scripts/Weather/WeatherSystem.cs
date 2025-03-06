@@ -27,8 +27,9 @@ namespace Synthesis.Weather
 
             weatherPercentages = new Dictionary<WeatherType, float>
             {
-                { drought, 0.5f },
-                { torrent, 0.5f }
+                { clear, 0.50f },
+                { drought, 0.25f },
+                { torrent, 0.25f }
             };
 
             // Set clear weather to begin wtih
@@ -115,6 +116,15 @@ namespace Synthesis.Weather
 
             // Fall back on the Drought weather if no weather was chosen
             return clearWeather;
+        }
+
+        /// <summary>
+        /// Adjust weather percentages
+        /// </summary>
+        private void AdjustWeatherPercentages<T>(T weatherType, float percentageIncrease) where T : WeatherType
+        {
+            // Get the current percentage of the weather type
+            Type type = typeof(T);
         }
     }
 }

@@ -63,7 +63,7 @@ namespace Synthesis
             {
                 GameObject creature = Instantiate(evilCreaturePrefab, transform.position, transform.rotation);
                 creature.transform.parent = transform;
-                creature.transform.localPosition = new Vector3((4 * (index + 1)), 2.5f, 0);
+                creature.transform.localPosition = new Vector3((3 * (index + 1)), 2.5f, 0);
                 evilCreatures.Add(creature);
                 index++;
             }
