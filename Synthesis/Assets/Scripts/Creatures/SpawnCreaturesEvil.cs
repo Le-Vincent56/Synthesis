@@ -49,6 +49,10 @@ namespace Synthesis
 
                 for (int i = 1; i < round; i++)
                 {
+                    if (round > 3)
+                    {
+                        round = 3;
+                    }
                     if (RandomChance(round))
                     {
                         SpawnEvilCreature();
