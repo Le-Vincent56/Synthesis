@@ -4,6 +4,7 @@ using Synthesis.EventBus.Events.Turns;
 using Synthesis.Mutations;
 using System;
 using System.Collections.Generic;
+using Synthesis.EventBus.Events.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -77,7 +78,10 @@ namespace Synthesis.UI.View
         {
             // Scale and translate
             Scale(maxScale, scaleDuration);
-            
+            EventBus<HighlightMutation>.Raise(new HighlightMutation()
+            {
+                mutation = mutation
+            });
         }
 
         /// <summary>
@@ -86,6 +90,10 @@ namespace Synthesis.UI.View
         private void Deselect()
         {
             Scale(initialScale, scaleDuration);
+            EventBus<HighlightMutation>.Raise(new HighlightMutation()
+            {
+                mutation = null
+            });
         }
 
         /// <summary>

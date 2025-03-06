@@ -20,17 +20,45 @@ namespace Synthesis.Creatures.Visual
         private static readonly int Color1 = Shader.PropertyToID("_Color1");
 
         private MutationStrategy associatedMutation;
+        private Vector3 defaultScale;
+        private bool highlighted;
 
         private EventBinding<HighlightMutation> onHighlightMutation;
 
-        private void OnEnable()
+        private void Start()
         {
-            
+            defaultScale = transform.localScale;
         }
 
-        public void HighlightMutation(HighlightMutation eventData)
+        private void OnEnable()
         {
-            
+            onHighlightMutation = new EventBinding<HighlightMutation>(HighlightPiece);
+            EventBus<HighlightMutation>.Register(onHighlightMutation);
+        }
+
+        private void OnDisable()
+        {
+            EventBus<HighlightMutation>.Deregister(onHighlightMutation);
+        }
+
+        public void HighlightPiece(HighlightMutation eventData)
+        {
+            if (associatedMutation != null)
+            {
+                if (eventData.mutation == associatedMutation)
+                {
+                    // Do stuff
+                    SetPartSize(false);
+                    SetPartColor(associatedMutation.Color1 + associatedMutation.Color1, ColorElement.Secondary);
+                    highlighted = true;
+                }
+                else if (highlighted)
+                {
+                    SetPartSize(true);
+                    SetPartColor(associatedMutation.Color1, ColorElement.Secondary);
+                    highlighted = false;
+                }
+            }
         }
 
         public void SetMutation(MutationStrategy mutation, Color bleed, float bleedRate)
@@ -42,10 +70,12 @@ namespace Synthesis.Creatures.Visual
             SetPartColor(mutation.Color1, ColorElement.Secondary);
             
             SetPartColor(mutation.Color2, ColorElement.Tertiary);
+
+            defaultScale = transform.localScale;
         }
 
         // Change the size of current part.
-        public void SetPartSize(float height, float width)
+        public void SetPartSize(bool reset)
         {
             var p = transform.parent;
 
@@ -59,7 +89,15 @@ namespace Synthesis.Creatures.Visual
                 }
             }
 
-            transform.localScale = new Vector3(width * scaleMod.x, height * scaleMod.y, 1);
+            if (reset)
+            {
+                transform.localScale = defaultScale;
+            }
+            else
+            {
+                transform.localScale = new Vector3(defaultScale.x * scaleMod.x, defaultScale.y * scaleMod.y, 1);
+            }
+            
         
             foreach (var connector in connectors)
             {

@@ -80,7 +80,7 @@ MonoBehaviour:
   connectors:
   - transform: {fileID: 4299804887161922092}
     child: {fileID: 0}
-  scaleMod: {x: 1, y: 1, z: 1}
+  scaleMod: {x: 1.2, y: 1.2, z: 1.2}
   primaryColorIn:
   - {fileID: 8927354996149034166}
   tertiaryColorIn: []
