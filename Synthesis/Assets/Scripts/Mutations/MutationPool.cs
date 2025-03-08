@@ -57,6 +57,7 @@ namespace Synthesis.Mutations
             RegisterMutation<MycorrhizalNetwork>();
             RegisterMutation<AdaptiveChloroplast>();
             RegisterMutation<RecursiveSpores>();
+            RegisterMutation<CataclyticBurst>();
             RegisterMutation<UnstableMutagen>();
         }
 

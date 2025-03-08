@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Synthesis.EventBus;
 using Synthesis.EventBus.Events.Weather;
@@ -11,7 +10,6 @@ namespace Synthesis.Weather
     public class WeatherSystem : MonoBehaviour
     {
         [SerializeField] private WeatherType currentWeather;
-        private Clear clearWeather;
         private int turnsUntilWeatherChange;
         private Dictionary<WeatherType, float> weatherPercentages;
 
@@ -19,21 +17,17 @@ namespace Synthesis.Weather
 
         public WeatherType CurrentWeather { get => currentWeather; }
 
+        public static readonly WeatherType Clear = new Clear();
+        public static readonly WeatherType Drought = new Drought();
+        public static readonly WeatherType Torrent = new Torrent();
+
         private void Awake()
         {
-            Clear clear = new Clear();
-            Drought drought = new Drought();
-            Torrent torrent = new Torrent();
-
-            weatherPercentages = new Dictionary<WeatherType, float>
-            {
-                { clear, 0.50f },
-                { drought, 0.25f },
-                { torrent, 0.25f }
-            };
+            // Initialize the Weather Percentages
+            InitializeWeatherPercentages();
 
             // Set clear weather to begin wtih
-            currentWeather = clear;
+            currentWeather = Clear;
 
             // Register this as service
             ServiceLocator.ForSceneOf(this).Register(this);
@@ -48,6 +42,16 @@ namespace Synthesis.Weather
         private void OnDisable()
         {
             EventBus<UpdateWeather>.Deregister(onUpdateWeather);
+        }
+
+        private void InitializeWeatherPercentages()
+        {
+            weatherPercentages = new Dictionary<WeatherType, float>
+            {
+                { Clear, 0.50f },
+                { Drought, 0.25f },
+                { Torrent, 0.25f }
+            };
         }
 
         /// <summary>
@@ -84,47 +88,65 @@ namespace Synthesis.Weather
         /// </summary>
         private WeatherType ChooseWeather()
         {
-            // Create a counter for the total weight
-            float totalWeight = 0f;
+            // Generate a random value between 0 and 1
+            float randomValue = Random.Range(0f, 1f);
+            float cumulative = 0f;
 
-            // Iterate through each KeyValuePair
+            // Iterate through each WeatherType and its corresponding percentage
             foreach (KeyValuePair<WeatherType, float> weather in weatherPercentages)
             {
-                // Add the weight to the total weight
-                totalWeight += weather.Value;
-            }
+                // Add the current weather's percentage to the cumulative total
+                cumulative += weather.Value;
 
-            // Get the random value from the total weight
-            float randomValue = Random.Range(0f, totalWeight);
-
-            // Start tracking a current sum
-            float currentSum = 0f;
-
-            // Iterate through each KeyValuePair
-            foreach (KeyValuePair<WeatherType, float> weather in weatherPercentages)
-            {
-                // Add the current weather value to the current sum
-                currentSum += weather.Value;
-
-                // Check If the random value is less than the current sum
-                if (randomValue <= currentSum)
-                {
-                    // Set the current weather to the current key
+                // If the random value is less than or equal to the cumulative total, select this weather
+                if (randomValue <= cumulative)
                     return weather.Key;
-                }
             }
 
-            // Fall back on the Drought weather if no weather was chosen
-            return clearWeather;
+            // Fall back on the Clear weather if no weather was chosen
+            return Clear;
         }
 
         /// <summary>
         /// Adjust weather percentages
         /// </summary>
-        private void AdjustWeatherPercentages<T>(T weatherType, float percentageIncrease) where T : WeatherType
+        public void AdjustWeatherPercentages(WeatherType weatherType, float percentageIncrease)
         {
-            // Get the current percentage of the weather type
-            Type type = typeof(T);
+            // Exit case - if the Weather Type does not exist in the dictionary
+            if (!weatherPercentages.ContainsKey(weatherType))
+                return;
+
+            // Calculate the current total of all weather percentages
+            float currentTotal = 0f;
+
+            // Iterate through each key-value pair
+            foreach (KeyValuePair<WeatherType, float> kvp in weatherPercentages)
+                currentTotal += kvp.Value;
+
+            // Calculate the available adjustment room
+            float availableAdjustment = 1f - currentTotal + weatherPercentages[weatherType];
+
+            // Ensure the increase doesn't exceed the available adjustment room
+            float newWeight = Mathf.Clamp(weatherPercentages[weatherType] + percentageIncrease, 0f, availableAdjustment);
+            weatherPercentages[weatherType] = newWeight;
+
+            // Normalize the rest of the weights to ensure the total sum equals 1
+            NormalizeWeatherPercentages();
+        }
+
+        /// <summary>
+        /// Ensures that the total probability always sums to 1
+        /// </summary>
+        private void NormalizeWeatherPercentages()
+        {
+            // Calculate the total sum of all weather percentages
+            float total = 0f;
+            foreach (KeyValuePair<WeatherType, float> kvp in weatherPercentages)
+                total += kvp.Value;
+
+            // Normalize each weather percentage so that the total sum equals 1
+            foreach (WeatherType key in weatherPercentages.Keys)
+                weatherPercentages[key] /= total;
         }
     }
 }
