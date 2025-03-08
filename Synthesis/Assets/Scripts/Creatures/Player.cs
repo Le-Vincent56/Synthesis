@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using DG.Tweening;
 using Synthesis.Creatures.Visual;
 using Synthesis.EventBus;
@@ -37,6 +38,8 @@ namespace Synthesis.Creatures
         private Tween jumpTween;
 
         private CameraController cameraController;
+        
+        private EventBinding<PlayerHit> onPlayerHit;
 
         public CreaturePiece Piece { get => piece; }
 
@@ -53,6 +56,9 @@ namespace Synthesis.Creatures
 
             onPlayerAttack = new EventBinding<PlayerAttack>(PlayAttack);
             EventBus<PlayerAttack>.Register(onPlayerAttack);
+            
+            onPlayerHit = new EventBinding<PlayerHit>(StartDamageBuffer);
+            EventBus<PlayerHit>.Register(onPlayerHit);
         }
 
         private void OnDisable()
@@ -105,6 +111,33 @@ namespace Synthesis.Creatures
 
             // Set the completion action
             jumpTween.onComplete += onComplete;
+        }
+        
+        private void StartDamageBuffer(PlayerHit eventData)
+        {
+            StartCoroutine(DamageBuffer());
+        }
+        
+        /// <summary>
+        ///  Invincibility for a short period after taking damage.
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerator DamageBuffer()
+        {
+            float hitBuffer = 1.0f;
+            while (hitBuffer > 0)
+            {
+                // flash the player's sprite while invincible.
+                piece.primaryColorIn[0].color = Color.red;
+                yield return new WaitForSeconds(0.1f);
+                piece.primaryColorIn[0].color = Color.clear;
+                yield return new WaitForSeconds(0.1f);
+                hitBuffer -= 0.2f;
+            }
+
+            // remove player buffering and also make sprite white again.
+            piece.primaryColorIn[0].color = Color.white;
+            //StopCoroutine(DamageGrace());
         }
 
         /// <summary>

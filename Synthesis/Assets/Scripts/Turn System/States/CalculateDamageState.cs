@@ -23,7 +23,6 @@ namespace Synthesis.Turns.States
             {
                 // Generate impulse and have enemies attack
                 EventBus<EnemyAttack>.Raise(new EnemyAttack());
-                this.cameraController.GenerateImpulse();
 
                 // STart the next timer
                 waitForAttackTimer.Start();
@@ -32,6 +31,8 @@ namespace Synthesis.Turns.States
             waitForAttackTimer = new CountdownTimer(0.75f);
             waitForAttackTimer.OnTimerStop += () =>
             {
+                EventBus<PlayerHit>.Raise(new PlayerHit());
+                
                 // Apply wilt
                 int wiltToApply = 5 * this.spawnCreaturesEvil.EvilCreaturesCount;
 

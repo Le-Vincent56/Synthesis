@@ -3,6 +3,8 @@ using Synthesis.EventBus.Events.Creatures;
 using Synthesis.EventBus;
 using UnityEngine;
 using DG.Tweening;
+using Synthesis.EventBus.Events.Turns;
+using Synthesis.ServiceLocators;
 
 namespace Synthesis.Creatures
 {
@@ -16,20 +18,40 @@ namespace Synthesis.Creatures
 
         private EventBinding<EnemyAttack> onEnemyAttack;
         private EventBinding<EnemyHit> onEnemyHit;
+        private EventBinding<EnemyDie> onEnemyDie;
+        private EventBinding<StartBattle> onSpawn;
+        
+        private CameraController cameraController;
+
+        private void Start()
+        {
+            cameraController = ServiceLocator.ForSceneOf(this).Get<CameraController>();
+        }
 
         private void OnEnable()
         {
             onEnemyAttack = new EventBinding<EnemyAttack>(PlayAttack);
             EventBus<EnemyAttack>.Register(onEnemyAttack);
 
-            onEnemyHit = new EventBinding<EnemyHit>(StartDamageBugger);
+            onEnemyHit = new EventBinding<EnemyHit>(StartDamageBuffer);
             EventBus<EnemyHit>.Register(onEnemyHit);
+
+            onEnemyDie = new EventBinding<EnemyDie>(DeathFade);
+            EventBus<EnemyDie>.Register(onEnemyDie);
+
+            onSpawn = new EventBinding<StartBattle>(() =>
+            {
+                spriteRenderer.DOFade(1, 1f);
+            });
+            EventBus<StartBattle>.Register(onSpawn);
         }
 
         private void OnDisable()
         {
             EventBus<EnemyAttack>.Deregister(onEnemyAttack);
             EventBus<EnemyHit>.Deregister(onEnemyHit);
+            EventBus<EnemyDie>.Deregister(onEnemyDie);
+            EventBus<StartBattle>.Deregister(onSpawn);
         }
 
         private void OnDestroy()
@@ -45,7 +67,11 @@ namespace Synthesis.Creatures
             float fromY = transform.localPosition.y;
 
             // Activate the jump
-            Jump(toY, jumpDuration / 2f, () => Jump(fromY, jumpDuration / 2f));
+            Jump(toY, jumpDuration / 2f, () =>
+            {
+                cameraController.GenerateImpulse();
+                Jump(fromY, jumpDuration / 2f);
+            });
         }
 
         /// <summary>
@@ -69,13 +95,13 @@ namespace Synthesis.Creatures
             jumpTween.onComplete += onComplete;
         }
 
-        private void StartDamageBugger(EnemyHit eventData)
+        private void StartDamageBuffer(EnemyHit eventData)
         {
             StartCoroutine(DamageBuffer());
         }
         
         /// <summary>
-        ///  Invincibility for a short period after taking damage.
+        ///  Flashes red for a short period after taking damage.
         /// </summary>
         /// <returns></returns>
         private IEnumerator DamageBuffer()
@@ -94,6 +120,11 @@ namespace Synthesis.Creatures
             // remove player buffering and also make sprite white again.
             spriteRenderer.color = Color.white;
             //StopCoroutine(DamageGrace());
+        }
+        
+        private void DeathFade(EnemyDie eventData)
+        {
+            spriteRenderer.DOFade(0, 1.0f);
         }
     }
 }

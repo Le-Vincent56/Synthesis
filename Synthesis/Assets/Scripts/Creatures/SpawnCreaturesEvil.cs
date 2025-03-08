@@ -1,7 +1,11 @@
+using System;
 using System.Collections.Generic;
+using Synthesis.EventBus;
+using Synthesis.EventBus.Events.Turns;
 using UnityEngine;
 using Synthesis.Turns;
 using Synthesis.ServiceLocators;
+using Random = UnityEngine.Random;
 
 namespace Synthesis
 {
@@ -12,6 +16,8 @@ namespace Synthesis
         private int index = 0;
         private int lastCheckedRound = 0;
         private TurnSystem turnSystem; // Reference to TurnSystem
+
+        private EventBinding<StartBattle> onStartBattle;
 
         public int EvilCreaturesCount { get => evilCreatures.Count; }
 
@@ -29,21 +35,35 @@ namespace Synthesis
                 Debug.LogError("TurnSystem not found in the scene!");
             }
 
-            HandleNewRound(1); // Initialize the first round
+            //HandleNewRound(1); // Initialize the first round
         }
 
-        private void Update()
+        private void OnEnable()
+        {
+            onStartBattle = new EventBinding<StartBattle>(() =>
+            {
+                HandleNewRound(turnSystem.CurrentRound);
+            });
+            EventBus<StartBattle>.Register(onStartBattle);
+        }
+
+        private void OnDisable()
+        {
+            EventBus<StartBattle>.Deregister(onStartBattle);
+        }
+
+        /*private void Update()
         {
             if (turnSystem != null && turnSystem.CurrentRound > lastCheckedRound)
             {
                 lastCheckedRound = turnSystem.CurrentRound;
                 HandleNewRound(lastCheckedRound);
             }
-        }
+        }*/
 
         private void HandleNewRound(int round)
         {
-            if (round >= 1)
+            if (round >= 0)
             {
                 SpawnEvilCreature();
 
