@@ -1291,6 +1291,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1882046040}
     m_Modifications:
+    - target: {fileID: 1985390079459571233, guid: cd0c10210c113084a998ef38ec1d81a6, type: 3}
+      propertyPath: interactable
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1985390079459571233, guid: cd0c10210c113084a998ef38ec1d81a6, type: 3}
+      propertyPath: autoInitialize
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2157867137338475656, guid: cd0c10210c113084a998ef38ec1d81a6, type: 3}
       propertyPath: m_FontData.m_BestFit
       value: 0
