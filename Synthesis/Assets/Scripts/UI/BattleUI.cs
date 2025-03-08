@@ -33,6 +33,7 @@ namespace Synthesis.UI
         private EventBinding<WiltApplied> onWiltApplied;
         private EventBinding<SetCanSynthesize> onSynthesize;
         private EventBinding<Synthesize> onAddMutation;
+        private EventBinding<HighlightMutation> onHighlightMutation;
 
         private void OnEnable()
         {
@@ -74,6 +75,19 @@ namespace Synthesis.UI
 
             onAddMutation = new EventBinding<Synthesize>(AddMutationTag);
             EventBus<Synthesize>.Register(onAddMutation);
+
+            onHighlightMutation = new EventBinding<HighlightMutation>((HighlightMutation e) =>
+            {
+                if (e.mutation != null)
+                {
+                    ShowMutationPreview(e.mutation);
+                }
+                else
+                {
+                    HideMutationPreview();
+                }
+            });
+            EventBus<HighlightMutation>.Register(onHighlightMutation);
         }
 
         private void OnDisable()
@@ -91,6 +105,7 @@ namespace Synthesis.UI
             EventBus<WiltApplied>.Deregister(onWiltApplied);
             EventBus<SetCanSynthesize>.Deregister(onSynthesize);
             EventBus<Synthesize>.Deregister(onAddMutation);
+            EventBus<HighlightMutation>.Deregister(onHighlightMutation);
         }
 
         private void Start()
@@ -127,5 +142,7 @@ namespace Synthesis.UI
         private void CheckCanSynthesize(SetCanSynthesize eventData) => controller.SetCanSynthesize(eventData.CanSynthesize);
 
         private void AddMutationTag(Synthesize eventData) => view.AddMutationTag(eventData);
+        private void ShowMutationPreview(MutationStrategy mutation) => view.ShowMutationPreview(mutation);
+        private void HideMutationPreview() => view.HideMutationPreview();
     }
 }

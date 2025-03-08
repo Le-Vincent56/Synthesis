@@ -22,12 +22,21 @@ namespace Synthesis.UI.View
         [SerializeField] private float scaleAmount;
         [SerializeField] private float submitDuration;
         [SerializeField] private bool interactable = true;
+        [SerializeField] private bool autoInitialize = false;
         private Tween scaleTween;
 
         private Vector3 initialScale;
         private Vector3 maxScale;
 
         public Action OnClick = delegate { };
+
+        private void Start()
+        {
+            if (autoInitialize)
+            {
+                Initialize();
+            }
+        }
 
         public void OnDestroy()
         {
@@ -70,7 +79,7 @@ namespace Synthesis.UI.View
         /// Reset the Mutation Card data
         /// </summary>
         public void ResetData()
-        {
+            {
             mutation = null;
             nameText.text = string.Empty;
             descriptionText.text = string.Empty;

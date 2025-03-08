@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using Synthesis.Input;
 using Synthesis.ServiceLocators;
 using Synthesis.EventBus.Events.Battle;
+using Synthesis.Mutations;
 
 namespace Synthesis.UI.View
 {
@@ -59,6 +60,8 @@ namespace Synthesis.UI.View
         [SerializeField] private MutationTag mutationTagPrefab;
         [SerializeField] private Transform mutationTagParent;
         private List<MutationTag> mutationTags;
+        [SerializeField] private CanvasGroup mutationPreview;
+        [SerializeField] private MutationCard previewCard;
 
         [Header("Fields")]
         [SerializeField] private bool actionsShown;
@@ -580,6 +583,18 @@ namespace Synthesis.UI.View
                 // Clear the list of current mutation cards
                 currentMutationCards.Clear();
             });
+        }
+
+        public void ShowMutationPreview(MutationStrategy mutation)
+        {
+            mutationPreview.alpha = 1;
+            previewCard.SetData(mutation);
+        }
+        
+        public void HideMutationPreview()
+        {
+            mutationPreview.alpha = 0;
+            previewCard.ResetData();
         }
 
         /// <summary>
