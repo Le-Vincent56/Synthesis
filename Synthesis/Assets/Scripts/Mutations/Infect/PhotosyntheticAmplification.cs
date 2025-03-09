@@ -12,6 +12,7 @@ namespace Synthesis.Mutations.Infect
             // Set properties
             name = "Photosynthetic Amplification";
             description = "The first Infect in Drought has a 25% higher final Combat Rating";
+            mutationType = MutationType.Active;
 
             partType = MutationPartType.InfectDrought;
             color0 = new Color(0.9f, 0.1f, 0.1f,1);
@@ -32,6 +33,14 @@ namespace Synthesis.Mutations.Infect
 
             // Increase the final additives by 25%
             calculator.IncreaseFinalAdditives(0.25f);
+        }
+
+        /// <summary>
+        /// Clone the Mutation
+        /// </summary>
+        public override MutationStrategy Duplicate()
+        {
+            return new PhotosyntheticAmplification();
         }
     }
 }

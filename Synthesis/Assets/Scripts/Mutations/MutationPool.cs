@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using Synthesis.Creatures.Visual;
 using UnityEngine;
 using Synthesis.EventBus.Events.Mutations;
+using Synthesis.Mutations.Synthesis;
 
 namespace Synthesis.Mutations
 {
@@ -16,8 +17,6 @@ namespace Synthesis.Mutations
     {
         private Dictionary<Type, bool> mutationAvailability;
         private List<Type> availableMutations;
-
-        private EventBinding<Synthesize> onSynthesize;
         
 
         private void Awake()
@@ -31,17 +30,6 @@ namespace Synthesis.Mutations
 
             // Register this as a service
             ServiceLocator.ForSceneOf(this).Register(this);
-        }
-
-        private void OnEnable()
-        {
-            onSynthesize = new EventBinding<Synthesize>(OnSynthesize);
-            EventBus<Synthesize>.Register(onSynthesize);
-        }
-
-        private void OnDisable()
-        {
-            EventBus<Synthesize>.Deregister(onSynthesize);
         }
 
         /// <summary>
@@ -59,18 +47,13 @@ namespace Synthesis.Mutations
             RegisterMutation<RecursiveSpores>();
             RegisterMutation<CataclyticBurst>();
             RegisterMutation<UnstableMutagen>();
-        }
 
-        /// <summary>
-        /// Set Mutation Availability after the player gains a Mutation by Synthesizing
-        /// </summary>
-        private void OnSynthesize(Synthesize eventData)
-        {
-            // Extract the Type of the Mutation
-            Type mutationType = eventData.Mutation.GetType();
-
-            // Set its availability to false
-            SetMutationAvailability(mutationType, false);
+            // Register all Synthesize mutations
+            RegisterMutation<ThermophilicRoots>();
+            RegisterMutation<ChimericClimate>();
+            RegisterMutation<DelugeHybridization>();
+            RegisterMutation<BulwarkGenome>();
+            RegisterMutation<RepetitiveNature>();
         }
 
         /// <summary>

@@ -19,6 +19,7 @@ namespace Synthesis.Mutations.Infect
             // Set properties
             name = "Mycorrhizal Network";
             description = "Infect gains +5% higher base Combat Rating per consecutive use";
+            mutationType = MutationType.Active;
 
             partType = MutationPartType.Infect;
             color0 = new Color(0.7f, 0.55f, 0.8f,1);
@@ -58,6 +59,14 @@ namespace Synthesis.Mutations.Infect
         {
             // Increase the base Combat Rating by 5% per consecutive use
             calculator.IncreaseBaseAdditives(0.05f * consecutiveInfects);
+        }
+
+        /// <summary>
+        /// Clone the Mutation
+        /// </summary>
+        public override MutationStrategy Duplicate()
+        {
+            return new MycorrhizalNetwork();
         }
     }
 }

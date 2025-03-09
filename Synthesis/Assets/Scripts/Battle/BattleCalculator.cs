@@ -92,6 +92,11 @@ namespace Synthesis.Battle
         public void IncreaseBasePermenentAdditive(float bcrPermanentAdditive) => bcrPermanentAdditives += bcrPermanentAdditive;
 
         /// <summary>
+        /// Increase the base combat rating permanently by a percentage
+        /// </summary>
+        public void IncreaseBasePermanentPercentage(float bcrPermanentPercentage) => bcrPermanentAdditives += baseCombatRating * bcrPermanentPercentage;
+
+        /// <summary>
         /// Calculate the player's Combat Rating for this turn
         /// </summary>
         public int CalculatePoints()
@@ -103,10 +108,10 @@ namespace Synthesis.Battle
             fcrAdditives = 0f;
 
             // Get the List of Mutations that the Player currently has
-            List<MutationStrategy> mutations = mutationsTracker.Mutations;
+            List<MutationStrategy> activeMutations = mutationsTracker.ActiveMutations;
 
             // Iterate through each Mutation
-            foreach (MutationStrategy mutation in mutations)
+            foreach (MutationStrategy mutation in activeMutations)
             {
                 // Apply the Mutation's effects
                 mutation.ApplyMutation(this, weatherSystem, mutationsTracker);

@@ -13,6 +13,7 @@ namespace Synthesis.Mutations.Infect
             // Set properties
             name = "Verdant Flood";
             description = "In Torrent, every third Infect grants +5 base Combat Rating permanently";
+            mutationType = MutationType.Active;
 
             partType = MutationPartType.InfectTorrent;
             color0 = new Color(0.0f, 0.65f, 0.1f,1);
@@ -33,6 +34,14 @@ namespace Synthesis.Mutations.Infect
 
             // Increase the base Combat Rating permanently by 5
             calculator.IncreaseBasePermenentAdditive(5f);
+        }
+
+        /// <summary>
+        /// Clone the Mutation
+        /// </summary>
+        public override MutationStrategy Duplicate()
+        {
+            return new VerdantFlood();
         }
     }
 }

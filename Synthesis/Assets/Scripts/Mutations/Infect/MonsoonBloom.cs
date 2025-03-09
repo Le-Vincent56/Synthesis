@@ -12,6 +12,7 @@ namespace Synthesis.Mutations.Infect
             // Set properties
             name = "Monsoon Bloom";
             description = "If a Torrent starts mid-battle, your next Infect has +30% base Combat Rating";
+            mutationType = MutationType.Active;
 
             partType = MutationPartType.InfectTorrent;
             color0 = new Color(0.0f, 0.65f, 0.1f,1);
@@ -32,6 +33,14 @@ namespace Synthesis.Mutations.Infect
 
             // Increase the base Combat Rating by 30%
             calculator.IncreaseBaseAdditives(0.3f);
+        }
+
+        /// <summary>
+        /// Clone the Mutation
+        /// </summary>
+        public override MutationStrategy Duplicate()
+        {
+            return new MonsoonBloom();
         }
     }
 }

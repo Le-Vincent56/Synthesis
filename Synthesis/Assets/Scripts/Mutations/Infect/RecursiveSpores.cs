@@ -10,6 +10,7 @@ namespace Synthesis.Mutations.Infect
             // Set properties
             name = "Recursive Spores";
             description = "Increase the final Combat Rating by +6% per Mutation";
+            mutationType = MutationType.Active;
         }
 
         /// <summary>
@@ -22,6 +23,14 @@ namespace Synthesis.Mutations.Infect
 
             // Increase the final Combat Rating by 6% per Mutation
             calculator.IncreaseFinalAdditives(0.06f * numberOfMutations);
+        }
+
+        /// <summary>
+        /// Clone the Mutation
+        /// </summary>
+        public override MutationStrategy Duplicate()
+        {
+            return new RecursiveSpores();
         }
     }
 }

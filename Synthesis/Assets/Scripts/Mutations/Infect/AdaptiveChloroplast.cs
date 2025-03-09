@@ -10,6 +10,7 @@ namespace Synthesis.Mutations.Infect
             // Set properties
             name = "Adaptive Chloroplast";
             description = "After choosing a Mutation, the next Infect has a 15% higher base Combat Rating";
+            mutationType = MutationType.Active;
         }
 
         /// <summary>
@@ -22,6 +23,14 @@ namespace Synthesis.Mutations.Infect
 
             // Increase the base Combat Rating by 15%
             calculator.IncreaseBaseAdditives(0.15f);
+        }
+
+        /// <summary>
+        /// Clone the Mutation
+        /// </summary>
+        public override MutationStrategy Duplicate()
+        {
+            return new AdaptiveChloroplast();
         }
     }
 }

@@ -14,6 +14,8 @@ namespace Synthesis.Mutations.Infect
             // Set properties
             name = "Thermal Septa";
             description = "In Drought, your base Combat Rating increases by +4% per turn. This bonus rests if Torrent starts.";
+            mutationType = MutationType.Active;
+
             partType = MutationPartType.InfectDrought;
             color0 = new Color(0.95f, 0.8f, 0,1);
             color1 = new Color(0.9f, 0.5f, 0.4f, 1);
@@ -41,6 +43,14 @@ namespace Synthesis.Mutations.Infect
 
             // Increase the base Combat Rating by 4% per turn
             calculator.IncreaseBaseAdditives(localBCRIncrease);
+        }
+
+        /// <summary>
+        /// Clone the Mutation
+        /// </summary>
+        public override MutationStrategy Duplicate()
+        {
+            return new ThermalSepta();
         }
     }
 }

@@ -7713,6 +7713,12 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
+    - Name: activeMutations
+      Entry: 6
+      Data: 
+    - Name: passiveMutations
+      Entry: 6
+      Data: 
 --- !u!1 &1685152172
 GameObject:
   m_ObjectHideFlags: 0

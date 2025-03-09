@@ -11,6 +11,7 @@ namespace Synthesis.Mutations.Infect
         {
             name = "Cataclytic Burst";
             description = "For every three Infect actions, the next one increases its base Combat Rating by +100%";
+            mutationType = MutationType.Active;
         }
 
         /// <summary>
@@ -26,6 +27,14 @@ namespace Synthesis.Mutations.Infect
 
             // Increase the base Combat Rating by 100%
             calculator.IncreaseBaseAdditives(1.0f);
+        }
+
+        /// <summary>
+        /// Clone the Mutation
+        /// </summary>
+        public override MutationStrategy Duplicate()
+        {
+            return new CataclyticBurst();
         }
     }
 }

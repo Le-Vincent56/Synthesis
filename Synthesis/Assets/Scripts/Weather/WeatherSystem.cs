@@ -72,7 +72,7 @@ namespace Synthesis.Weather
             currentWeatherPeriods = new List<WeatherPeriod>();
 
             // Iterate 7 times
-            for(int i = 0; i < 3; i++)
+            for(int i = 0; i < 4; i++)
             {
                 // Add a random Weather Period
                 AddWeatherPeriod();
@@ -209,6 +209,32 @@ namespace Synthesis.Weather
             // Normalize each weather percentage so that the total sum equals 1
             foreach (WeatherType key in weatherPercentages.Keys)
                 weatherPercentages[key] /= total;
+        }
+
+        /// <summary>
+        /// Forcibly shift the Weather by regenerating it
+        /// </summary>
+        public void ShiftWeather()
+        {
+            // Clear the current Weather periods
+            currentWeatherPeriods.Clear();
+
+            // Iterate 7 times
+            for (int i = 0; i < 4; i++)
+            {
+                // Add a random Weather Period
+                AddWeatherPeriod();
+            }
+
+            // Set the new current weather
+            currentWeather = currentWeatherPeriods[0].WeatherType;
+            currentWeather.Duration = currentWeatherPeriods[0].Duration;
+
+            // Update the Weather Timeline
+            EventBus<WeatherUpdated>.Raise(new WeatherUpdated()
+            {
+                WeatherPeriods = currentWeatherPeriods
+            });
         }
     }
 }

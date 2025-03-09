@@ -41,6 +41,7 @@ namespace Synthesis.Turns
         private EventBinding<FesterFinished> onCombatRatingCalculationFinished;
         private EventBinding<WinBattle> onEndBattle;
         private EventBinding<Wilted> onWilted;
+        private EventBinding<GainTurns> onGainTurns;
         public int CurrentRound { get => currentRound; }
 
         private void Awake()
@@ -74,6 +75,9 @@ namespace Synthesis.Turns
 
             onWilted = new EventBinding<Wilted>(LoseTurn);
             EventBus<Wilted>.Register(onWilted);
+
+            onGainTurns = new EventBinding<GainTurns>(GainTurns);
+            EventBus<GainTurns>.Register(onGainTurns);
         }
 
         private void OnDisable()
@@ -83,6 +87,7 @@ namespace Synthesis.Turns
             EventBus<FesterFinished>.Deregister(onCombatRatingCalculationFinished);
             EventBus<WinBattle>.Deregister(onEndBattle);
             EventBus<Wilted>.Deregister(onWilted);
+            EventBus<GainTurns>.Deregister(onGainTurns);
         }
 
         private void Start()
@@ -266,6 +271,21 @@ namespace Synthesis.Turns
         /// </summary>
         public void AwaitPassTurn() => endTurnTimer?.Start();
 
+        /// <summary>
+        /// Gain a certain amount of turns
+        /// </summary>
+        private void GainTurns(GainTurns eventData)
+        {
+            // Gain the turns
+            totalTurns += eventData.TurnsToGain;
+
+            // Update the turns
+            EventBus<UpdateTurns>.Raise(new UpdateTurns { CurrentTurn = currentTurn, TotalTurns = totalTurns });
+        }
+
+        /// <summary>
+        /// Win the Battle
+        /// </summary>
         private void WinBattle()
         {
             // Set the state to 6

@@ -24,4 +24,9 @@ namespace Synthesis.EventBus.Events.Turns
     public struct WinBattle : IEvent { }
 
     public struct LoseBattle : IEvent { }
+
+    public struct GainTurns : IEvent
+    {
+        public int TurnsToGain;
+    }
 }

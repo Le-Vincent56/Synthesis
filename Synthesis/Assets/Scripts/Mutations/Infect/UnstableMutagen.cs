@@ -12,6 +12,7 @@ namespace Synthesis.Mutations.Infect
             // Set properties
             name = "Unstable Mutagen";
             description = "After the first Infect of the battle, randomly reroll a previous Mutation";
+            mutationType = MutationType.Active;
         }
 
         /// <summary>
@@ -27,6 +28,14 @@ namespace Synthesis.Mutations.Infect
 
             // Reroll a previous Mutation
             mutations.Reroll(1, 1, rerollExceptions);
+        }
+
+        /// <summary>
+        /// Clone the Mutation
+        /// </summary>
+        public override MutationStrategy Duplicate()
+        {
+            return new UnstableMutagen();
         }
     }
 }
