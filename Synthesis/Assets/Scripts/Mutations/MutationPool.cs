@@ -1,11 +1,8 @@
 using Synthesis.EventBus;
-using Synthesis.EventBus.Events.Turns;
-using Synthesis.Mutations;
 using Synthesis.Mutations.Infect;
 using Synthesis.ServiceLocators;
 using System;
 using System.Collections.Generic;
-using Synthesis.Creatures.Visual;
 using UnityEngine;
 using Synthesis.EventBus.Events.Mutations;
 using Synthesis.Mutations.Synthesis;
