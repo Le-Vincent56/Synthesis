@@ -169,8 +169,6 @@ namespace Synthesis.Turns
                 // Decrement the turns remaining and set the player state
                 currentTurn++;
                 state = 1;
-                
-                EventBus<UpdateWeather>.Raise(new UpdateWeather());
 
                 return;
             }

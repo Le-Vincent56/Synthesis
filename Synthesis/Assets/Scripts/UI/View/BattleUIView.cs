@@ -11,6 +11,7 @@ using Synthesis.Input;
 using Synthesis.ServiceLocators;
 using Synthesis.EventBus.Events.Battle;
 using Synthesis.Mutations;
+using Synthesis.EventBus.Events.Weather;
 
 namespace Synthesis.UI.View
 {
@@ -464,6 +465,21 @@ namespace Synthesis.UI.View
             FillWilt(fillPercentage, previousWilt, currentWilt);
         }
 
+        public void ResetFester(int currentFester, int targetFester)
+        {
+            // Update the text
+            this.targetFester.text = targetFester.ToString();
+
+            // Get the previous combat rating value
+            int previousFester = int.Parse(this.currentFester.text);
+
+            // Get the fill percentage
+            float fillPercentage = (float)currentFester / targetFester;
+
+            // Lerp the fill
+            FillFester(fillPercentage, previousFester, currentFester);
+        }
+
         /// <summary>
         /// Udpate the current Fester bar
         /// </summary>
@@ -489,15 +505,6 @@ namespace Synthesis.UI.View
         {
             // Update the text
             this.totalWilt.text = totalWilt.ToString();
-        }
-
-        /// <summary>
-        /// Update the total Fester text
-        /// </summary>
-        public void UpdateTargetFester(int targetFester)
-        {
-            // Update the text
-            this.targetFester.text = targetFester.ToString();
         }
 
         /// <summary>
@@ -530,6 +537,9 @@ namespace Synthesis.UI.View
 
                 // Select the Infect button
                 EventSystem.current.SetSelectedGameObject(infectButton.gameObject);
+
+                // Update the Weather
+                EventBus<UpdateWeather>.Raise(new UpdateWeather());
             });
         }
 

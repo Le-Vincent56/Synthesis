@@ -71,8 +71,7 @@ namespace Synthesis.UI.Controller
         public void SetBattleMetrics(int currentFester, int targetFester, int currentWilt, int totalWilt)
         {
             // Update the view
-            view.UpdateCurrentFester(currentFester, targetFester);
-            view.UpdateTargetFester(targetFester);
+            view.ResetFester(currentFester, targetFester);
             view.UpdateCurrentWilt(currentWilt, totalWilt);
             view.UpdateTotalWilt(totalWilt);
         }

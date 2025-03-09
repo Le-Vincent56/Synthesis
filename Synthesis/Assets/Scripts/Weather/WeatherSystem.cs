@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using Synthesis.EventBus;
 using Synthesis.EventBus.Events.Weather;
 using Synthesis.ServiceLocators;
@@ -7,13 +8,14 @@ using Random = UnityEngine.Random;
 
 namespace Synthesis.Weather
 {
-    public class WeatherSystem : MonoBehaviour
+    public class WeatherSystem : SerializedMonoBehaviour
     {
         [SerializeField] private WeatherType currentWeather;
-        private int turnsUntilWeatherChange;
         private Dictionary<WeatherType, float> weatherPercentages;
 
         private EventBinding<UpdateWeather> onUpdateWeather;
+
+        [SerializeField] private List<WeatherPeriod> currentWeatherPeriods;
 
         public WeatherType CurrentWeather { get => currentWeather; }
 
@@ -26,8 +28,12 @@ namespace Synthesis.Weather
             // Initialize the Weather Percentages
             InitializeWeatherPercentages();
 
+            // Initialize the Weather Periods
+            InitializeWeatherPeriods();
+
             // Set clear weather to begin wtih
-            currentWeather = Clear;
+            currentWeather = currentWeatherPeriods[0].WeatherType;
+            currentWeather.Duration = currentWeatherPeriods[0].Duration;
 
             // Register this as service
             ServiceLocator.ForSceneOf(this).Register(this);
@@ -44,6 +50,9 @@ namespace Synthesis.Weather
             EventBus<UpdateWeather>.Deregister(onUpdateWeather);
         }
 
+        /// <summary>
+        /// Initialize the weather percentages
+        /// </summary>
         private void InitializeWeatherPercentages()
         {
             weatherPercentages = new Dictionary<WeatherType, float>
@@ -55,33 +64,86 @@ namespace Synthesis.Weather
         }
 
         /// <summary>
+        /// Initialize the Weather Periods
+        /// </summary>
+        private void InitializeWeatherPeriods()
+        {
+            // Initialize the weather periods
+            currentWeatherPeriods = new List<WeatherPeriod>();
+
+            // Iterate 7 times
+            for(int i = 0; i < 3; i++)
+            {
+                // Add a random Weather Period
+                AddWeatherPeriod();
+            }
+        }
+
+        /// <summary>
+        /// Add a random Weather Period
+        /// </summary>
+        private void AddWeatherPeriod()
+        {
+            // Choose a random weather type and get its duration
+            WeatherType weatherType = ChooseWeather();
+            weatherType.SetDuration(SetWeatherDate());
+
+            // Add it as a weather period
+            currentWeatherPeriods.Add(new WeatherPeriod(weatherType, weatherType.Duration));
+        }
+
+        private void Start()
+        {
+            // Update the Weather Timeline
+            EventBus<WeatherUpdated>.Raise(new WeatherUpdated()
+            {
+                WeatherPeriods = currentWeatherPeriods
+            });
+        }
+
+        /// <summary>
         /// Update the Weather System
         /// </summary>
         public void UpdateWeather()
         {
-            // Check if there are still turns until the weather change
-            if (turnsUntilWeatherChange > 0)
+            // Exit case - if the current Weather has not expired
+            if (!currentWeather.Tick())
             {
-                // Tick down the amount of turns unti the weather change
-                turnsUntilWeatherChange--;
+                currentWeatherPeriods[0].Duration = currentWeather.Duration;
+
+                // Update the Weather Timeline
+                EventBus<WeatherUpdated>.Raise(new WeatherUpdated()
+                {
+                    WeatherPeriods = currentWeatherPeriods
+                });
 
                 return;
             }
+            
+            // Add another Weather Period
+            AddWeatherPeriod();
 
-            // If there are no turns left until the weather change, change the weather
-            currentWeather = ChooseWeather();
+            // Remove the first Weather Period
+            currentWeatherPeriods.RemoveAt(0);
 
-            // Set a new Weather date
-            SetWeatherDate();
+            // Set the new current weather
+            currentWeather = currentWeatherPeriods[0].WeatherType;
+            currentWeather.Duration = currentWeatherPeriods[0].Duration;
 
             // Start the weather effect
             currentWeather.StartWeather();
+
+            // Update the Weather Timeline
+            EventBus<WeatherUpdated>.Raise(new WeatherUpdated()
+            {
+                WeatherPeriods = currentWeatherPeriods
+            });
         }
 
         /// <summary>
         /// Set how many turns until the next Weather change
         /// </summary>
-        private void SetWeatherDate() => turnsUntilWeatherChange = Random.Range(3, 7);
+        private int SetWeatherDate() => Random.Range(3, 7);
 
         /// <summary>
         /// Choose the current Weather given the weights of the WeatherPercentages

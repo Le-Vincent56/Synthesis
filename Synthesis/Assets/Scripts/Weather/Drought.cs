@@ -1,11 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using Synthesis.EventBus;
 using Synthesis.EventBus.Events.Weather;
-using UnityEngine;
 
 namespace Synthesis.Weather
 {
+    [Serializable]
     public class Drought : WeatherType
     {
         /// <summary>

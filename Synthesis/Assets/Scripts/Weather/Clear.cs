@@ -1,8 +1,10 @@
 using Synthesis.EventBus;
 using Synthesis.EventBus.Events.Weather;
+using System;
 
 namespace Synthesis.Weather
 {
+    [Serializable]
     public class Clear : WeatherType
     {
         /// <summary>
