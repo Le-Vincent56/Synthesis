@@ -13,6 +13,8 @@ namespace Synthesis.Mutations.Synthesis
             mutationType = MutationType.Passive;
 
             partType = MutationPartType.Synthesis;
+            color0 = new UnityEngine.Color(1.0f, 1.0f, 1.0f, 1.0f);
+            color1 = new UnityEngine.Color(0.6f, 1.0f, 1.0f, 1.0f);
         }
 
         public override void ApplyMutation(BattleCalculator calculator, WeatherSystem weather, MutationsTracker mutations)

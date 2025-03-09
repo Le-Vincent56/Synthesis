@@ -13,6 +13,9 @@ namespace Synthesis.Mutations.Synthesis
             mutationType = MutationType.Passive;
 
             partType = MutationPartType.SynthesisDrought;
+            color0 = new UnityEngine.Color(1.0f, 0.2f, 0.0f, 1.0f);
+            color1 = new UnityEngine.Color(1.0f, 0.7f, 0.3f, 1.0f);
+            color2 = new UnityEngine.Color(1.0f, 0.0f, 0.0f, 1.0f);
         }
 
         /// <summary>

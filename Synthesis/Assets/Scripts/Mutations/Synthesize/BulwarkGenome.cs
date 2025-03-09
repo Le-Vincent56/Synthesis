@@ -19,6 +19,8 @@ namespace Synthesis.Mutations.Synthesis
             mutationsSinceReceived = 0;
 
             partType = MutationPartType.Synthesis;
+            color0 = new UnityEngine.Color(0.3f, 1.0f, 0.3f, 1.0f);
+            color1 = new UnityEngine.Color(0.3f, 1.0f, 0.3f, 1.0f);
         }
 
         public override void ApplyMutation(BattleCalculator calculator, WeatherSystem weather, MutationsTracker mutations)
