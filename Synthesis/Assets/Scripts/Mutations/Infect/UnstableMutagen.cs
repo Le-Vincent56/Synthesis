@@ -2,6 +2,8 @@ using Synthesis.Battle;
 using Synthesis.Weather;
 using System;
 using System.Collections.Generic;
+using Synthesis.Creatures;
+using UnityEngine;
 
 namespace Synthesis.Mutations.Infect
 {
@@ -12,6 +14,9 @@ namespace Synthesis.Mutations.Infect
             // Set properties
             name = "Unstable Mutagen";
             description = "After the first Infect of the battle, randomly reroll a previous Mutation";
+            partType = MutationPartType.Infect;
+            color1 = new Color(1.0f, 1.0f, 1.0f,1);
+            color0 = new Color(0.1f, 0.2f, 0.1f, 1);
             mutationType = MutationType.Active;
         }
 

@@ -1,5 +1,7 @@
 using Synthesis.Battle;
+using Synthesis.Creatures;
 using Synthesis.Weather;
+using UnityEngine;
 
 namespace Synthesis.Mutations.Infect
 {
@@ -10,6 +12,9 @@ namespace Synthesis.Mutations.Infect
             // Set properties
             name = "Recursive Spores";
             description = "Increase the final Combat Rating by +6% per Mutation";
+            partType = MutationPartType.Infect;
+            color0 = new Color(1.0f, 1.0f, 1.0f,1);
+            color1 = new Color(0.0f, 0.0f, 0.0f, 1);
             mutationType = MutationType.Active;
         }
 

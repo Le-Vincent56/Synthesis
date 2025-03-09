@@ -1,5 +1,7 @@
 using Synthesis.Battle;
+using Synthesis.Creatures;
 using Synthesis.Weather;
+using UnityEngine;
 
 namespace Synthesis.Mutations.Infect
 {
@@ -11,6 +13,9 @@ namespace Synthesis.Mutations.Infect
         {
             name = "Cataclytic Burst";
             description = "For every three Infect actions, the next one increases its base Combat Rating by +100%";
+            partType = MutationPartType.Infect;
+            color0 = new Color(0.4f, 0.3f, 1.0f,1);
+            color1 = new Color(0.0f, 1.0f, 0.0f, 1);
             mutationType = MutationType.Active;
         }
 
